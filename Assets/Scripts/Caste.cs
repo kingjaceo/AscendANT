@@ -1,17 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Caste
 { 
-    public int speed;
+    public string name;
+    public float speed;
     public Pheromone[] pheromoneSequence;
     
-    public Caste(int speed)
+    public Caste(string name, float speed, Pheromone[] pheromoneSequence)
     {
         this.speed = speed;
 
-        Scout scout = new Scout("Curiosity");
-        pheromoneSequence = { scout };
+        this.name = name;
+
+        this.pheromoneSequence = pheromoneSequence;
     }
 }

@@ -11,14 +11,14 @@ public class Handler : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        world = Instantiate(world);
-        world.transform.position = new Vector3(0, 0, 0);
+        // world = Instantiate(world);
+        // world.transform.position = new Vector3(0, 0, 0);
 
-        GameObject mainColony = Instantiate(colony);
-        mainColony.transform.position = new Vector3(-3, 0, 3);
+        // GameObject mainColony = Instantiate(colony);
+        // mainColony.transform.position = new Vector3(-3, 0, 3);
 
-        GameObject initialCuriosity = Instantiate(curiosity);
-        initialCuriosity.transform.position = new Vector3(3, 0, 3);
+        // GameObject initialCuriosity = Instantiate(curiosity);
+        // initialCuriosity.transform.position = new Vector3(3, 0, 3);
     }
 
     // Update is called once per frame

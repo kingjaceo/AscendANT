@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class Pheromone
 {
-    public string name;
     public bool active;
+    public string name = "Pheromone";
     
-    IEnumerator Start()
+    public virtual Vector3 GetDestination(Ant ant)
     {
-
+        Debug.Log("WARNING: Default Pheromone behavior GetDestination() called, which  does nothing!");
+        return ant.transform.position;
     }
 
-    public void CheckActive()
+    public virtual float GetDelay(Ant ant)
     {
-
+        return 1f;
+    }
+    
+    public virtual bool CheckActive(Ant ant, Collision collision)
+    {
+        return true;
     }
 }
