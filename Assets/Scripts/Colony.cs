@@ -21,7 +21,7 @@ public class Colony : MonoBehaviour
     {
         InitializeColony();
         InitializeCastes();
-        InitializeAnts();
+        StartCoroutine(InitializeAnts());
     }
 
     // Update is called once per frame
@@ -42,7 +42,9 @@ public class Colony : MonoBehaviour
     private void InitializeCastes()
     {
         Scout scout = new Scout("Curiosity");
-        Pheromone[] pheromoneSequence = {scout};
+        Report report = new Report();
+
+        Pheromone[] pheromoneSequence = {scout, report};
         
         Caste caste0 = new Caste("Attendant", 1f, pheromoneSequence);
         Caste caste1 = new Caste("Scout", 2f, pheromoneSequence);
@@ -55,7 +57,7 @@ public class Colony : MonoBehaviour
     }
 
     // initializes the default number and types of ants
-    private void InitializeAnts()
+    private IEnumerator InitializeAnts()
     {
         int[] amountOfAntsInCastes = { 1, 7, 2 };
         int numCastes = this.castes.Length;
@@ -79,9 +81,8 @@ public class Colony : MonoBehaviour
                 antObject.AssignCaste(caste);
                 this.numAnts ++;
                 antsInCaste[j] = newAnt;
+                yield return new WaitForSeconds(0.1f);
             }
         }
-
-         this.ants = ants;
     }
 }

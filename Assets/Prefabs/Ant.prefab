@@ -132,10 +132,8 @@ MonoBehaviour:
     name: 
     speed: 0
   id: 0
-  currentPheromoneIndex: 0
-  pheromoneChanged: 1
-  alive: 1
-  direction: {x: 0, y: 0, z: 0}
+  antState: 0
+  pheromoneState: 0
 --- !u!54 &6832236973638403284
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -163,5 +161,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.15
+  m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
