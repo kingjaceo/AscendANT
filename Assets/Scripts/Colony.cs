@@ -122,7 +122,7 @@ public class Colony : MonoBehaviour
 
     private void NextAnt()
     {
-        Caste caste = castes[1];
+        Caste caste = castes[2];
         GameObject newAnt = Instantiate(ant);
         Ant antObject = newAnt.GetComponent<Ant>();
         antObject.AssignColony(this);

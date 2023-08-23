@@ -15,6 +15,8 @@ public class Ant : MonoBehaviour
     public Pheromone currentPheromone;
     public Memory memory;
 
+    public Dictionary<ResourceType, float> carrying = new Dictionary<ResourceType, float>();
+
     private Pheromone[] pheromoneSequence;
     private int currentPheromoneIndex;
     private Pheromone previousFramePheromone;
@@ -38,6 +40,11 @@ public class Ant : MonoBehaviour
         antState = AntState.Idle;
         pheromoneState = PheromoneState.InProgress;
         currentPheromoneIndex = 0;
+
+        foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
+        {
+            carrying[resourceType] = 0;
+        }
     }
 
     // Update is called once per frame

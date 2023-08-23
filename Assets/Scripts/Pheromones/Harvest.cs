@@ -41,6 +41,7 @@ class Harvest : Pheromone
             if (collisionResource == target)
             {
                 ant.antState = AntState.Harvesting;
+                ant.carrying[target] += 5;
             }
         }
 
@@ -52,8 +53,9 @@ class Harvest : Pheromone
         {
             ant.pheromoneState = PheromoneState.Complete;
             ant.antState = AntState.Idle;
+            ant.colony.resourceAmounts[target] += ant.carrying[target];
+            ant.carrying[target] -= ant.carrying[target];
         }
-        
     }
 
     private Vector3 GetColonyDirection(Ant ant)
