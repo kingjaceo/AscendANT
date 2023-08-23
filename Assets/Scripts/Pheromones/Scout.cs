@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 class Scout : Pheromone
 {
-    public string target;
-    public bool redirect = false;
+    public ResourceType target;
 
     public override PheromoneName pheromoneName { get; set; }
 
-    public Scout(string target)
+    public Scout(ResourceType target)
     {
         pheromoneName = PheromoneName.Scout;
 
         this.target = target;
-        Debug.Log("Scout pheromone created!");
+        Debug.Log("Scout pheromone created with target: " + target);
     }
     
     public override Vector3 GetDirection(Ant ant)
@@ -23,11 +23,10 @@ class Scout : Pheromone
         Vector3 direction = ant.transform.forward;
         float guessAngle;
 
-        guessAngle = Random.Range(-2.5f, 2.5f);
+        guessAngle = UnityEngine.Random.Range(-2.5f, 2.5f);
         if (ant.antState == AntState.Collided) 
         {
-            guessAngle = Random.Range(90f, 100f);
-            guessAngle = guessAngle * (Random.Range(0, 2) * 2 - 1);
+            guessAngle += UnityEngine.Random.Range(5f, 10f) * (UnityEngine.Random.Range(0, 2) * 2 - 1);
         }
         ant.antState = AntState.Searching;
 
@@ -36,19 +35,21 @@ class Scout : Pheromone
         return newDirection;
     }
 
-    public override float GetDelay(Ant ant)
-    {
-        // should calculate the time it will take to travel to the destination
-        return 0.5f;
-    }
-
     public override void UpdateStates(Ant ant, Collision collision)
     {        
-        Debug.Log("Ant" + ant.id + " collides with " + collision.gameObject.name);
-        if (collision.gameObject.name == target)
+        string collisionName = collision.gameObject.name;
+        ResourceType collisionResource;
+        ant.antState = AntState.Collided;
+        if (Enum.TryParse(collisionName, out collisionResource))
         {
-            ant.pheromoneState = PheromoneState.Complete;
-            ant.antState = AntState.Idle;
+            Debug.Log("Ant" + ant.id + " collides with " + collisionName + ", which contains " + collisionResource);
+            if (target.HasFlag(collisionResource))
+            {
+                ant.memory.DiscoverResource(collisionResource, collision.gameObject.transform.position);
+                Debug.Log("Ant" + ant.id + " now has memory of nearest resources: " + ant.memory);
+                ant.pheromoneState = PheromoneState.Complete;
+                ant.antState = AntState.Idle;
+            }
         }
     }
 }

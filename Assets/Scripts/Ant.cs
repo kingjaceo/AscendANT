@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime;
 using UnityEngine;
 
 public class Ant : MonoBehaviour
@@ -9,19 +10,17 @@ public class Ant : MonoBehaviour
     public Caste caste;
 
     public int id;
-
-
-
     public AntState antState;
     public PheromoneState pheromoneState;
-    private Pheromone[] pheromoneSequence;
     public Pheromone currentPheromone;
+    public Memory memory;
+
+    private Pheromone[] pheromoneSequence;
     private int currentPheromoneIndex;
     private Pheromone previousFramePheromone;
     private Coroutine currentPheromoneCoroutine;
     private float antennaRadius = 0.25f;
     private Vector3 direction;
-
 
 
     // Start is called before the first frame update
@@ -39,8 +38,6 @@ public class Ant : MonoBehaviour
         antState = AntState.Idle;
         pheromoneState = PheromoneState.InProgress;
         currentPheromoneIndex = 0;
-
-        // StartCoroutine(Controller());
     }
 
     // Update is called once per frame
@@ -57,79 +54,55 @@ public class Ant : MonoBehaviour
 
         // update direction
         direction = currentPheromone.GetDirection(this);
+        // randomly rotate the direction by a few degrees
+        direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-5f, 5f), transform.up) * direction;
+        // direction = colony.transform.position - transform.position;
         transform.forward = direction;
 
         // move the ant forward
         transform.position = new Vector3(transform.position[0], 0.0625f, transform.position[2]);
         transform.position += transform.forward * Time.deltaTime * this.caste.speed;
-        // body.MovePosition(transform.position + transform.forward * Time.deltaTime * this.caste.speed);
+    }
+
+    void OnCollision(Collision collision)
+    {
+        if (collision.gameObject.name == "World")
+        {
+            return;
+        }
+        
+        // check if the current pheromone is still active
+        // antState = AntState.Collided;
+        currentPheromone.UpdateStates(this, collision);
+
+        // if the ant touched the colony, update its memory
+        if (collision.gameObject.name == "Colony")
+        {
+            Debug.Log("Ant" + id + " memory before update: " + memory);
+            Debug.Log("Colony memory before update: " + memory);
+            colony.memory.UpdateColonyMemory(memory);
+            memory.UpdateAntMemory(colony.memory);
+            Debug.Log("Ant" + id + " memory after update: " + memory);
+            Debug.Log("Colony memory after update: " + memory);
+        }
     }
 
     // An ant's behavior might change on collision with another object
     void OnCollisionEnter(Collision collision)
     {
-       Debug.Log("Ant" + id + " collided with " + collision.gameObject.name);
-       // check if the current pheromone is still active
-       antState = AntState.Collided;
-       currentPheromone.UpdateStates(this, collision);
+        OnCollision(collision);
     }
 
-
-    // private IEnumerator Controller()
-    // {
-        // Debug.Log("Ant" + this.id + " begins behaving!");
-
-        // access the first pheromone
-        // int currentPheromoneIndex = 0;
-        // while (pheromoneSequence.Length == 0)
-        // {
-        //     yield return null;
-        // }
-        // currentPheromone = pheromoneSequence[currentPheromoneIndex];
-        // currentPheromoneCoroutine = StartCoroutine(Continue());
-
-        // begin obeying pheromones
-        // while (true)
-        // {
-            // if (pheromoneState == PheromoneState.Complete)
-            // {
-                // stop the ant's current behavior
-                // StopCoroutine(currentPheromoneCoroutine);
-
-                // update the pheromone and state
-                // currentPheromoneIndex = currentPheromoneIndex++ % pheromoneSequence.Length;
-                // currentPheromone = pheromoneSequence[currentPheromoneIndex];
-                // pheromoneState = PheromoneState.InProgress;
-                
-                // begin a new coroutine
-                // Debug.Log("Ant" + id + " changes pheromones and begins again: " + currentPheromone.pheromoneName);
-                // currentPheromoneCoroutine = StartCoroutine(Continue());
-            // }
-
-            // yield return null;
-        // }
-    // }
-
-    // private IEnumerator Continue()
-    // {
-    //     Debug.Log("Ant" + this.id + " continues behavior: " + this.currentPheromone.pheromoneName);
-
-    //     // continuing behavior always asks for a destination and waits for some time, both of which depend on the pheromone
-    //     while (true) 
-    //     {
-    //         this.direction = this.currentPheromone.GetDestination(this);
-    //         // Debug.Log("Ant" + this.id + " decides to travel in direction " + this.direction);
-    //         float delay = this.currentPheromone.GetDelay(this);
-
-    //         yield return new WaitForSeconds(delay);
-    //     }
-    // }
-
+    void OnCollisionStay(Collision collision)
+    {
+        OnCollision(collision);
+    }
 
     public void AssignColony(Colony colony)
     {
         this.colony = colony;
         id = colony.numAnts;
+        memory = new Memory(colony.memory);
     }
 
     public void AssignCaste(Caste caste)
@@ -140,6 +113,18 @@ public class Ant : MonoBehaviour
         // Debug.Log("Caste Assigned " + caste.name);
     }
 
+    // public void MergeMemory()
+    // {
+    //     colony.memory.nearestResource = new Dictionary<ResourceType, Vector3>(memory.nearestResource);
+    //     Debug.Log("Ant" + id + " shares memory with Colony, colony now has memory of nearest resource: " + colony.memory);
+    //     colony.memory.resourceLocations = new Dictionary<ResourceType, List<Vector3>>(memory.resourceLocations);
+    // }
+
+    // private void UpdateMemory()
+    // {
+    //     memory.nearestResource = new Dictionary<ResourceType, Vector3>(colony.memory.nearestResource);
+    //     memory.resourceLocations = new Dictionary<ResourceType, List<Vector3>>(colony.memory.resourceLocations);
+    // }
 
     void OnDrawGizmos()
     {
