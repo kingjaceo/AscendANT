@@ -12,9 +12,9 @@ public class ColonyStatsDisplay : MonoBehaviour
  
     public void Update()
     {
-        statsText.text = "Food: " + Math.Round(colony.resourceAmounts[ResourceType.Food]) + "\n";
-        statsText.text += "Water: " + Math.Round(colony.resourceAmounts[ResourceType.Water]) + "\n";
-        statsText.text += "Eggs: " + colony.resourceAmounts[ResourceType.Eggs]; 
+        // statsText.text = "Food: " + Math.Round(colony.resourceAmounts[ResourceType.Food]) + "\n";
+        // statsText.text += "Water: " + Math.Round(colony.resourceAmounts[ResourceType.Water]) + "\n";
+        // statsText.text += "Eggs: " + colony.resourceAmounts[ResourceType.Eggs]; 
     }
 
     // Start is called before the first frame update

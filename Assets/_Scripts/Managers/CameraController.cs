@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-// using System.Numerics;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour 
+{
  
     /*
     Writen by Windexglow 11-13-10.  Use it, edit it, steal it I don't care.  
@@ -13,8 +13,8 @@ public class CameraController : MonoBehaviour {
     wasd : basic movement
     shift : Makes camera accelerate
     space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
-     
-     
+    public static CameraController Instance;    
+        
     float mainSpeed = 10.0f; //regular speed
     float shiftAdd = 25.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 100.0f; //Maximum speed when holdin gshift
@@ -24,14 +24,13 @@ public class CameraController : MonoBehaviour {
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun= 1.0f;
 
-    private new Camera camera;
     [SerializeField] private float cameraHeight = 20;
     public int interpolationFramesCount = 45;
     int elapsedFrames = 0;
-     
+        
     void Start()
     {
-        camera = GetComponent<Camera>();
+        Instance = this;
     }
 
     void Update () {
@@ -41,7 +40,7 @@ public class CameraController : MonoBehaviour {
         // transform.eulerAngles = lastMouse;
         lastMouse =  Input.mousePosition;
         //Mouse  camera angle done.  
-       
+        
         //Keyboard commands
         float zoomScale = 1f;
         Vector3 p = GetBaseInput();
@@ -77,7 +76,7 @@ public class CameraController : MonoBehaviour {
         }
 
         // camera.fieldOfView += 5 * Input.mouseScrollDelta.y;
-	    // camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, min, max);
+        // camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, min, max);
 
         if (Input.GetKey (KeyCode.LeftShift)) 
         {
@@ -92,7 +91,7 @@ public class CameraController : MonoBehaviour {
         cameraHeight = Mathf.Clamp(cameraHeight - Input.GetAxis("Mouse ScrollWheel") * zoomScale, minHeight, maxHeight);
         ZoomSmooth();
     }
-     
+        
     private Vector3 GetBaseInput() { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
         if (Input.GetKey (KeyCode.W)){

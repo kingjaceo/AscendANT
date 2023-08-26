@@ -53,7 +53,7 @@ class Harvest : Pheromone
         {
             ant.pheromoneState = PheromoneState.Complete;
             ant.antState = AntState.Idle;
-            ant.colony.resourceAmounts[target] += ant.carrying[target];
+            ant.colony.ResourceAmounts[target] += ant.carrying[target];
             ant.carrying[target] -= ant.carrying[target];
         }
     }

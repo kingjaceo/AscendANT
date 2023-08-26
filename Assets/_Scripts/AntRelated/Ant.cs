@@ -35,7 +35,7 @@ public class Ant : MonoBehaviour
 
     void Start()
     {
-        transform.position = colony.transform.position;
+        // transform.position = colony.transform.position;
 
         antState = AntState.Idle;
         pheromoneState = PheromoneState.InProgress;
@@ -67,8 +67,8 @@ public class Ant : MonoBehaviour
         transform.forward = direction;
 
         // move the ant forward
-        transform.position = new Vector3(transform.position[0], 0.0625f, transform.position[2]);
-        transform.position += transform.forward * Time.deltaTime * this.caste.speed;
+        // transform.position = new Vector3(transform.position[0], 1f, transform.position[2]);
+        transform.position += transform.forward * Time.deltaTime * caste.speed;
     }
 
     void OnCollision(Collision collision)
@@ -87,8 +87,8 @@ public class Ant : MonoBehaviour
         {
             Debug.Log("Ant" + id + " memory before update: " + memory);
             Debug.Log("Colony memory before update: " + memory);
-            colony.memory.UpdateColonyMemory(memory);
-            memory.UpdateAntMemory(colony.memory);
+            colony.Memory.UpdateColonyMemory(memory);
+            memory.UpdateAntMemory(colony.Memory);
             Debug.Log("Ant" + id + " memory after update: " + memory);
             Debug.Log("Colony memory after update: " + memory);
         }
@@ -108,8 +108,8 @@ public class Ant : MonoBehaviour
     public void AssignColony(Colony colony)
     {
         this.colony = colony;
-        id = colony.numAnts;
-        memory = new Memory(colony.memory);
+        id = colony.NumAnts;
+        memory = new Memory(colony.Memory);
     }
 
     public void AssignCaste(Caste caste)

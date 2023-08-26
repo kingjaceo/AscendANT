@@ -16,7 +16,7 @@ public class Memory
     public Memory(Colony colony)
     {
         this.colony = colony;
-        colonyResources = colony.resourceAmounts;
+        colonyResources = colony.ResourceAmounts;
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
             resourceLocations[resourceType] = new List<Vector3>();
