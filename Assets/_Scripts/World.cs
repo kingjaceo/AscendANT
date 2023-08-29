@@ -47,6 +47,8 @@ public class World : MonoBehaviour
         _ground.GetComponent<Renderer>().material = _groundMaterial;
         _ground.transform.position = new Vector3(0, 0, 0);
         _ground.transform.localScale = new Vector3(_scale.x, 1, _scale.z);
+
+        _ground.name = "Ground";
     }
     
     private void CreateWalls()
@@ -62,21 +64,25 @@ public class World : MonoBehaviour
         _posXWall.transform.parent = transform;
         _posXWall.transform.localScale = xWallScale;
         _posXWall.transform.position = new Vector3(_transform.position.x + xShift, _transform.position.y + yShift, _transform.position.z);
+        _posXWall.name = "Boundary";
 
         _negXWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         _negXWall.transform.parent = transform;
         _negXWall.transform.localScale = xWallScale;
         _negXWall.transform.position = new Vector3(_transform.position.x - xShift, _transform.position.y + yShift, _transform.position.z);
+        _negXWall.name = "Boundary";
 
         _posZWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         _posZWall.transform.parent = transform;
         _posZWall.transform.localScale = zWallScale;
         _posZWall.transform.position = new Vector3(_transform.position.x, _transform.position.y + yShift, _transform.position.z + zShift);
+        _posZWall.name = "Boundary";
 
         _negZWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         _negZWall.transform.parent = transform;
         _negZWall.transform.localScale = zWallScale;
         _negZWall.transform.position = new Vector3(_transform.position.x, _transform.position.y + yShift, _transform.position.z - zShift);
+        _negZWall.name = "Boundary";
     }
 
     private void CreateColony()
@@ -96,14 +102,14 @@ public class World : MonoBehaviour
         curiosity.transform.parent = transform;
         curiosity.name = "Curiosity";
         GameObject food = Instantiate(_foodPrefab);
-        food.transform.position = _colony.RandomLocationAroundColony(5f, 10f);
+        food.transform.position = _colony.RandomLocationAroundColony(3f, 5f);
         food.transform.parent = transform;
         food.name = "Food";
     }
 
     private Vector3 RandomLocationInWorld()
     {
-        var buffer = 2f;
+        var buffer = 10f;
         var x = _transform.position.x + Random.Range(-_scale.x / 2 + buffer, _scale.x / 2 - buffer);
         var y = _transform.position.y + _scale.y / 4;
         var z = _transform.position.z + Random.Range(-_scale.z / 2 + buffer, _scale.z / 2 - buffer);

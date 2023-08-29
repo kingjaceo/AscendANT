@@ -24,11 +24,11 @@ class Scout : Pheromone
         float guessAngle;
 
         guessAngle = UnityEngine.Random.Range(-2.5f, 2.5f);
-        if (ant.antState == AntState.Collided) 
+        if (ant.AntState == AntState.Collided) 
         {
             guessAngle += UnityEngine.Random.Range(5f, 10f) * (UnityEngine.Random.Range(0, 2) * 2 - 1);
         }
-        ant.antState = AntState.Searching;
+        ant.SetAntState(AntState.Searching);
 
         Vector3 newDirection = Quaternion.AngleAxis(guessAngle, ant.transform.up) * direction;
 
@@ -39,16 +39,16 @@ class Scout : Pheromone
     {        
         string collisionName = collision.gameObject.name;
         ResourceType collisionResource;
-        ant.antState = AntState.Collided;
+        ant.SetAntState(AntState.Collided);
         if (Enum.TryParse(collisionName, out collisionResource))
         {
-            Debug.Log("Ant" + ant.id + " collides with " + collisionName + ", which contains " + collisionResource);
+            Debug.Log("Ant" + ant.ID + " collides with " + collisionName + ", which contains " + collisionResource);
             if (target.HasFlag(collisionResource))
             {
-                ant.memory.DiscoverResource(collisionResource, collision.gameObject.transform.position);
-                Debug.Log("Ant" + ant.id + " now has memory of nearest resources: " + ant.memory);
-                ant.pheromoneState = PheromoneState.Complete;
-                ant.antState = AntState.Idle;
+                ant.Memory.DiscoverResource(collisionResource, collision.gameObject.transform.position);
+                // Debug.Log("Ant" + ant.ID + " now has memory of nearest resources: " + ant.Memory);
+                ant.SetPheromoneState(PheromoneState.Complete);
+                ant.SetAntState(AntState.Idle);
             }
         }
     }

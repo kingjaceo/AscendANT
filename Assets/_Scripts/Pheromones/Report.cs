@@ -13,8 +13,8 @@ class Report : Pheromone
 
     public override Vector3 GetDirection(Ant ant)
     {
-        Vector3 direction = ant.colony.transform.position - ant.transform.position;
-        ant.antState = AntState.Reporting;
+        Vector3 direction = ant.Colony.transform.position - ant.transform.position;
+        ant.SetAntState(AntState.Reporting);
         return direction;
     }
 
@@ -27,8 +27,8 @@ class Report : Pheromone
     {
         if (collision.gameObject.name == "Colony")
         {
-            ant.pheromoneState = PheromoneState.Complete;
-            ant.antState = AntState.Idle;
+            ant.SetPheromoneState(PheromoneState.Complete);
+            ant.SetAntState(AntState.Idle);
         }
     }
 }

@@ -25,4 +25,9 @@ abstract public class Pheromone
     {
 
     }
+
+    public virtual float UpdatePheromoneProgress(Ant ant)
+    {
+        return ant.PheromoneProgress + 1;
+    }
 }

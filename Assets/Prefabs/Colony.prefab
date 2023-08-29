@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1611642917827940365}
   - component: {fileID: 1611642917827940362}
+  - component: {fileID: 7187125433110899556}
   m_Layer: 0
   m_Name: Colony
   m_TagString: Untagged
@@ -45,11 +46,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NumAnts: 0
-  _antPrefab: {fileID: 1317557349863640888, guid: 6ec926140a8c6b1448a3d37288faefd2, type: 3}
   Memory:
     colony: {fileID: 0}
     updatedResources: 
   HatchProgress: 0
+  _antPrefab: {fileID: 1317557349863640888, guid: 6ec926140a8c6b1448a3d37288faefd2, type: 3}
+  _queenPrefab: {fileID: 1537797982187099633, guid: e203921d34af2dc41ade31a9dae45660, type: 3}
+--- !u!136 &7187125433110899556
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611642917827940364}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5795876989714413792
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 5795876989714413792}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1611642917827940365}
   m_RootOrder: 0

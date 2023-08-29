@@ -30,7 +30,8 @@ public enum PheromoneName
     Report,
     Retrieve,
     TendColony,
-    Attack
+    Attack,
+    CircleColony,
 }
 
 [Flags]

@@ -16,7 +16,7 @@ class Harvest : Pheromone
 
     public override Vector3 GetDirection(Ant ant) 
     {
-        if (ant.antState == AntState.Harvesting)
+        if (ant.AntState == AntState.Harvesting)
         {
             return GetColonyDirection(ant);
         }
@@ -31,17 +31,17 @@ class Harvest : Pheromone
         string collisionName = collision.gameObject.name;
         ResourceType collisionResource;
 
-        string debugString = "Ant" + ant.id + " collides with " + collisionName;
+        string debugString = "Ant" + ant.ID + " collides with " + collisionName;
         // if the ant finds its target while searching
-        debugString += (ant.antState == AntState.Searching) + ", ";
+        debugString += (ant.AntState == AntState.Searching) + ", ";
         debugString += Enum.TryParse(collisionName, out collisionResource);
-        if (ant.antState == AntState.Searching & Enum.TryParse(collisionName, out collisionResource))
+        if (ant.AntState == AntState.Searching & Enum.TryParse(collisionName, out collisionResource))
         {
             debugString += " which contains " + collisionResource;
             if (collisionResource == target)
             {
-                ant.antState = AntState.Harvesting;
-                ant.carrying[target] += 5;
+                ant.SetAntState(AntState.Harvesting);
+                ant.Carrying[target] += 5;
             }
         }
 
@@ -49,18 +49,18 @@ class Harvest : Pheromone
 
 
         // if the ant makes it home while harvesting
-        if (ant.antState == AntState.Harvesting & collisionName == "Colony")
+        if (ant.AntState == AntState.Harvesting & collisionName == "Colony")
         {
-            ant.pheromoneState = PheromoneState.Complete;
-            ant.antState = AntState.Idle;
-            ant.colony.ResourceAmounts[target] += ant.carrying[target];
-            ant.carrying[target] -= ant.carrying[target];
+            ant.SetPheromoneState(PheromoneState.Complete);
+            ant.SetAntState(AntState.Idle);
+            ant.Colony.ResourceAmounts[target] += ant.Carrying[target];
+            ant.Carrying[target] -= ant.Carrying[target];
         }
     }
 
     private Vector3 GetColonyDirection(Ant ant)
     {
-        Vector3 direction = ant.colony.transform.position - ant.transform.position;
+        Vector3 direction = ant.Colony.transform.position - ant.transform.position;
         return direction;
     }
 
@@ -70,14 +70,14 @@ class Harvest : Pheromone
         Vector3 destination;
         try
         {
-            destination = ant.memory.nearestResource[target];
-            ant.antState = AntState.Searching;
+            destination = ant.Memory.nearestResource[target];
+            ant.SetAntState(AntState.Searching);
         }
         catch (KeyNotFoundException)
         {
-            Debug.Log("Ant" + ant.id + " doesn't have knowledge of " + target + " and returns to the colony");
-            destination = ant.colony.transform.position;
-            ant.antState = AntState.Idle;
+            Debug.Log("Ant" + ant.ID + " doesn't have knowledge of " + target + " and returns to the colony");
+            destination = ant.Colony.transform.position;
+            ant.SetAntState(AntState.Idle);
         }
 
         Vector3 direction = destination - ant.transform.position;

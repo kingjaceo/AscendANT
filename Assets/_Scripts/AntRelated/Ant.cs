@@ -6,23 +6,23 @@ using UnityEngine;
 
 public class Ant : MonoBehaviour
 {
-    public Colony colony;
-    public Caste caste;
+    public Colony Colony { get; private set; }
+    public Caste Caste { get; private set; }
 
-    public int id;
-    public AntState antState;
-    public PheromoneState pheromoneState;
-    public Pheromone currentPheromone;
-    public Memory memory;
+    public int ID { get; private set; }
+    public AntState AntState { get; private set; }
+    public PheromoneState PheromoneState { get; private set; }
+    public Pheromone CurrentPheromone { get; private set; }
+    public float PheromoneProgress { get; private set; } = 0;
+    public Memory Memory { get; private set; }
 
-    public Dictionary<ResourceType, float> carrying = new Dictionary<ResourceType, float>();
+    public Dictionary<ResourceType, float> Carrying = new Dictionary<ResourceType, float>();
 
-    private Pheromone[] pheromoneSequence;
-    private int currentPheromoneIndex;
-    private Pheromone previousFramePheromone;
-    private Coroutine currentPheromoneCoroutine;
-    private float antennaRadius = 0.25f;
-    private Vector3 direction;
+    private List<Pheromone>  _pheromoneSequence;
+    private int _currentPheromoneIndex;
+    protected float _antennaRadius = 0.25f;
+    protected Vector3 _direction;
+    protected Transform _transform;
 
 
     // Start is called before the first frame update
@@ -31,66 +31,67 @@ public class Ant : MonoBehaviour
         Debug.Log("Ant created!");
         Rigidbody body = GetComponent<Rigidbody>();
         body.freezeRotation = true;
+
+        _transform = transform;
     }
 
-    void Start()
+    public virtual void Start()
     {
-        // transform.position = colony.transform.position;
-
-        antState = AntState.Idle;
-        pheromoneState = PheromoneState.InProgress;
-        currentPheromoneIndex = 0;
+        AntState = AntState.Idle;
+        PheromoneState = PheromoneState.InProgress;
+        _currentPheromoneIndex = 0;
 
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
-            carrying[resourceType] = 0;
+            Carrying[resourceType] = 0;
         }
     }
 
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
+        // PheromoneProgress = CurrentPheromone.UpdatePheromoneProgress(this);
+
         // update current pheromone
-        if (pheromoneState == PheromoneState.Complete)
+        if (PheromoneState == PheromoneState.Complete)
         {
-            currentPheromoneIndex = (currentPheromoneIndex+1) % pheromoneSequence.Length;
-            pheromoneState = PheromoneState.InProgress;
-            Debug.Log("Pheromone on Ant" + id + " changes to: " + pheromoneSequence[currentPheromoneIndex]);
+            _currentPheromoneIndex = (_currentPheromoneIndex+1) % _pheromoneSequence.Count;
+            PheromoneState = PheromoneState.InProgress;
+            Debug.Log("Pheromone on Ant" + ID + " changes to: " + _pheromoneSequence[_currentPheromoneIndex]);
         }
-        currentPheromone = pheromoneSequence[currentPheromoneIndex];
+        CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
 
         // update direction
-        direction = currentPheromone.GetDirection(this);
+        _direction = CurrentPheromone.GetDirection(this);
+
         // randomly rotate the direction by a few degrees
-        direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-5f, 5f), transform.up) * direction;
-        // direction = colony.transform.position - transform.position;
-        transform.forward = direction;
+        _direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-5f, 5f), _transform.up) * _direction;
+        _transform.forward = _direction;
 
         // move the ant forward
-        // transform.position = new Vector3(transform.position[0], 1f, transform.position[2]);
-        transform.position += transform.forward * Time.deltaTime * caste.speed;
+        _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
     }
 
     void OnCollision(Collision collision)
     {
-        if (collision.gameObject.name == "World")
+        if (collision.gameObject.name == "Ground")
         {
             return;
         }
         
         // check if the current pheromone is still active
         // antState = AntState.Collided;
-        currentPheromone.UpdateStates(this, collision);
+        CurrentPheromone.UpdateStates(this, collision);
 
         // if the ant touched the colony, update its memory
         if (collision.gameObject.name == "Colony")
         {
-            Debug.Log("Ant" + id + " memory before update: " + memory);
-            Debug.Log("Colony memory before update: " + memory);
-            colony.Memory.UpdateColonyMemory(memory);
-            memory.UpdateAntMemory(colony.Memory);
-            Debug.Log("Ant" + id + " memory after update: " + memory);
-            Debug.Log("Colony memory after update: " + memory);
+            // Debug.Log("Ant" + ID + " memory before update: " + Memory);
+            // Debug.Log("Colony memory before update: " + Memory);
+            Colony.Memory.UpdateColonyMemory(Memory);
+            Memory.UpdateAntMemory(Colony.Memory);
+            // Debug.Log("Ant" + ID + " memory after update: " + Memory);
+            // Debug.Log("Colony memory after update: " + Memory);
         }
     }
 
@@ -105,25 +106,43 @@ public class Ant : MonoBehaviour
         OnCollision(collision);
     }
 
-    public void AssignColony(Colony colony)
+    public virtual void AssignColony(Colony colony)
     {
-        this.colony = colony;
-        id = colony.NumAnts;
-        memory = new Memory(colony.Memory);
+        this.Colony = colony;
+        ID = colony.NumAnts;
+        Memory = new Memory(colony.Memory);
     }
 
     public void AssignCaste(Caste caste)
     {
-        this.caste = caste;
-        pheromoneSequence = caste.pheromoneSequence;
-        this.currentPheromone = this.pheromoneSequence[0];
-        // Debug.Log("Caste Assigned " + caste.name);
+        this.Caste = caste;
+        _pheromoneSequence = caste.PheromoneSequence;
+        this.CurrentPheromone = this._pheromoneSequence[0];
+    }
+
+    public void SetAntState(AntState antState)
+    {
+        AntState = antState;
+    }
+
+    public void SetPheromoneState(PheromoneState pheromoneState)
+    {
+        PheromoneState = pheromoneState;
+    }
+
+    public void SetColony(Colony colony)
+    {
+        Colony = colony;
+    }
+
+    public void SetMemory(Memory memory)
+    {
+        Memory = memory;
     }
 
     // public void MergeMemory()
     // {
     //     colony.memory.nearestResource = new Dictionary<ResourceType, Vector3>(memory.nearestResource);
-    //     Debug.Log("Ant" + id + " shares memory with Colony, colony now has memory of nearest resource: " + colony.memory);
     //     colony.memory.resourceLocations = new Dictionary<ResourceType, List<Vector3>>(memory.resourceLocations);
     // }
 
@@ -140,6 +159,6 @@ public class Ant : MonoBehaviour
         Vector3 direction = transform.TransformDirection(Vector3.forward) * 2;
         Gizmos.DrawRay(transform.position, direction);
 
-        Gizmos.DrawWireSphere(transform.position, antennaRadius);
+        Gizmos.DrawWireSphere(transform.position, _antennaRadius);
     }
 }

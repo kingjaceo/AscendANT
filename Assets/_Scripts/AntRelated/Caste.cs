@@ -6,16 +6,25 @@ using UnityEngine;
 [Serializable]
 public class Caste
 { 
-    public string name;
-    public float speed;
-    public Pheromone[] pheromoneSequence;
+    public string Name;
+    public float Speed { get; private set; }
+    public List<Pheromone> PheromoneSequence { get; private set; }
+    public float Percentage { get; private set; }
     
-    public Caste(string name, float speed, Pheromone[] pheromoneSequence)
+    public Caste(string name, float percentage, float speed, List<Pheromone> pheromoneSequence)
     {
-        this.speed = speed;
+        Speed = speed;
 
-        this.name = name;
+        Name = name;
+        
+        Percentage = percentage;
 
-        this.pheromoneSequence = pheromoneSequence;
+        PheromoneSequence = pheromoneSequence;
     }
+
+    public void SetPercentage(float percentage)
+    {
+        Percentage = percentage;
+    }
+
 }

@@ -7,31 +7,38 @@ public class Colony : MonoBehaviour
 { 
     public int NumAnts = 0;
 
-    [SerializeField] private GameObject _antPrefab;
-    private List<Ant> _ants;
-    private Caste[] _castes;
-
-    private Transform _transform;
-
     public Memory Memory;
     public Dictionary<ResourceType, float> ResourceAmounts = new Dictionary<ResourceType, float>();
     public float HatchProgress = 0;
 
+    [SerializeField] private GameObject _antPrefab;
+    private List<Ant> _ants;
+    public Dictionary<string, float> AntsByCaste = new Dictionary<string, float>();
+    public Caste[] Castes { get; private set;}
+
+    [SerializeField] private GameObject _queenPrefab;
+    private Queen _queen;
+
+    private Transform _transform;
+    
     // Start is called before the first frame update
     void Awake()
     {
         Debug.Log("New Colony starts up...");
         _transform = transform;
+        MainGUIPanel.Instance.GiveColony(this);
 
         InitializeColony();
         InitializeCastes();
+        InitializeQueen();
         StartCoroutine(InitializeAnts());
+        StartCoroutine(HatchEggs());
+
     }
 
     // Update is called once per frame
     void Start()
     {
-        StartCoroutine(HatchEggs());
     }
 
     // initalizes the colony according to default parameters
@@ -40,9 +47,7 @@ public class Colony : MonoBehaviour
         ResourceAmounts[ResourceType.Food] = 100f;
         ResourceAmounts[ResourceType.Water] = 100f;
         ResourceAmounts[ResourceType.Eggs] = 3f;
-        Memory = new Memory(this);
-        // queen = Instantiate(queen);
-        // queen.AssignColony(this);
+        Memory = new Memory(this);        
     }
 
     private void InitializeCastes()
@@ -53,20 +58,36 @@ public class Colony : MonoBehaviour
         Harvest harvest = new Harvest(ResourceType.Food);
         TendColony tendColony = new TendColony();
 
-        Pheromone[] attendantPheromoneSequence = { tendColony };
+        List<Pheromone> attendantPheromoneSequence = new List<Pheromone> { tendColony };
 
-        Pheromone[] scoutPheromoneSequence = { scout, report };
+        List<Pheromone> scoutPheromoneSequence = new List<Pheromone> { scout, report };
 
-        Pheromone[] workerPheromoneSequence = { harvest };
+        List<Pheromone> workerPheromoneSequence = new List<Pheromone> { harvest };
         
-        Caste caste0 = new Caste("Attendant", 1f, attendantPheromoneSequence);
-        Caste caste1 = new Caste("Scout", 2f, scoutPheromoneSequence);
-        Caste caste2 = new Caste("Worker", 3f, workerPheromoneSequence);
+        Caste caste0 = new Caste("Attendant", 0.1f, 1f, attendantPheromoneSequence);
+        Caste caste1 = new Caste("Scout", 0.4f, 2f, scoutPheromoneSequence);
+        Caste caste2 = new Caste("Worker", 0.5f, 3f, workerPheromoneSequence);
 
         Caste[] castes = { caste0, caste1, caste2 };
-        _castes = castes;
+        Castes = castes;
+    }
 
-        // Debug.Log("Caste 0: " + pheromoneSequence[0].name);
+    private void InitializeQueen()
+    {
+        CircleColony circle = new CircleColony();
+        List<Pheromone> queenPheromoneSequence = new List<Pheromone> { circle };
+        Caste casteQ = new Caste("Queen", 0f, 0.25f, queenPheromoneSequence);
+       
+        _queen = Instantiate(_queenPrefab).GetComponent<Queen>();
+        _queen.AssignColony(this);
+
+        // set the Ant's parent
+        _queen.transform.parent = transform;
+
+        // set the Ant's position, colony, and caste
+        _queen.transform.position = RandomLocationAroundColony(0.5f, 1.5f);
+        _queen.AssignColony(this);
+        _queen.AssignCaste(casteQ);
     }
 
     // initializes the default number and types of ants
@@ -74,14 +95,17 @@ public class Colony : MonoBehaviour
     {
         int[] amountOfAntsInCastes = { 1, 17, 2 };
 
-        for (int i = 0; i < _castes.Length; i++) 
+        for (int i = 0; i < Castes.Length; i++) 
         {
+            AntsByCaste[Castes[i].Name] = 0;
             for (int j = 0; j < amountOfAntsInCastes[i]; j++)
             {
-                NextAnt(_castes[i]);
+                NextAnt(Castes[i]);
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.01f);
             }
+
+            
         }
     }
 
@@ -100,7 +124,7 @@ public class Colony : MonoBehaviour
 
         if (ResourceAmounts[ResourceType.Food] > 10)
         {
-            ResourceAmounts[ResourceType.Food] -= tendAmount;
+            ResourceAmounts[ResourceType.Food] -= tendAmount / 10;
             HatchProgress += tendAmount;
         }
     }
@@ -115,7 +139,8 @@ public class Colony : MonoBehaviour
                 HatchProgress = 0;
 
                 // produce a new ant
-                NextAnt(_castes[2]);
+                Caste caste = NextCaste();
+                NextAnt(caste);
             }
 
             yield return null;
@@ -138,5 +163,33 @@ public class Colony : MonoBehaviour
         // update colony variables
         NumAnts++;
         // _ants.Add(ant);
+        AntsByCaste[caste.Name] ++;
+    }
+
+    private Caste NextCaste()
+    {
+        // compare Caste percentages to real percentages:
+        int casteIndex = 0;
+        float maxPercentageDifference = 0;
+        for (int i = 0; i < Castes.Length; i++) 
+        {
+            float realPercentage = AntsByCaste[Castes[i].Name] / NumAnts;
+            float targetPercentage = Castes[i].Percentage;
+            float percentageDifference = targetPercentage - realPercentage;
+            if (percentageDifference > maxPercentageDifference)
+            {
+                casteIndex = i;
+                maxPercentageDifference = percentageDifference;
+            }
+        }
+
+        return Castes[casteIndex];
+    }
+
+    public void UpdateCastePercentages(float caste0Percentage, float caste1Percentage, float caste2Percentage)
+    {
+        Castes[0].SetPercentage(caste0Percentage);
+        Castes[1].SetPercentage(caste1Percentage);
+        Castes[2].SetPercentage(caste2Percentage);
     }
 }

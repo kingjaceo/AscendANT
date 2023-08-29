@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
 
     public GameState State { get; private set; }
 
-    
-
     void Awake() 
     {
         Instance = this;

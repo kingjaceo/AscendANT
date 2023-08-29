@@ -18,18 +18,18 @@ class TendColony : Pheromone
 
     public override Vector3 GetDirection(Ant ant)
     {
-        Vector3 direction = ant.colony.transform.position - ant.transform.position;
+        Vector3 direction = ant.Colony.transform.position - ant.transform.position;
 
         return direction;
     }
 
     public override void UpdateStates(Ant ant, Collision collision)
     {
-        ant.antState = AntState.TendingColony;
+        ant.SetAntState(AntState.TendingColony);
         if (collision.gameObject.name == "Colony")
         {
             // give some attention to the nest's eggs
-            ant.colony.TendEggs();
+            ant.Colony.TendEggs();
         }
     }
 }
