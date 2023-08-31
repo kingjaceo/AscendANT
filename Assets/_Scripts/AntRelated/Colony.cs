@@ -26,7 +26,6 @@ public class Colony : MonoBehaviour
     {
         Debug.Log("New Colony starts up...");
         _transform = transform;
-        MainGUIPanel.Instance.GiveColony(this);
 
         InitializeColony();
         InitializeCastes();
@@ -39,6 +38,7 @@ public class Colony : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
+        MainGUIPanel.Instance.GiveColony(this);
     }
 
     // initalizes the colony according to default parameters
@@ -54,15 +54,14 @@ public class Colony : MonoBehaviour
     {
         ResourceType target = ResourceType.Food | ResourceType.Curiosity;
         Scout scout = new Scout(target);
-        Report report = new Report();
         Harvest harvest = new Harvest(ResourceType.Food);
         TendColony tendColony = new TendColony();
 
-        List<Pheromone> attendantPheromoneSequence = new List<Pheromone> { tendColony };
+        List<IPheromone> attendantPheromoneSequence = new List<IPheromone> { tendColony };
 
-        List<Pheromone> scoutPheromoneSequence = new List<Pheromone> { scout, report };
+        List<IPheromone> scoutPheromoneSequence = new List<IPheromone> { scout };
 
-        List<Pheromone> workerPheromoneSequence = new List<Pheromone> { harvest };
+        List<IPheromone> workerPheromoneSequence = new List<IPheromone> { harvest };
         
         Caste caste0 = new Caste("Attendant", 0.1f, 1f, attendantPheromoneSequence);
         Caste caste1 = new Caste("Scout", 0.4f, 2f, scoutPheromoneSequence);
@@ -75,7 +74,7 @@ public class Colony : MonoBehaviour
     private void InitializeQueen()
     {
         CircleColony circle = new CircleColony();
-        List<Pheromone> queenPheromoneSequence = new List<Pheromone> { circle };
+        List<IPheromone> queenPheromoneSequence = new List<IPheromone> { circle };
         Caste casteQ = new Caste("Queen", 0f, 0.25f, queenPheromoneSequence);
        
         _queen = Instantiate(_queenPrefab).GetComponent<Queen>();
@@ -186,10 +185,16 @@ public class Colony : MonoBehaviour
         return Castes[casteIndex];
     }
 
-    public void UpdateCastePercentages(float caste0Percentage, float caste1Percentage, float caste2Percentage)
+    public void UpdateCastePercentages(float[] newCastePercentages)
     {
-        Castes[0].SetPercentage(caste0Percentage);
-        Castes[1].SetPercentage(caste1Percentage);
-        Castes[2].SetPercentage(caste2Percentage);
+        for (int i = 0; i < Castes.Length; i++)
+        {
+            Castes[i].SetPercentage(newCastePercentages[i]);
+        }
+    }
+
+    public Vector3 GetQueenPosition()
+    {
+        return _queen.transform.position;
     }
 }

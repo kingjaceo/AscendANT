@@ -16,24 +16,22 @@ public class MainGUIPanel : MonoBehaviour
     [SerializeField] private GameObject _caste1;
     [SerializeField] private GameObject _caste2;
 
-    [SerializeField] private Slider _caste0Slider;
-    [SerializeField] private Slider _caste1Slider;
-    [SerializeField] private Slider _caste2Slider;
+    [SerializeField] private Slider[] _sliders;
+    private float[] _previousCasteLevels = new float[] {10, 80, 10};
+
+    [SerializeField] private Slider _hatchProgressSlider;
+
 
     private TMP_Text _caste0Text;
     private TMP_Text _caste1Text;
     private TMP_Text _caste2Text;
-
-    private float _previousCaste0Level = 10;
-    private float _previousCaste1Level = 80;
-    private float _previousCaste2Level = 10;
  
     public void Update()
     {
         UpdateColonyStats();
         UpdateCasteText();
-        // UpdateSliderLevels();
-        _colony.UpdateCastePercentages(_previousCaste0Level, _previousCaste1Level, _previousCaste2Level);
+        _colony.UpdateCastePercentages(_previousCasteLevels);
+        UpdateHatchProgress();
     }
 
     // Start is called before the first frame update
@@ -41,18 +39,14 @@ public class MainGUIPanel : MonoBehaviour
     {
         Instance = this;
         
-        _caste0Slider = _caste0.GetComponent<Slider>();
-        _caste0Slider.value = _previousCaste0Level;
-        _caste0Slider.onValueChanged.AddListener((v) => { UpdateSliderLevels();});
-        _caste1Slider = _caste1.GetComponent<Slider>();
-        _caste1Slider.value = _previousCaste1Level;
-        _caste1Slider.onValueChanged.AddListener((v) => { UpdateSliderLevels();});
-        _caste2Slider = _caste2.GetComponent<Slider>();
-        _caste2Slider.value = _previousCaste2Level;
-        _caste2Slider.onValueChanged.AddListener((v) => { UpdateSliderLevels();});
+        _sliders = new Slider[] {_caste0.GetComponent<Slider>(), _caste1.GetComponent<Slider>(), _caste2.GetComponent<Slider>()};
+        for (int i = 0; i < _sliders.Length; i++)
+        {
+            _sliders[i].value = _previousCasteLevels[i];
+            _sliders[i].onValueChanged.AddListener((v) => { UpdateSliderLevels();});
+        }
 
         _caste0Text = _caste0.transform.Find("Caste0NameAndAmount").GetComponent<TMP_Text>();
-        Debug.Log("MainGUIPanel sees " + _caste0Text);
         _caste1Text = _caste1.transform.Find("Caste1NameAndAmount").GetComponent<TMP_Text>();
         _caste2Text = _caste2.transform.Find("Caste2NameAndAmount").GetComponent<TMP_Text>();
     }
@@ -64,61 +58,71 @@ public class MainGUIPanel : MonoBehaviour
 
     private void UpdateColonyStats()
     {
-        _colonyStatsText.text = "Food: " + Math.Round(_colony.ResourceAmounts[ResourceType.Food]) + "\n";
-        _colonyStatsText.text += "Water: " + Math.Round(_colony.ResourceAmounts[ResourceType.Water]) + "\n";
-        _colonyStatsText.text += "Eggs: " + _colony.ResourceAmounts[ResourceType.Eggs]; 
+        if (_colony != null & _colony.ResourceAmounts != null & _colonyStatsText != null)
+        {
+            _colonyStatsText.text = "Food: " + Math.Round(_colony.ResourceAmounts[ResourceType.Food]) + "\n";
+            _colonyStatsText.text += "Water: " + Math.Round(_colony.ResourceAmounts[ResourceType.Water]) + "\n";
+            _colonyStatsText.text += "Eggs: " + _colony.ResourceAmounts[ResourceType.Eggs]; 
+        }
     }
 
     private void UpdateCasteText()
     {
         _caste0Text.text = _colony.Castes[0].Name;
-        _caste0Text.text += ": " + _colony.AntsByCaste[_colony.Castes[0].Name];
+        _caste0Text.text += ": " + _colony.AntsByCaste[_colony.Castes[0].Name] + $" ({_previousCasteLevels[0]}%)";
 
         _caste1Text.text = _colony.Castes[1].Name;
-        _caste1Text.text += ": " + _colony.AntsByCaste[_colony.Castes[1].Name];
+        _caste1Text.text += ": " + _colony.AntsByCaste[_colony.Castes[1].Name] + $" ({_previousCasteLevels[1]}%)";
 
         _caste2Text.text = _colony.Castes[2].Name;
-        _caste2Text.text += ": " + _colony.AntsByCaste[_colony.Castes[2].Name];
+        _caste2Text.text += ": " + _colony.AntsByCaste[_colony.Castes[2].Name] + $" ({_previousCasteLevels[2]}%)";
     }
     
     private void UpdateSliderLevels()
     {
-        float caste0Level = _caste0Slider.value;
-        float caste1Level = _caste1Slider.value;
-        float caste2Level = _caste2Slider.value;
+        float[] casteLevels = new float[_sliders.Length];
+        int changedSliderIndex = 0;
+
+        for (int i = 0; i < _sliders.Length; i++)
+        {
+            casteLevels[i] = _sliders[i].value;
+            if (casteLevels[i] != _previousCasteLevels[i])
+            {
+                changedSliderIndex = i;
+            }
+        }
+
         float remainderPercentage;
-        float sumPercentage;
+        float sumPercentage = 0;
 
-        if (caste0Level != _previousCaste0Level)
+        remainderPercentage = 100 - casteLevels[changedSliderIndex];
+        for (int i = 0; i < _sliders.Length; i++)
         {
-            remainderPercentage = 100f - caste0Level;
-            sumPercentage = caste1Level + caste2Level;
-            caste1Level = _previousCaste1Level / sumPercentage * remainderPercentage;
-            caste2Level = _previousCaste2Level /sumPercentage * remainderPercentage;
+            if (i != changedSliderIndex)
+            {
+                sumPercentage += casteLevels[i];
+            }
         }
 
-        else if (caste1Level != _previousCaste1Level)
+        for (int i = 0; i < _sliders.Length; i++)
         {
-            remainderPercentage = 100f - caste1Level;
-            sumPercentage = caste0Level + caste2Level;
-            caste0Level = _previousCaste0Level / sumPercentage * remainderPercentage;
-            caste2Level = _previousCaste2Level * remainderPercentage;
+            if (i != changedSliderIndex & sumPercentage == 0)
+            {
+                casteLevels[i] = 0.5f * remainderPercentage;
+            }
+            else if (i != changedSliderIndex)
+            {
+                casteLevels[i] = _previousCasteLevels[i] / sumPercentage * remainderPercentage;
+            }
+
+            casteLevels[i] = Mathf.Round(Mathf.Clamp(casteLevels[i], 0, 100));
+            _sliders[i].SetValueWithoutNotify(casteLevels[i]);
+            _previousCasteLevels[i] = casteLevels[i];
         }
+    }
 
-        else if (caste2Level != _previousCaste2Level)
-        {
-            remainderPercentage = 100f - caste2Level;
-            sumPercentage = caste0Level + caste1Level;
-            caste0Level = _previousCaste0Level / sumPercentage * remainderPercentage;
-            caste1Level = _previousCaste1Level / sumPercentage * remainderPercentage;
-        }
-
-        _caste0Slider.value = caste0Level;
-        _caste1Slider.value = caste1Level;
-        _caste2Slider.value = caste2Level;
-
-        _previousCaste0Level = caste0Level;
-        _previousCaste1Level = caste1Level;
-        _previousCaste2Level = caste2Level;
+    private void UpdateHatchProgress()
+    {
+        _hatchProgressSlider.value = _colony.HatchProgress;
     }
 }

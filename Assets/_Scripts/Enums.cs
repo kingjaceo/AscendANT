@@ -25,13 +25,10 @@ public enum PheromoneState
 [Serializable]
 public enum PheromoneName
 {
-    Pheromone,
     Scout,
-    Report,
-    Retrieve,
-    TendColony,
-    Attack,
-    CircleColony,
+    Collect,
+    TendEggs,
+    Queen
 }
 
 [Flags]
@@ -44,4 +41,12 @@ public enum ResourceType
     Water       = 0b_0000_0100, // 4
     Eggs        = 0b_0000_1000, // 8
     Aphids      = 0b_0001_0000, // 16
+}
+
+public enum TargetType
+{
+    Colony,
+    Ant,
+    Queen,
+    Resource
 }

@@ -43,8 +43,6 @@ public class Queen : Ant
         _transform.forward = _direction;
         _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
 
-        Debug.Log("Queen moves in " + _direction);
-
         timeSinceLastEgg += Time.deltaTime;
 
         if (timeSinceLastEgg > timeToLayEgg) 

@@ -8,10 +8,10 @@ public class Caste
 { 
     public string Name;
     public float Speed { get; private set; }
-    public List<Pheromone> PheromoneSequence { get; private set; }
+    public List<IPheromone> PheromoneSequence { get; private set; }
     public float Percentage { get; private set; }
     
-    public Caste(string name, float percentage, float speed, List<Pheromone> pheromoneSequence)
+    public Caste(string name, float percentage, float speed, List<IPheromone> pheromoneSequence)
     {
         Speed = speed;
 
