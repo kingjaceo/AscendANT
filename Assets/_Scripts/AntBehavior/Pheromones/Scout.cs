@@ -5,47 +5,30 @@ using System;
 
 class Scout : IPheromone
 {
-    public ResourceType Target;
-
     private float _timeElapsed = 0;
     private Ant _ant;
 
-    public Scout(ResourceType target)
+    public Scout()
     {
-        Target = target;
     }
 
-    public Scout(Ant ant, ResourceType target)
+    public Scout(Ant ant)
     {
         _ant = ant;
-        Target = target;
     }
 
     public void Start()
     {
-        _ant.SetResourceTarget(Target);
+        _ant.SetLocationTarget(LocationType.Resource);
     }
 
     public void Update()
     {
-        bool antWandering = _ant.AntBehaviorMachine.CurrentBehavior == _ant.AntBehaviorMachine.Wander;
         bool antIdling = _ant.AntBehaviorMachine.CurrentBehavior == _ant.AntBehaviorMachine.Idle;
-        bool antApproachingColony = _ant.AntBehaviorMachine.CurrentBehavior == _ant.AntBehaviorMachine.Approach;
-        if (_ant.CollidedWithTarget & antWandering)
+
+        // Ant should begin scouting
+        if (antIdling & _timeElapsed > 1)
         {
-            _ant.CollidedWithTarget = false;
-            _ant.SetLocationTarget(TargetType.Colony);
-            // _ant.AntBehaviorMachine.Approach.SetTarget(TargetType.Colony);
-            _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
-        }
-        else if (_ant.CollidedWithTarget & antApproachingColony)
-        {
-            _ant.CollidedWithTarget = false;
-            _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Wander);
-        }
-        else if (_timeElapsed > 3 & antIdling)
-        {
-            _ant.SetResourceTarget(Target);
             _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Wander);
         }
 
@@ -59,7 +42,57 @@ class Scout : IPheromone
 
     public IPheromone Copy(Ant ant)
     {
-        return new Scout(ant, Target);
+        return new Scout(ant);
+    }
+
+    // public void CollidedWithTarget(GameObject target)
+    // {
+    //     if (_ant.LocationTarget == LocationType.Resource)
+    //     {
+    //         // Ant should discover the resource and begin approaching the colony
+    //         ResourceType resourceType = target.GetComponent<Resource>().ResourceType;
+    //         _ant.Memory.DiscoverResource(resourceType, target.transform.position);
+
+    //         _ant.SetLocationTarget(LocationType.Colony);
+    //         _ant.AntBehaviorMachine.Approach.SetTargetPosition(_ant.Colony.Transform.position);
+    //         _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
+    //     }
+
+    //     else if (_ant.LocationTarget == LocationType.Colony)
+    //     {
+    //         // Ant should begin idling
+    //         _timeElapsed = 0;
+    //         _ant.SetLocationTarget(LocationType.Resource);
+    //         _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
+    //     }
+    // }
+
+    public void OnCollision(GameObject collider)
+    {
+        Location location;
+
+        if (collider.TryGetComponent(out location))
+        {
+            if (location.LocationType == LocationType.Resource)
+            {
+                // Ant should discover the resource and begin approaching the colony
+                ResourceType resourceType = collider.GetComponent<Resource>().ResourceType;
+                _ant.Memory.DiscoverResource(resourceType, collider.transform.position);
+
+                _ant.SetLocationTarget(LocationType.Colony);
+                _ant.AntBehaviorMachine.Approach.SetTargetPosition(_ant.Colony.Transform.position);
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
+            }
+
+            if (location.LocationType == LocationType.Colony)
+            {
+                // Ant should begin idling
+                _timeElapsed = 0;
+                _ant.SetLocationTarget(LocationType.Resource);
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
+            }
+        }
+
     }
     
     // public override Vector3 GetDirection(Ant ant)

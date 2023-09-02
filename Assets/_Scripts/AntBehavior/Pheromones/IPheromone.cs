@@ -11,4 +11,8 @@ public interface IPheromone
     public void Finish();
 
     public IPheromone Copy(Ant ant);
+
+    // public void CollidedWithTarget(GameObject target);
+
+    public void OnCollision(GameObject collider);
 }

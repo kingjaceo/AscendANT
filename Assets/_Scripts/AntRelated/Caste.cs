@@ -10,6 +10,7 @@ public class Caste
     public float Speed { get; private set; }
     public List<IPheromone> PheromoneSequence { get; private set; }
     public float Percentage { get; private set; }
+    public float HarvestAmount { get; private set; }
     
     public Caste(string name, float percentage, float speed, List<IPheromone> pheromoneSequence)
     {
@@ -20,6 +21,8 @@ public class Caste
         Percentage = percentage;
 
         PheromoneSequence = pheromoneSequence;
+
+        HarvestAmount = 5;
     }
 
     public void SetPercentage(float percentage)

@@ -35,7 +35,6 @@ public enum PheromoneName
 public enum ResourceType
 {
     // each represents a bit field, use bitwise logical operators | or & to conbine or intersect choices
-    Resource    = 0b_0000_0000, // 0
     Curiosity   = 0b_0000_0001, // 1
     Food        = 0b_0000_0010, // 2
     Water       = 0b_0000_0100, // 4
@@ -43,10 +42,11 @@ public enum ResourceType
     Aphids      = 0b_0001_0000, // 16
 }
 
-public enum TargetType
+[Flags]
+public enum LocationType
 {
-    Colony,
-    Ant,
-    Queen,
-    Resource
+    None        = 0b_0000_0000, // 0
+    Colony      = 0b_0000_0001, // 1
+    Queen       = 0b_0000_0010, // 2
+    Resource    = 0b_0000_0100, // 4
 }

@@ -5,9 +5,16 @@ using System;
 
 class TendColony : IPheromone
 {
+    private float _timeElapsed = 0;
+    private Ant _ant;
+    
     public TendColony()
     {
-        Debug.Log("TendColony pheromone created!");
+    }
+
+    public TendColony(Ant ant)
+    {
+        _ant = ant;
     }
 
     public void Start()
@@ -17,7 +24,21 @@ class TendColony : IPheromone
 
     public void Update()
     {
+        // Circle the Queen
+        if (_timeElapsed > 3)
+        {
+            _ant.SetLocationTarget(LocationType.Queen);
+            _ant.AntBehaviorMachine.Circle.SetTarget(_ant.Colony.Queen.Transform.position);
+            _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Circle);
+        }
 
+        // if close enough to queen, increment egg progress
+        if ((_ant.Transform.position - _ant.Colony.Queen.Transform.position).sqrMagnitude < 2)
+        {
+            _ant.Colony.TendEggs();
+        }
+
+        _timeElapsed += Time.deltaTime;
     }
 
     public void Finish()
@@ -27,7 +48,17 @@ class TendColony : IPheromone
 
     public IPheromone Copy(Ant ant)
     {
-        return new TendColony();
+        return new TendColony(ant);
+    }
+
+    // public void CollidedWithTarget(GameObject target)
+    // {
+        
+    // }
+
+    public void OnCollision(GameObject collider)
+    {
+        
     }
 
     // public override Vector3 GetDirection(Ant ant)

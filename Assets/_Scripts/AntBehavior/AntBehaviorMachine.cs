@@ -8,14 +8,16 @@ public class AntBehaviorMachine
 {
     public IAntBehavior CurrentBehavior { get; private set; }
 
+    private Ant _ant;
+
     private WanderBehavior _wander;
     public WanderBehavior Wander => _wander;
 
     private ApproachBehavior _approach;
     public ApproachBehavior Approach => _approach;
 
-    // private CircleBehavior _circle;
-    // public CircleBehavior Circle => _circle;
+    private CircleBehavior _circle;
+    public CircleBehavior Circle => _circle;
 
     private IdleBehavior _idle;
     public IdleBehavior Idle => _idle;
@@ -24,10 +26,11 @@ public class AntBehaviorMachine
 
     public AntBehaviorMachine(Ant ant)
     {
-        _wander = new WanderBehavior(ant);
-        _approach = new ApproachBehavior(ant);
-        // _circle = new CircleBehavior(ant);
-        _idle = new IdleBehavior(ant);
+        _ant = ant;
+        _wander = new WanderBehavior(_ant);
+        _approach = new ApproachBehavior(_ant);
+        _circle = new CircleBehavior(_ant);
+        _idle = new IdleBehavior(_ant);
     }
 
     public void Initialize(IAntBehavior behavior)

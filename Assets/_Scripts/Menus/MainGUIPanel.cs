@@ -20,6 +20,7 @@ public class MainGUIPanel : MonoBehaviour
     private float[] _previousCasteLevels = new float[] {10, 80, 10};
 
     [SerializeField] private Slider _hatchProgressSlider;
+    [SerializeField] private Slider _layProgressSlider;
 
 
     private TMP_Text _caste0Text;
@@ -32,6 +33,7 @@ public class MainGUIPanel : MonoBehaviour
         UpdateCasteText();
         _colony.UpdateCastePercentages(_previousCasteLevels);
         UpdateHatchProgress();
+        UpdateLayProgress();
     }
 
     // Start is called before the first frame update
@@ -124,5 +126,10 @@ public class MainGUIPanel : MonoBehaviour
     private void UpdateHatchProgress()
     {
         _hatchProgressSlider.value = _colony.HatchProgress;
+    }
+
+    private void UpdateLayProgress()
+    {
+        _layProgressSlider.value = _colony.Queen.TimeSinceLastEgg / _colony.Queen.TimeToLayEgg * 100;
     }
 }

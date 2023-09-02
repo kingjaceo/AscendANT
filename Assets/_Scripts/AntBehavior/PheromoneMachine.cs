@@ -8,6 +8,8 @@ public class PheromoneMachine
 {
     public IPheromone CurrentPheromone { get; private set; }
 
+    private Ant _ant;
+
     private List<IPheromone> _pheromoneSequence = new List<IPheromone>();
     private int _currentPheromoneIndex;
 
@@ -15,14 +17,14 @@ public class PheromoneMachine
 
     public PheromoneMachine(Ant ant)
     {
-
+        _ant = ant;
     }
 
-    public void Initialize(List<IPheromone> pheromones, Ant ant)
+    public void Initialize(List<IPheromone> pheromones)
     {
         foreach (IPheromone pheromone in pheromones)
         {
-            _pheromoneSequence.Add(pheromone.Copy(ant));
+            _pheromoneSequence.Add(pheromone.Copy(_ant));
         }
         
         CurrentPheromone = _pheromoneSequence[0];

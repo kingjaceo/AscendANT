@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Queen : Ant
 {
-    private float timeToLayEgg;
-    private float timeSinceLastEgg;
+    private float _timeToLayEgg = 10f;
+    public float TimeToLayEgg => _timeToLayEgg;
+    private float _timeSinceLastEgg = 0f;
+    public float TimeSinceLastEgg => _timeSinceLastEgg;
 
     void Awake()
     {
@@ -19,7 +21,7 @@ public class Queen : Ant
     public override void Start()
     {
         base.Start();
-        timeToLayEgg = 10f;
+        _timeToLayEgg = 10f;
     }
 
     // Update is called once per frame
@@ -43,12 +45,12 @@ public class Queen : Ant
         _transform.forward = _direction;
         _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
 
-        timeSinceLastEgg += Time.deltaTime;
+        _timeSinceLastEgg += Time.deltaTime;
 
-        if (timeSinceLastEgg > timeToLayEgg) 
+        if (_timeSinceLastEgg > _timeToLayEgg) 
         {
             LayEgg();
-            timeSinceLastEgg = 0;
+            _timeSinceLastEgg = 0;
         }
     }
 

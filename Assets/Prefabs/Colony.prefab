@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1611642917827940365}
   - component: {fileID: 1611642917827940362}
+  - component: {fileID: -7724564094432201210}
   - component: {fileID: 7187125433110899556}
   m_Layer: 0
   m_Name: Colony
@@ -52,6 +53,19 @@ MonoBehaviour:
   HatchProgress: 0
   _antPrefab: {fileID: 1317557349863640888, guid: 6ec926140a8c6b1448a3d37288faefd2, type: 3}
   _queenPrefab: {fileID: 1537797982187099633, guid: e203921d34af2dc41ade31a9dae45660, type: 3}
+--- !u!114 &-7724564094432201210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611642917827940364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a090ccb88520e5045b35da79d7f8eec2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LocationType: 1
 --- !u!136 &7187125433110899556
 CapsuleCollider:
   m_ObjectHideFlags: 0

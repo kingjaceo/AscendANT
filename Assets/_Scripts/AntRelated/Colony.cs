@@ -18,9 +18,11 @@ public class Colony : MonoBehaviour
 
     [SerializeField] private GameObject _queenPrefab;
     private Queen _queen;
+    public Queen Queen => _queen;
 
     private Transform _transform;
-    
+    public Transform Transform => _transform;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -32,7 +34,6 @@ public class Colony : MonoBehaviour
         InitializeQueen();
         StartCoroutine(InitializeAnts());
         StartCoroutine(HatchEggs());
-
     }
 
     // Update is called once per frame
@@ -52,8 +53,8 @@ public class Colony : MonoBehaviour
 
     private void InitializeCastes()
     {
-        ResourceType target = ResourceType.Food | ResourceType.Curiosity;
-        Scout scout = new Scout(target);
+        // ResourceType target = ResourceType.Food | ResourceType.Curiosity;
+        Scout scout = new Scout();
         Harvest harvest = new Harvest(ResourceType.Food);
         TendColony tendColony = new TendColony();
 
@@ -73,8 +74,8 @@ public class Colony : MonoBehaviour
 
     private void InitializeQueen()
     {
-        CircleColony circle = new CircleColony();
-        List<IPheromone> queenPheromoneSequence = new List<IPheromone> { circle };
+        // CircleColony circle = new CircleColony();
+        List<IPheromone> queenPheromoneSequence = new List<IPheromone>();
         Caste casteQ = new Caste("Queen", 0f, 0.25f, queenPheromoneSequence);
        
         _queen = Instantiate(_queenPrefab).GetComponent<Queen>();
@@ -149,7 +150,8 @@ public class Colony : MonoBehaviour
     private void NextAnt(Caste caste)
     {
         // create the Ant
-        Ant ant = Instantiate(_antPrefab).GetComponent<Ant>();
+        GameObject antObject = Instantiate(_antPrefab);
+        Ant ant = antObject.GetComponent<Ant>();
 
         // set the Ant's parent
         ant.transform.parent = transform;
@@ -159,9 +161,11 @@ public class Colony : MonoBehaviour
         ant.AssignColony(this);
         ant.AssignCaste(caste);
 
+        // ant.GetComponent<Renderer>().material.color = PaletteManager.Colors[0];
+        antObject.name = caste.Name + "Ant" + ant.ID;
+
         // update colony variables
         NumAnts++;
-        // _ants.Add(ant);
         AntsByCaste[caste.Name] ++;
     }
 
@@ -196,5 +200,10 @@ public class Colony : MonoBehaviour
     public Vector3 GetQueenPosition()
     {
         return _queen.transform.position;
+    }
+
+    public void AddFood(float amount)
+    {
+        ResourceAmounts[ResourceType.Food] += amount;
     }
 }

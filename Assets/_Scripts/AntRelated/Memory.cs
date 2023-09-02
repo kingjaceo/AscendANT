@@ -28,9 +28,10 @@ public class Memory
         colony = otherMemory.colony;
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
-            if (otherMemory.nearestResource.ContainsKey(resourceType))
+            Vector3 location;
+            if (otherMemory.nearestResource.TryGetValue(resourceType, out location))
             {
-                nearestResource[resourceType] = otherMemory.nearestResource[resourceType];
+                nearestResource[resourceType] = location;
             }
         
             resourceLocations[resourceType] = new List<Vector3>(otherMemory.resourceLocations[resourceType]);
