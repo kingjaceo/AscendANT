@@ -36,14 +36,13 @@ public class Ant : MonoBehaviour
         body.freezeRotation = true;
 
         _transform = transform;
-
-        _antBehaviorMachine = new AntBehaviorMachine(this);
-        _pheromoneMachine = new PheromoneMachine(this);
     }
 
     public virtual void Start()
     {
+        _antBehaviorMachine = new AntBehaviorMachine(this);
         _antBehaviorMachine.Initialize(_antBehaviorMachine.Idle);
+        _pheromoneMachine = new PheromoneMachine(this);
         _pheromoneMachine.Initialize(Caste.PheromoneSequence);
 
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))

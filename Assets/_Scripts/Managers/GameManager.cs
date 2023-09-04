@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public void ChangeState(GameState newState)
     {
         OnBeforeStateChanged?.Invoke(newState);
-        Debug.Log($"GameManager has new state: { newState }");
+        // Debug.Log($"GameManager has new state: { newState }");
 
         State = newState;
         switch (newState) 

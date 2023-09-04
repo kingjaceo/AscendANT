@@ -10,9 +10,11 @@ public class PaletteManager : MonoBehaviour
     
     void Awake()
     {
-        Texture2D image = LoadImage("palette.png");
+        string path = Directory.GetCurrentDirectory() + "\\Assets";
+        string palettePath = path + "\\palette.png";
         
-        // (Texture2D)Resources.Load("palette.png");  
+        Texture2D image = LoadImage(palettePath);
+        
         Instance = this;
         ReadColors(image);
     }
@@ -21,7 +23,8 @@ public class PaletteManager : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            Colors.Add(image.GetPixel(20, i * 160 + 20));
+            Color color = image.GetPixel(i * 160 + 20, 100);
+            Colors.Add(color);
         }
     }
 

@@ -89,14 +89,14 @@ public class Memory
 
     public void UpdateResourceLocations(Memory otherMemory, ResourceType resourceType)
     {
-        try
+        List<Vector3> locations;
+        if (otherMemory.resourceLocations.TryGetValue(resourceType, out locations))
         {
-            Vector3 resourceLocation = otherMemory.resourceLocations[resourceType].Last();
-            AddResourceLocation(resourceType, resourceLocation);
-        }
-        catch (InvalidOperationException ex)
-        {
-            Debug.LogException(ex);
+            if (locations.Count > 0)
+            {
+                Vector3 resourceLocation = locations.Last();
+                AddResourceLocation(resourceType, resourceLocation);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Colony : MonoBehaviour
 { 
@@ -13,7 +14,8 @@ public class Colony : MonoBehaviour
 
     [SerializeField] private GameObject _antPrefab;
     private List<Ant> _ants;
-    public Dictionary<string, float> AntsByCaste = new Dictionary<string, float>();
+    public int[] AntCountByCaste;
+    public List<Ant>[] AntsByCaste;
     public Caste[] Castes { get; private set;}
 
     [SerializeField] private GameObject _queenPrefab;
@@ -40,6 +42,7 @@ public class Colony : MonoBehaviour
     void Start()
     {
         MainGUIPanel.Instance.GiveColony(this);
+        ConnectCastesToGUI();
     }
 
     // initalizes the colony according to default parameters
@@ -69,6 +72,7 @@ public class Colony : MonoBehaviour
         Caste caste2 = new Caste("Worker", 0.5f, 3f, workerPheromoneSequence);
 
         Caste[] castes = { caste0, caste1, caste2 };
+
         Castes = castes;
     }
 
@@ -82,10 +86,11 @@ public class Colony : MonoBehaviour
         _queen.AssignColony(this);
 
         // set the Ant's parent
-        _queen.transform.parent = transform;
+        _queen.Transform.parent = transform;
 
         // set the Ant's position, colony, and caste
-        _queen.transform.position = RandomLocationAroundColony(0.5f, 1.5f);
+        _queen.Transform.position = RandomLocationAroundColony(0.5f, 1.5f);
+        _queen.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[PaletteManager.Colors.Count - 1];
         _queen.AssignColony(this);
         _queen.AssignCaste(casteQ);
     }
@@ -94,13 +99,16 @@ public class Colony : MonoBehaviour
     private IEnumerator InitializeAnts()
     {
         int[] amountOfAntsInCastes = { 1, 17, 2 };
+        AntCountByCaste = new int[Castes.Length];
+        AntsByCaste = new List<Ant>[Castes.Length];
 
         for (int i = 0; i < Castes.Length; i++) 
         {
-            AntsByCaste[Castes[i].Name] = 0;
+            AntCountByCaste[i] = 0;
+            AntsByCaste[i] = new List<Ant>();
             for (int j = 0; j < amountOfAntsInCastes[i]; j++)
             {
-                NextAnt(Castes[i]);
+                NextAnt(i);
 
                 yield return new WaitForSeconds(0.01f);
             }
@@ -139,16 +147,18 @@ public class Colony : MonoBehaviour
                 HatchProgress = 0;
 
                 // produce a new ant
-                Caste caste = NextCaste();
-                NextAnt(caste);
+                int casteIndex = NextCaste();
+                NextAnt(casteIndex);
             }
 
             yield return null;
         }
     }
 
-    private void NextAnt(Caste caste)
+    private void NextAnt(int casteIndex)
     {
+        Caste caste = Castes[casteIndex];
+
         // create the Ant
         GameObject antObject = Instantiate(_antPrefab);
         Ant ant = antObject.GetComponent<Ant>();
@@ -161,22 +171,26 @@ public class Colony : MonoBehaviour
         ant.AssignColony(this);
         ant.AssignCaste(caste);
 
-        // ant.GetComponent<Renderer>().material.color = PaletteManager.Colors[0];
+        // set the color and name
+        Color color = PaletteManager.Colors[casteIndex];
+        ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[casteIndex*4];
         antObject.name = caste.Name + "Ant" + ant.ID;
+        Debug.Log(antObject.name + " gets color: " + color.ToString());
 
         // update colony variables
         NumAnts++;
-        AntsByCaste[caste.Name] ++;
+        AntCountByCaste[casteIndex] ++;
+        AntsByCaste[casteIndex].Add(ant);
     }
 
-    private Caste NextCaste()
+    private int NextCaste()
     {
         // compare Caste percentages to real percentages:
         int casteIndex = 0;
         float maxPercentageDifference = 0;
         for (int i = 0; i < Castes.Length; i++) 
         {
-            float realPercentage = AntsByCaste[Castes[i].Name] / NumAnts;
+            float realPercentage = AntCountByCaste[i] / NumAnts;
             float targetPercentage = Castes[i].Percentage;
             float percentageDifference = targetPercentage - realPercentage;
             if (percentageDifference > maxPercentageDifference)
@@ -186,7 +200,7 @@ public class Colony : MonoBehaviour
             }
         }
 
-        return Castes[casteIndex];
+        return casteIndex;
     }
 
     public void UpdateCastePercentages(float[] newCastePercentages)
@@ -205,5 +219,32 @@ public class Colony : MonoBehaviour
     public void AddFood(float amount)
     {
         ResourceAmounts[ResourceType.Food] += amount;
+    }
+
+    public void ConnectCastesToGUI()
+    {
+        for (int i = 0; i < Castes.Length; i++)
+        {
+            Debug.Log("Connecting Caste " + i + " to ColorDropdown " + i);
+            
+            int k = i;
+
+            MainGUIPanel.Instance.ColorDropdowns[i].onValueChanged.AddListener((v) => { ChangeColor(k); });
+            // MainGUIPanel.Instance.PheromoneButtons[i].onClick.AddListener(Castes[i].ChangePheromone);
+        }
+    }
+
+    public void ChangeColor(int casteIndex)
+    {
+        Debug.Log("Attempting to change the color of Caste " + casteIndex + " to ");
+        
+        int colorIndex = MainGUIPanel.Instance.ColorDropdowns[casteIndex].value;
+        Color color = PaletteManager.Colors[colorIndex];
+        
+        for (int j = 0; j < AntCountByCaste[casteIndex]; j++)
+        {
+            Ant ant = AntsByCaste[casteIndex][j];
+            ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+        }  
     }
 }
