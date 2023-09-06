@@ -12,7 +12,9 @@ public class WorldManager : MonoBehaviour
 
     void Awake()
     {
+        Instance = this;
         GameManager.OnAfterStateChanged += GameManager_OnAfterStateChanged;
+        AllPheromones Pheromones = new AllPheromones();
         _scale = new Vector3(50f, 2f, 50f);
     }
     

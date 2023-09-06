@@ -27,8 +27,7 @@ class TendColony : IPheromone
         // Circle the Queen
         if (_timeElapsed > 3)
         {
-            _ant.SetLocationTarget(LocationType.Queen);
-            _ant.AntBehaviorMachine.Circle.SetTarget(_ant.Colony.Queen.Transform.position);
+            _ant.AntBehaviorMachine.Circle.SetTarget(LocationType.Queen, _ant.Colony.Queen.Transform.position);
             _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Circle);
         }
 
@@ -78,4 +77,9 @@ class TendColony : IPheromone
     //         ant.Colony.TendEggs();
     //     }
     // }
+
+    public override string ToString()
+    {
+        return "TendColony";
+    }
 }

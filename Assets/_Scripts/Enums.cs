@@ -26,7 +26,7 @@ public enum PheromoneState
 public enum PheromoneName
 {
     Scout,
-    Collect,
+    Harvest,
     TendEggs,
     Queen
 }

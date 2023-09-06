@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StartMenu : MonoBehaviour
+public class GUIStartMenu : MonoBehaviour
 {
     public Button _playButton;
     public Button _quitButton;

@@ -6,9 +6,15 @@ using UnityEngine;
 public class ApproachBehavior : IAntBehavior
 {
     private Ant _ant;
-    public LocationType TargetLocation;
-    public ResourceType TargetResource;
-    public Vector3 TargetPosition;
+
+    private LocationType _targetLocation;
+    public LocationType TargetLocation => _targetLocation;
+
+    private ResourceType _targetResource;
+    public ResourceType TargetResource => _targetResource;
+
+    private Vector3 _targetPosition;
+    public Vector3 TargetPosition => _targetPosition;
 
     public ApproachBehavior(Ant ant)
     {
@@ -17,7 +23,7 @@ public class ApproachBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins approaching " + _ant.LocationTarget);
+        Debug.Log("Ant" + _ant.ID + " begins approaching " + TargetLocation);
     }
 
     public void Update()
@@ -28,16 +34,16 @@ public class ApproachBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " finishes approaching " + _ant.LocationTarget);
+        Debug.Log("Ant" + _ant.ID + " finishes approaching " + TargetLocation);
     }
 
     public void SetTarget(LocationType target)
     {
-        TargetLocation = target;
+        _targetLocation = target;
     }
 
     public void SetTargetPosition(Vector3 targetPosition)
     {
-        TargetPosition = targetPosition;
+        _targetPosition = targetPosition;
     }
 }

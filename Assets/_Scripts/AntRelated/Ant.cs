@@ -9,7 +9,7 @@ public class Ant : MonoBehaviour
     public Colony Colony { get; private set; }
     public Caste Caste { get; private set; }
 
-    [field: SerializeField] public int ID { get; private set; }
+    [field: SerializeField] public int ID { get; protected set; }
 
     public float PheromoneProgress { get; private set; } = 0;
     public Memory Memory { get; private set; }
@@ -21,7 +21,6 @@ public class Ant : MonoBehaviour
     protected Vector3 _direction;
     protected Transform _transform;
     public Transform Transform => _transform;
-    [field: SerializeField] public LocationType LocationTarget { get; private set; }
 
     protected AntBehaviorMachine _antBehaviorMachine;
     public AntBehaviorMachine AntBehaviorMachine => _antBehaviorMachine;
@@ -38,12 +37,15 @@ public class Ant : MonoBehaviour
         _transform = transform;
     }
 
-    public virtual void Start()
+    void Start()
+    {
+        OnStart();
+    }
+
+    protected virtual void OnStart()
     {
         _antBehaviorMachine = new AntBehaviorMachine(this);
         _antBehaviorMachine.Initialize(_antBehaviorMachine.Idle);
-        _pheromoneMachine = new PheromoneMachine(this);
-        _pheromoneMachine.Initialize(Caste.PheromoneSequence);
 
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
@@ -92,7 +94,7 @@ public class Ant : MonoBehaviour
 
     public virtual void AssignColony(Colony colony)
     {
-        this.Colony = colony;
+        Colony = colony;
         ID = colony.NumAnts;
         Memory = new Memory(colony.Memory);
     }
@@ -100,6 +102,8 @@ public class Ant : MonoBehaviour
     public void AssignCaste(Caste caste)
     {
         Caste = caste;
+        _pheromoneMachine = new PheromoneMachine(this);
+        _pheromoneMachine.Initialize(Caste.PheromoneSequence);
     }
 
     public void SetColony(Colony colony)
@@ -115,11 +119,6 @@ public class Ant : MonoBehaviour
     public void SetDirection(Vector3 direction)
     {
         _transform.forward = direction;
-    }
-
-    public void SetLocationTarget(LocationType target)
-    {
-        LocationTarget = target;
     }
 
     public void CarryResource(ResourceType resource, float amount)

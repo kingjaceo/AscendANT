@@ -12,14 +12,12 @@ public class Caste
     public float Percentage { get; private set; }
     public float HarvestAmount { get; private set; }
     
-    public Caste(string name, float percentage, float speed, List<IPheromone> pheromoneSequence)
+    public Caste(string name, float speed, List<IPheromone> pheromoneSequence)
     {
         Speed = speed;
 
         Name = name;
         
-        Percentage = percentage;
-
         PheromoneSequence = pheromoneSequence;
 
         HarvestAmount = 5;
@@ -27,7 +25,14 @@ public class Caste
 
     public void SetPercentage(float percentage)
     {
+        // Debug.Log("Percentage set to " + percentage);
         Percentage = percentage;
+    }
+
+    public void SetPheromone(PheromoneName pheromoneName, int pheromoneIndex)
+    {
+        // reference a static global "AllPheromones" list attribute
+        PheromoneSequence[pheromoneIndex] = AllPheromones.Instance.PheromonesByName[pheromoneName];
     }
 
 }

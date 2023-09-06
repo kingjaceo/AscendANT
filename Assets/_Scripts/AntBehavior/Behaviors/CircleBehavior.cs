@@ -5,7 +5,15 @@ using UnityEngine;
 public class CircleBehavior : IAntBehavior
 {
     private Ant _ant;
-    private Vector3 _target;
+
+    private LocationType _targetLocation;
+    public LocationType TargetLocation => _targetLocation;
+
+    private Vector3 _targetPosition;
+    public Vector3 TargetPosition => _targetPosition;
+
+    private float _minRadiusFromTarget = 0.5f;
+    private float _maxRadiusFromTarget = 1f;
 
     public CircleBehavior(Ant ant)
     {
@@ -14,16 +22,18 @@ public class CircleBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins circling " + _ant.LocationTarget);
+        Debug.Log("Ant" + _ant.ID + " begins circling " + TargetLocation);
     }
 
     public void Update()
     {
-        Vector3 radius = _target - _ant.Transform.position;
+        Vector3 radius = _targetPosition - _ant.Transform.position;
+
+        // point toward the target
         Vector3 direction = radius;
         
         float radiusLength = radius.magnitude;
-        if (radiusLength > 0.5f & radiusLength < 1f)
+        if (radiusLength > _minRadiusFromTarget & radiusLength < _maxRadiusFromTarget)
         {
             // begin travelling perpindicular
             Vector2 radius2D = new Vector2(radius.x, radius.z);
@@ -31,7 +41,7 @@ public class CircleBehavior : IAntBehavior
             direction = new Vector3(newDirection2D.x, _ant.Transform.forward.y, newDirection2D.y);
             // direction = Quaternion.AngleAxis(Random.Range(-5, 5), _ant.Transform.up) * direction;
         }
-        else if (radiusLength < 0.5f)
+        else if (radiusLength < _minRadiusFromTarget)
         {
             // begin moving away from the target
             direction = -direction;
@@ -42,11 +52,18 @@ public class CircleBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " finishes circling " + _ant.LocationTarget);
+        Debug.Log("Ant" + _ant.ID + " finishes circling " + TargetLocation);
     }
 
-    public void SetTarget(Vector3 target)
+    public void SetTarget(LocationType location, Vector3 target)
     {
-        _target = target;
+        _targetLocation = location;
+        _targetPosition = target;
+    }
+
+    public void SetMinMaxRadius(float minRadius, float maxRadius)
+    {
+        _minRadiusFromTarget = minRadius;
+        _maxRadiusFromTarget = maxRadius;
     }
 }

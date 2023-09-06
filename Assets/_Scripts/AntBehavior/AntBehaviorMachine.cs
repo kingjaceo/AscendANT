@@ -35,6 +35,8 @@ public class AntBehaviorMachine
 
     public void Initialize(IAntBehavior behavior)
     {
+        Debug.Log("AntBehavior machine created!");
+        
         CurrentBehavior = behavior;
 
         CurrentBehavior.Begin();
@@ -57,5 +59,10 @@ public class AntBehaviorMachine
         {
             CurrentBehavior.Update();
         }
+    }
+
+    public override string ToString()
+    {
+        return "AntBehaviorMachine for " + _ant.ID;
     }
 }

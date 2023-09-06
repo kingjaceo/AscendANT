@@ -15,13 +15,15 @@ public class Queen : Ant
         Rigidbody body = GetComponent<Rigidbody>();
         body.freezeRotation = true;
         _transform = transform;
+        ID = -1;
+        base.OnStart();
     }
 
     // Start is called before the first frame update
-    public override void Start()
+    public void Start()
     {
-        base.Start();
         _timeToLayEgg = 10f;
+        
     }
 
     // Update is called once per frame
@@ -61,7 +63,6 @@ public class Queen : Ant
 
     public new void AssignColony(Colony colony)
     {
-        
         SetColony(colony);
         SetMemory(new Memory(colony.Memory));
     }

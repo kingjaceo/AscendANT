@@ -14,6 +14,9 @@ class Harvest : IPheromone
     private HarvestState _harvestState;
     private float _timeElapsed;
 
+    public Harvest()
+    {}
+    
     public Harvest(ResourceType target)
     {
         TargetResourceType = target;
@@ -28,7 +31,6 @@ class Harvest : IPheromone
     public void Start()
     {
         _timeElapsed = 0;
-        _ant.SetLocationTarget(LocationType.Resource);
         _harvestState = HarvestState.AtColony;
     }
 
@@ -138,5 +140,10 @@ class Harvest : IPheromone
         Harvesting,
         ApproachingColony,
         AtColony,
+    }
+
+    public override string ToString()
+    {
+        return "Harvest";
     }
 }

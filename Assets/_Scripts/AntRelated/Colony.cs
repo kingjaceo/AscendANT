@@ -33,15 +33,17 @@ public class Colony : MonoBehaviour
 
         InitializeColony();
         InitializeCastes();
-        InitializeQueen();
-        StartCoroutine(InitializeAnts());
-        StartCoroutine(HatchEggs());
+        
     }
 
     // Update is called once per frame
     void Start()
     {
-        MainGUIPanel.Instance.GiveColony(this);
+        InitializeQueen();
+        StartCoroutine(InitializeAnts());
+        StartCoroutine(HatchEggs());
+        
+        GUIMainPanelController.Instance.SetColony(this);
         ConnectCastesToGUI();
     }
 
@@ -67,9 +69,9 @@ public class Colony : MonoBehaviour
 
         List<IPheromone> workerPheromoneSequence = new List<IPheromone> { harvest };
         
-        Caste caste0 = new Caste("Attendant", 0.1f, 1f, attendantPheromoneSequence);
-        Caste caste1 = new Caste("Scout", 0.4f, 2f, scoutPheromoneSequence);
-        Caste caste2 = new Caste("Worker", 0.5f, 3f, workerPheromoneSequence);
+        Caste caste0 = new Caste("Attendant", 1f, attendantPheromoneSequence);
+        Caste caste1 = new Caste("Scout", 2f, scoutPheromoneSequence);
+        Caste caste2 = new Caste("Worker", 3f, workerPheromoneSequence);
 
         Caste[] castes = { caste0, caste1, caste2 };
 
@@ -78,21 +80,23 @@ public class Colony : MonoBehaviour
 
     private void InitializeQueen()
     {
-        // CircleColony circle = new CircleColony();
-        List<IPheromone> queenPheromoneSequence = new List<IPheromone>();
-        Caste casteQ = new Caste("Queen", 0f, 0.25f, queenPheromoneSequence);
+        QueenPheromone queenPheromone = new QueenPheromone();
+        List<IPheromone> queenPheromoneSequence = new List<IPheromone> {queenPheromone};
+        Caste casteQ = new Caste("Queen", 0.5f, queenPheromoneSequence);
        
-        _queen = Instantiate(_queenPrefab).GetComponent<Queen>();
-        _queen.AssignColony(this);
-
-        // set the Ant's parent
+        GameObject queenObject = Instantiate(_queenPrefab);
+        _queen = queenObject.GetComponent<Queen>();
         _queen.Transform.parent = transform;
-
-        // set the Ant's position, colony, and caste
-        _queen.Transform.position = RandomLocationAroundColony(0.5f, 1.5f);
-        _queen.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[PaletteManager.Colors.Count - 1];
         _queen.AssignColony(this);
         _queen.AssignCaste(casteQ);
+        queenObject.name = "Queen";
+
+        // set the Ant's parent
+        
+
+        // set the Ant's position, colony, and caste
+        _queen.Transform.position = RandomLocationAroundColony(2f, 1.5f);
+        _queen.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[PaletteManager.Colors.Count - 1];
     }
 
     // initializes the default number and types of ants
@@ -104,10 +108,12 @@ public class Colony : MonoBehaviour
 
         for (int i = 0; i < Castes.Length; i++) 
         {
+            Debug.Log("Creating ants in caste " + i);
             AntCountByCaste[i] = 0;
             AntsByCaste[i] = new List<Ant>();
             for (int j = 0; j < amountOfAntsInCastes[i]; j++)
             {
+                Debug.Log("Creating ant " + NumAnts); 
                 NextAnt(i);
 
                 yield return new WaitForSeconds(0.01f);
@@ -172,8 +178,8 @@ public class Colony : MonoBehaviour
         ant.AssignCaste(caste);
 
         // set the color and name
-        Color color = PaletteManager.Colors[casteIndex];
-        ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[casteIndex*4];
+        Color color = PaletteManager.Colors[casteIndex * 2];
+        ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
         antObject.name = caste.Name + "Ant" + ant.ID;
         Debug.Log(antObject.name + " gets color: " + color.ToString());
 
@@ -190,7 +196,7 @@ public class Colony : MonoBehaviour
         float maxPercentageDifference = 0;
         for (int i = 0; i < Castes.Length; i++) 
         {
-            float realPercentage = AntCountByCaste[i] / NumAnts;
+            float realPercentage = AntCountByCaste[i] / (float) NumAnts;
             float targetPercentage = Castes[i].Percentage;
             float percentageDifference = targetPercentage - realPercentage;
             if (percentageDifference > maxPercentageDifference)
@@ -199,7 +205,8 @@ public class Colony : MonoBehaviour
                 maxPercentageDifference = percentageDifference;
             }
         }
-
+        
+        // Debug.Log("Next Caste chosen to be " + casteIndex + ", since real percentage is " + AntCountByCaste[casteIndex] + " / " +  NumAnts + " and caste percentage is " + Castes[casteIndex].Percentage);
         return casteIndex;
     }
 
@@ -226,10 +233,10 @@ public class Colony : MonoBehaviour
         for (int i = 0; i < Castes.Length; i++)
         {
             Debug.Log("Connecting Caste " + i + " to ColorDropdown " + i);
-            
-            int k = i;
+            GUIMainPanelController.Instance.CastePanels[i].SetCaste(Castes[i]);
+            GUIMainPanelController.Instance.CastePanels[i].SetColony(this);
 
-            MainGUIPanel.Instance.ColorDropdowns[i].onValueChanged.AddListener((v) => { ChangeColor(k); });
+            // GUIMainPanelController.Instance.CastePanels[i].
             // MainGUIPanel.Instance.PheromoneButtons[i].onClick.AddListener(Castes[i].ChangePheromone);
         }
     }
@@ -238,8 +245,7 @@ public class Colony : MonoBehaviour
     {
         Debug.Log("Attempting to change the color of Caste " + casteIndex + " to ");
         
-        int colorIndex = MainGUIPanel.Instance.ColorDropdowns[casteIndex].value;
-        Color color = PaletteManager.Colors[colorIndex];
+        Color color = GUIMainPanelController.Instance.CastePanels[casteIndex].GetColor();
         
         for (int j = 0; j < AntCountByCaste[casteIndex]; j++)
         {

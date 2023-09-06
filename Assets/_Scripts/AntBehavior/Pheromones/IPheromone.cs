@@ -12,7 +12,7 @@ public interface IPheromone
 
     public IPheromone Copy(Ant ant);
 
-    // public void CollidedWithTarget(GameObject target);
-
     public void OnCollision(GameObject collider);
+
+    public string ToString();
 }

@@ -18,7 +18,11 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    void Start() => ChangeState(GameState.Starting);
+    // void Start() => ChangeState(GameState.Starting);
+    void Start()
+    {
+        WorldManager.Instance.World.Create(new Vector3(50f, 2f, 50f));
+    }
 
     public void ChangeState(GameState newState)
     {

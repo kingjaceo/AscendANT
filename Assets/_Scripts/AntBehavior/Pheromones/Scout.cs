@@ -19,7 +19,7 @@ class Scout : IPheromone
 
     public void Start()
     {
-        _ant.SetLocationTarget(LocationType.Resource);
+
     }
 
     public void Update()
@@ -79,7 +79,6 @@ class Scout : IPheromone
                 ResourceType resourceType = collider.GetComponent<Resource>().ResourceType;
                 _ant.Memory.DiscoverResource(resourceType, collider.transform.position);
 
-                _ant.SetLocationTarget(LocationType.Colony);
                 _ant.AntBehaviorMachine.Approach.SetTargetPosition(_ant.Colony.Transform.position);
                 _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
             }
@@ -88,7 +87,6 @@ class Scout : IPheromone
             {
                 // Ant should begin idling
                 _timeElapsed = 0;
-                _ant.SetLocationTarget(LocationType.Resource);
                 _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
             }
         }
@@ -130,4 +128,9 @@ class Scout : IPheromone
     //         }
     //     }
     // }
+
+    public override string ToString()
+    {
+        return "Scout";
+    }
 }

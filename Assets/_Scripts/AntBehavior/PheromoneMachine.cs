@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 [Serializable]
 public class PheromoneMachine
@@ -24,6 +25,7 @@ public class PheromoneMachine
     {
         foreach (IPheromone pheromone in pheromones)
         {
+            Debug.Log("Adding pheromone " + pheromone.ToString());
             _pheromoneSequence.Add(pheromone.Copy(_ant));
         }
         
@@ -34,16 +36,16 @@ public class PheromoneMachine
         PheromoneChanged?.Invoke(CurrentPheromone);
     }
 
-    public void NextPheromone()
-    {
-        _currentPheromoneIndex++;
+    // public void NextPheromone()
+    // {
+    //     _currentPheromoneIndex++;
 
-        CurrentPheromone.Finish();
-        CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
-        CurrentPheromone.Start();
+    //     CurrentPheromone.Finish();
+    //     CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
+    //     CurrentPheromone.Start();
 
-        PheromoneChanged?.Invoke(CurrentPheromone);
-    }
+    //     PheromoneChanged?.Invoke(CurrentPheromone);
+    // }
 
     public void Update()
     {

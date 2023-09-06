@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
     public int interpolationFramesCount = 45;
     int elapsedFrames = 0;
         
-    void Start()
+    void Awake()
     {
         Instance = this;
     }
