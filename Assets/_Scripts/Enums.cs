@@ -35,6 +35,7 @@ public enum PheromoneName
 public enum ResourceType
 {
     // each represents a bit field, use bitwise logical operators | or & to conbine or intersect choices
+    None        = 0b_0000_0000,
     Curiosity   = 0b_0000_0001, // 1
     Food        = 0b_0000_0010, // 2
     Water       = 0b_0000_0100, // 4

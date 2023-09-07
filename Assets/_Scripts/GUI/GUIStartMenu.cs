@@ -12,8 +12,8 @@ public class GUIStartMenu : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        // _playButton.onClick.AddListener( () => { GameManager.Instance.ChangeState(GameState.WorldGeneration); } ); 
+        _playButton.onClick.AddListener(() => { GameManager.Instance.ChangeState(GameState.ChooseVictoryCondition); }); 
 
-        // _quitButton.onClick.AddListener( () => { GameManager.Instance.ChangeState(GameState.Quitting); } );
+        _quitButton.onClick.AddListener( () => { GameManager.Instance.ChangeState(GameState.Quitting); } );
     }
 }

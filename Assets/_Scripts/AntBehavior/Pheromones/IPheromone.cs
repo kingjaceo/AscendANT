@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IPheromone
-{
+{    
+    public PheromoneName PheromoneName { get; set; }
+
     public void Start();
 
     public void Update();

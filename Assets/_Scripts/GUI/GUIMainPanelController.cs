@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.Dropdown;
 
 public class GUIMainPanelController : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class GUIMainPanelController : MonoBehaviour
 
     [SerializeField] private Colony _colony;
     public Colony Colony => _colony;
+    private ColonyResources _colonyResources;
     [SerializeField] private TextMeshProUGUI _colonyStatsText;
 
     [SerializeField] private Slider _hatchProgressSlider;
@@ -23,22 +23,16 @@ public class GUIMainPanelController : MonoBehaviour
 
     private float[] _previousCastePercentages = new float[] {10, 80, 10};
  
-    public void Update()
+    void OnEnable()
     {
-        if (_colony != null)
-        {
-            UpdateColonyStats();
-            _colony.UpdateCastePercentages(_previousCastePercentages);
-            UpdateHatchProgress();
-            UpdateLayProgress();
-        }
+        
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        _casteButtonTemplate.SetActive(false);
         Instance = this;
+
+        _casteButtonTemplate.SetActive(false);
         int numCastes = 3;
 
         for (int i = 0; i < numCastes; i++)
@@ -58,19 +52,35 @@ public class GUIMainPanelController : MonoBehaviour
             CastePanels[i].SetCastePercentageSliderValue(_previousCastePercentages[i]);
         }
     }
+    
+    public void Update()
+    {
+        if (_colony != null)
+        {
+            UpdateColonyStats();
+            _colony.UpdateCastePercentages(_previousCastePercentages);
+            UpdateHatchProgress();
+            UpdateLayProgress();
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+    
+    }
 
     public void SetColony(Colony colony)
     {
         _colony = colony;
+        _colonyResources = _colony.ColonyResources;
     }
 
     private void UpdateColonyStats()
     {
-        Dictionary<ResourceType, float> resourceAmounts = _colony.ResourceAmounts;
-
-        string foodAmount = Math.Round(resourceAmounts[ResourceType.Food]).ToString();
-        string waterAmount = Math.Round(resourceAmounts[ResourceType.Water]).ToString();
-        string eggs = resourceAmounts[ResourceType.Eggs].ToString();
+        string foodAmount = Math.Round(_colonyResources.Amount(ResourceType.Food)).ToString();
+        string waterAmount = Math.Round(_colonyResources.Amount(ResourceType.Water)).ToString();
+        string eggs = _colonyResources.Amount(ResourceType.Eggs).ToString();
         string statsText = "";
         statsText += "Food: " + foodAmount + "\n";
         statsText += "Water: " + waterAmount + "\n";

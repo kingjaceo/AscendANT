@@ -5,7 +5,7 @@ using System;
 
 class Harvest : IPheromone
 {
-    public ResourceType TargetResourceType;
+    public ResourceType TargetResourceType = ResourceType.None;
 
     private Resource _targetResource;
     private Vector3 _targetPosition;
@@ -13,6 +13,8 @@ class Harvest : IPheromone
     private bool _hasTargetResourcePosition = false;
     private HarvestState _harvestState;
     private float _timeElapsed;
+
+    public PheromoneName PheromoneName { get; set; } = PheromoneName.Harvest;
 
     public Harvest()
     {}
@@ -30,8 +32,14 @@ class Harvest : IPheromone
 
     public void Start()
     {
+       Debug.Log("PHEROMONE: Harvest begins for " + _ant);
         _timeElapsed = 0;
         _harvestState = HarvestState.AtColony;
+
+        if (TargetResourceType == ResourceType.None)
+        {
+            TargetResourceType = ResourceType.Food;
+        }
     }
 
     public void Update()
@@ -64,7 +72,7 @@ class Harvest : IPheromone
 
     public void Finish()
     {
-
+        Debug.Log("PHEROMONE: Harvest ends for " + _ant);
     }
 
     public IPheromone Copy(Ant ant)
@@ -131,7 +139,7 @@ class Harvest : IPheromone
     private void DumpFood()
     {
         float amount = _ant.DumpResource(TargetResourceType);
-        _ant.Colony.AddFood(amount);
+        _ant.Colony.ColonyResources.AddResource(ResourceType.Food, amount);
     }
 
     private enum HarvestState

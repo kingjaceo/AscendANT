@@ -6,6 +6,7 @@ public class World : MonoBehaviour
 {
     [SerializeField] private GameObject _colonyPrefab;
     private Colony _colony;
+    public Colony Colony => _colony;
 
     private Transform _transform;
     private Vector3 _scale;
@@ -115,5 +116,15 @@ public class World : MonoBehaviour
         var z = _transform.position.z + Random.Range(-_scale.z / 2 + buffer, _scale.z / 2 - buffer);
 
         return new Vector3(x, y, z);
+    }
+
+    public void MakePlayable()
+    {
+        _colony.ConnectCastesToGUI();
+    }
+
+    public void OnDestroy()
+    {
+        Debug.Log("WORLD: World Destroyed!");
     }
 }

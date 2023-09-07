@@ -10,13 +10,13 @@ public class Memory
     public Colony colony;
     public Dictionary<ResourceType, Vector3> nearestResource = new Dictionary<ResourceType, Vector3>();
     public Dictionary<ResourceType, List<Vector3>> resourceLocations = new Dictionary<ResourceType, List<Vector3>>();
-    public Dictionary<ResourceType, float> colonyResources = new Dictionary<ResourceType, float>();
+    public ColonyResources ColonyResources;
     public List<ResourceType> updatedResources = new List<ResourceType>();
 
     public Memory(Colony colony)
     {
         this.colony = colony;
-        colonyResources = colony.ResourceAmounts;
+        ColonyResources = colony.ColonyResources;
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
             resourceLocations[resourceType] = new List<Vector3>();
@@ -84,7 +84,7 @@ public class Memory
             UpdateResourceLocations(colonyMemory, resourceType);
         }
 
-        colonyResources = new Dictionary<ResourceType, float>(colonyMemory.colonyResources);
+        ColonyResources = colonyMemory.ColonyResources;
     }
 
     public void UpdateResourceLocations(Memory otherMemory, ResourceType resourceType)

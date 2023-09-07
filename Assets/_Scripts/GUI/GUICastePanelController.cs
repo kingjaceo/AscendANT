@@ -17,6 +17,8 @@ public class GUICastePanelController : MonoBehaviour
     [SerializeField] private Button _mainButton;
     [SerializeField] private Button _pheromoneButton;
     [SerializeField] private Slider _castePercentageSlider;
+    [SerializeField] private GameObject _casteStatsPanel;
+    [SerializeField] private TMP_Text _casteStatsText;
     [SerializeField] private GameObject _pheromonePanel;
     private GUIPheromonePanelController _pheromonePanelController;
 
@@ -25,17 +27,20 @@ public class GUICastePanelController : MonoBehaviour
     {
         _transform = transform;
         _pheromonePanelController = _pheromonePanel.GetComponent<GUIPheromonePanelController>();
+        _casteStatsText = _casteStatsPanel.GetComponentInChildren<TMP_Text>();
     }
 
     void Start()
     {
         _pheromoneButton.onClick.AddListener(PheromoneButtonClicked);
+        _mainButton.onClick.AddListener(MainButtonClicked);
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateCasteText();
+        UpdateCasteStats();
     }
 
     public int GetCastePercentageSliderValue()
@@ -89,10 +94,23 @@ public class GUICastePanelController : MonoBehaviour
             _casteText.text += ": " + numAnts + $" ({Mathf.Round(currentPercentage)}%)";
         }
     }
+
+    private void UpdateCasteStats()
+    {
+        string newText = _caste.CasteStats.ToString();
+        _casteStatsText.text = newText;
+    }
     
     private void PheromoneButtonClicked()
     {
         bool isActive = _pheromonePanel.activeSelf;
         _pheromonePanel.SetActive(!isActive);
+    }
+
+    private void MainButtonClicked()
+    {
+        Debug.Log("Caste Panel toggled");
+        bool isActive = _casteStatsPanel.activeSelf;
+        _casteStatsPanel.SetActive(!isActive);
     }
 }

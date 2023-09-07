@@ -13,7 +13,10 @@ public class CameraController : MonoBehaviour
     wasd : basic movement
     shift : Makes camera accelerate
     space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
-    public static CameraController Instance;    
+    public static CameraController Instance; 
+    [SerializeField] private GameObject _camera;
+    private Transform _cameraTransform;
+    private bool _receivingInput = true;
         
     float mainSpeed = 10.0f; //regular speed
     float shiftAdd = 25.0f; //multiplied by how long shift is held.  Basically running
@@ -33,10 +36,25 @@ public class CameraController : MonoBehaviour
         Instance = this;
     }
 
-    void Update () {
+    void Start()
+    {
+        _cameraTransform = _camera.transform;
+        GameManager.OnAfterStateChanged += GameManager_OnAfterStateChanged;
+    }
+
+    void Update () 
+    {
+        if (_receivingInput)
+        {
+            InputUpdate();
+        }
+    }
+
+    void InputUpdate()
+    {
         lastMouse = Input.mousePosition - lastMouse ;
         lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
-        lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y, 0);
+        lastMouse = new Vector3(_cameraTransform.eulerAngles.x + lastMouse.x , _cameraTransform.eulerAngles.y + lastMouse.y, 0);
         // transform.eulerAngles = lastMouse;
         lastMouse =  Input.mousePosition;
         //Mouse  camera angle done.  
@@ -61,17 +79,17 @@ public class CameraController : MonoBehaviour
             }
 
                 p = p * Time.deltaTime;
-                Vector3 newPosition = transform.position;
+                Vector3 newPosition = _cameraTransform.position;
                 if (Input.GetKey(KeyCode.Space))
                 { //If player wants to move on X and Z axis only
-                    transform.Translate(p);
-                    newPosition.x = transform.position.x;
-                    newPosition.z = transform.position.z;
-                    transform.position = newPosition;
+                    _cameraTransform.Translate(p);
+                    newPosition.x = _cameraTransform.position.x;
+                    newPosition.z = _cameraTransform.position.z;
+                    _cameraTransform.position = newPosition;
                 } 
                 else 
                 {
-                    transform.Translate(p);
+                    _cameraTransform.Translate(p);
                 }
         }
 
@@ -113,11 +131,24 @@ public class CameraController : MonoBehaviour
     {
         float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
         // var mouseWorldPosStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 newPosition = new Vector3(transform.position.x, cameraHeight, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, newPosition, interpolationRatio);
+        Vector3 newPosition = new Vector3(_cameraTransform.position.x, cameraHeight, _cameraTransform.position.z);
+        _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, newPosition, interpolationRatio);
         elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
         // Mathf.Lerp(Camera.main.orthographicSize, zoom, interpolationFactor * Time.deltaTime);
         // var mouseWorldPosDiff = mouseWorldPosStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // transform.position += mouseWorldPosDiff;
+    }
+
+    private void GameManager_OnAfterStateChanged(GameState gameState)
+    {
+    //     switch (gameState)
+    //     {
+    //         case GameState.InProgress:
+    //             _receivingInput = true;
+    //             break;
+    //         default:
+    //             _receivingInput = false;
+    //             break;
+    //     }
     }
 }

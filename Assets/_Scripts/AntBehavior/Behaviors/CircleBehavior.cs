@@ -22,7 +22,6 @@ public class CircleBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins circling " + TargetLocation);
     }
 
     public void Update()
@@ -52,7 +51,6 @@ public class CircleBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " finishes circling " + TargetLocation);
     }
 
     public void SetTarget(LocationType location, Vector3 target)

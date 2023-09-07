@@ -19,18 +19,18 @@ public class MenuManager : MonoBehaviour
 
     private void GameManager_OnAfterStateChanged(GameState state)
     {
-        switch (state)
-        {
-            case GameState.InStartMenu:
-                Debug.Log("MenuManager turns on Start Menu");
-                _startMenuCanvas.SetActive(true);
-                break;
-            case GameState.InProgress:
-                Debug.Log("MenuManager turns off Start Menu");
-                _startMenuCanvas.SetActive(false);
-                break;
-            default:
-                break;
-        }
+        // switch (state)
+        // {
+        //     case GameState.MainMenu:
+        //         Debug.Log("MenuManager turns on Start Menu");
+        //         _startMenuCanvas.SetActive(true);
+        //         break;
+        //     case GameState.InProgress:
+        //         Debug.Log("MenuManager turns off Start Menu");
+        //         _startMenuCanvas.SetActive(false);
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 }

@@ -23,14 +23,13 @@ public class GUIManager : MonoBehaviour
  
    private void GameManager_OnAfterStateChanged(GameState state)
    {
-      switch (state)
-      {
-         case GameState.InProgress:
-            _mainGUICanvas.SetActive(true);
-            break;
-         default:
-            break;
-      }
+      // switch (state)
+      // {
+      //    case GameState.InProgress:
+      //       break;
+      //    default:
+      //       break;
+      // }
    }
    
    public void Update()

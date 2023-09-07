@@ -58,7 +58,7 @@ public class Queen : Ant
 
     private void LayEgg()
     {
-        Colony.ResourceAmounts[ResourceType.Eggs]++;
+        Colony.ColonyResources.AddResource(ResourceType.Eggs, 1);
     }
 
     public new void AssignColony(Colony colony)

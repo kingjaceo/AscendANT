@@ -9,7 +9,9 @@ public class Colony : MonoBehaviour
     public int NumAnts = 0;
 
     public Memory Memory;
-    public Dictionary<ResourceType, float> ResourceAmounts = new Dictionary<ResourceType, float>();
+    
+    public ColonyResources ColonyResources { get; private set; }
+
     public float HatchProgress = 0;
 
     [SerializeField] private GameObject _antPrefab;
@@ -42,17 +44,23 @@ public class Colony : MonoBehaviour
         InitializeQueen();
         StartCoroutine(InitializeAnts());
         StartCoroutine(HatchEggs());
-        
-        GUIMainPanelController.Instance.SetColony(this);
-        ConnectCastesToGUI();
     }
 
     // initalizes the colony according to default parameters
     private void InitializeColony()
     {
-        ResourceAmounts[ResourceType.Food] = 100f;
-        ResourceAmounts[ResourceType.Water] = 100f;
-        ResourceAmounts[ResourceType.Eggs] = 3f;
+        Dictionary<ResourceType, float> resourceAmounts = new Dictionary<ResourceType, float>();
+        resourceAmounts[ResourceType.Food] = 990f;
+        resourceAmounts[ResourceType.Water] = 990f;
+        resourceAmounts[ResourceType.Eggs] = 95f;
+
+        Dictionary<ResourceType, float> resourceCapacities = new Dictionary<ResourceType, float>();
+        resourceCapacities[ResourceType.Food] = 1100f;
+        resourceCapacities[ResourceType.Water] = 1000f;
+        resourceCapacities[ResourceType.Eggs] = 110f;
+
+        ColonyResources = new ColonyResources(resourceAmounts, resourceCapacities);
+
         Memory = new Memory(this);        
     }
 
@@ -118,8 +126,6 @@ public class Colony : MonoBehaviour
 
                 yield return new WaitForSeconds(0.01f);
             }
-
-            
         }
     }
 
@@ -136,9 +142,9 @@ public class Colony : MonoBehaviour
     {
         float tendAmount = 0.1f;
 
-        if (ResourceAmounts[ResourceType.Food] > 10)
+        if (ColonyResources.Amount(ResourceType.Food) > 10)
         {
-            ResourceAmounts[ResourceType.Food] -= tendAmount / 10;
+            ColonyResources.DepleteResource(ResourceType.Food, tendAmount / 10);
             HatchProgress += tendAmount;
         }
     }
@@ -147,9 +153,9 @@ public class Colony : MonoBehaviour
     {
         while(true)
         {
-            if (HatchProgress > 100 & ResourceAmounts[ResourceType.Eggs] > 0) {
+            if (HatchProgress > 100 & ColonyResources.Amount(ResourceType.Eggs) > 0) {
                 // reduce eggs and reset hatchProgress
-                ResourceAmounts[ResourceType.Eggs]--;
+                ColonyResources.DepleteResource(ResourceType.Food, 1);
                 HatchProgress = 0;
 
                 // produce a new ant
@@ -223,21 +229,15 @@ public class Colony : MonoBehaviour
         return _queen.transform.position;
     }
 
-    public void AddFood(float amount)
-    {
-        ResourceAmounts[ResourceType.Food] += amount;
-    }
-
     public void ConnectCastesToGUI()
     {
         for (int i = 0; i < Castes.Length; i++)
         {
             Debug.Log("Connecting Caste " + i + " to ColorDropdown " + i);
-            GUIMainPanelController.Instance.CastePanels[i].SetCaste(Castes[i]);
+            Caste caste = Castes[i];
+            GUIMainPanelController.Instance.SetColony(this);
+            GUIMainPanelController.Instance.CastePanels[i].SetCaste(caste);
             GUIMainPanelController.Instance.CastePanels[i].SetColony(this);
-
-            // GUIMainPanelController.Instance.CastePanels[i].
-            // MainGUIPanel.Instance.PheromoneButtons[i].onClick.AddListener(Castes[i].ChangePheromone);
         }
     }
 

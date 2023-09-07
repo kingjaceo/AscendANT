@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
 
 [Serializable]
 public class PheromoneMachine
@@ -23,11 +22,7 @@ public class PheromoneMachine
 
     public void Initialize(List<IPheromone> pheromones)
     {
-        foreach (IPheromone pheromone in pheromones)
-        {
-            Debug.Log("Adding pheromone " + pheromone.ToString());
-            _pheromoneSequence.Add(pheromone.Copy(_ant));
-        }
+        SetPheromoneSequence(pheromones);
         
         CurrentPheromone = _pheromoneSequence[0];
 
@@ -36,22 +31,37 @@ public class PheromoneMachine
         PheromoneChanged?.Invoke(CurrentPheromone);
     }
 
-    // public void NextPheromone()
-    // {
-    //     _currentPheromoneIndex++;
-
-    //     CurrentPheromone.Finish();
-    //     CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
-    //     CurrentPheromone.Start();
-
-    //     PheromoneChanged?.Invoke(CurrentPheromone);
-    // }
-
     public void Update()
     {
         if (CurrentPheromone != null)
         {
             CurrentPheromone.Update();
         }
+    }
+
+    public void SetPheromoneSequence(List<IPheromone> pheromones)
+    {
+        foreach (IPheromone pheromone in pheromones)
+        {
+            Debug.Log("PHEROMONE: Setting pheromone for " + _ant + pheromone.ToString());
+            _pheromoneSequence.Add(pheromone.Copy(_ant));
+        }
+    }
+
+    public void UpdatePheromoneSequence(List<IPheromone> pheromones)
+    {
+        Debug.Log("PHEROMONE: Updating pheromone list for " + _ant + " to " + pheromones[0]);
+
+        for (int i = 0; i < pheromones.Count; i++)
+        {
+            if (pheromones[i].PheromoneName != _pheromoneSequence[i].PheromoneName)
+            {
+                _pheromoneSequence[i] = pheromones[i].Copy(_ant);
+            } 
+        } 
+
+        CurrentPheromone.Finish();
+        CurrentPheromone = _pheromoneSequence[0];
+        CurrentPheromone.Start();
     }
 }

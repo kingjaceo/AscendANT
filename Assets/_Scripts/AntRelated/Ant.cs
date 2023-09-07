@@ -27,10 +27,12 @@ public class Ant : MonoBehaviour
 
     protected PheromoneMachine _pheromoneMachine;
     public PheromoneMachine PheromoneMachine => _pheromoneMachine;
+    
+    protected float _timeOfLastPheromoneChange;
 
     void Awake()
     {
-        Debug.Log("Ant created!");
+        // Debug.Log("ANT: Empty Ant created!");
         Rigidbody body = GetComponent<Rigidbody>();
         body.freezeRotation = true;
 
@@ -57,6 +59,7 @@ public class Ant : MonoBehaviour
     {
         // PheromoneMachine determines the behavior pattern for the ant
         _pheromoneMachine.Update();
+
         // AntBehaviorMachine determines the execution of the current specific behavior
         _antBehaviorMachine.Update();
 
@@ -76,19 +79,20 @@ public class Ant : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out location))
         {
             locationType = location.LocationType;
-            Debug.Log("Ant" + ID + " collides with " + locationType);
         }
 
         _pheromoneMachine.CurrentPheromone.OnCollision(collision.gameObject);
 
         if (locationType == LocationType.Colony)
         {
-            // Debug.Log("Ant" + ID + " memory before update: " + Memory);
-            // Debug.Log("Colony memory before update: " + Memory);
             Colony.Memory.UpdateColonyMemory(Memory);
             Memory.UpdateAntMemory(Colony.Memory);
-            // Debug.Log("Ant" + ID + " memory after update: " + Memory);
-            // Debug.Log("Colony memory after update: " + Memory);
+            
+            if (Caste.HasNewSequence(_timeOfLastPheromoneChange))
+            {
+                _pheromoneMachine.UpdatePheromoneSequence(Caste.PheromoneSequence);
+                _timeOfLastPheromoneChange = Time.time;
+            }
         }
     }
 
@@ -141,5 +145,10 @@ public class Ant : MonoBehaviour
         Gizmos.DrawRay(transform.position, direction);
 
         Gizmos.DrawWireSphere(transform.position, _antennaRadius);
+    }
+
+    public override string ToString()
+    {
+        return Caste.Name + "Ant" + ID;
     }
 }

@@ -14,7 +14,6 @@ public class WanderBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins wandering");
     }
 
     public void Update()
@@ -27,6 +26,5 @@ public class WanderBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " stops wandering");
     }
 }

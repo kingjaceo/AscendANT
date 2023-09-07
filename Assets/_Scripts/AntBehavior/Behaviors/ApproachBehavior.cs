@@ -23,7 +23,7 @@ public class ApproachBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins approaching " + TargetLocation);
+        // Debug.Log("BEHAVIOR: " + _ant + " begins approaching " + TargetLocation);
     }
 
     public void Update()
@@ -34,7 +34,7 @@ public class ApproachBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " finishes approaching " + TargetLocation);
+        // Debug.Log("BEHAVIOR: " + _ant + " finishes approaching " + TargetLocation);
     }
 
     public void SetTarget(LocationType target)

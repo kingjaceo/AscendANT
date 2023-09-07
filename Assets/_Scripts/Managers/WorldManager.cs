@@ -1,5 +1,4 @@
 using System;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +6,8 @@ using UnityEngine.UIElements;
 public class WorldManager : MonoBehaviour
 {
     public static WorldManager Instance;
+    [SerializeField] private GameObject _worldParent;
+    [SerializeField] private GameObject _worldPrefab;
     public World World;
     private Vector3 _scale;
 
@@ -20,13 +21,37 @@ public class WorldManager : MonoBehaviour
     
     private void GameManager_OnAfterStateChanged(GameState state)
     {
-        switch (state)
+        // switch (state)
+        // {
+        //     case GameState.MainMenu:
+        //         CreateNewWorld(_scale);
+        //         break;
+        //     case GameState.InProgress:
+        //         CreateNewWorld(_scale);
+        //         break;
+        //     default:
+        //         break;
+        // }
+    }
+
+    public void ConnectToGUI()
+    {
+        World.MakePlayable();
+    }
+
+    public void CreateNewWorld()
+    {
+        if (World != null)
         {
-            case GameState.WorldGeneration:
-                World.Create(_scale);
-                break;
-            default:
-                break;
+            Debug.Log("WORLD: Destroying world ... ");
+            Destroy(World.gameObject);
         }
+        
+        Debug.Log("WORLD: Creating new world ... ");
+
+        World = Instantiate(_worldPrefab).GetComponent<World>();
+        World.gameObject.name = "CurrentWorld";
+        World.transform.parent = _worldParent.transform;
+        World.Create(_scale);
     }
 }

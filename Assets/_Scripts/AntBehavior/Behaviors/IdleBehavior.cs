@@ -14,7 +14,6 @@ public class IdleBehavior : IAntBehavior
 
     public void Begin()
     {
-        Debug.Log("Ant" + _ant.ID + " begins idling");
     }
 
     public void Update()
@@ -25,6 +24,5 @@ public class IdleBehavior : IAntBehavior
 
     public void End()
     {
-        Debug.Log("Ant" + _ant.ID + " finishes idling");
     }
 }

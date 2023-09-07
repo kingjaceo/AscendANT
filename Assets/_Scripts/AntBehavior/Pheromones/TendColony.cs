@@ -7,7 +7,9 @@ class TendColony : IPheromone
 {
     private float _timeElapsed = 0;
     private Ant _ant;
-    
+
+    public PheromoneName PheromoneName { get; set; } = PheromoneName.TendEggs;
+
     public TendColony()
     {
     }

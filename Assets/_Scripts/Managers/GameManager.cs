@@ -9,6 +9,13 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnBeforeStateChanged;
     public static event Action<GameState> OnAfterStateChanged;
 
+    [SerializeField] private GameObject _mainMenuCanvas;
+    [SerializeField] private GameObject _victoryChoiceCanvas;
+    [SerializeField] private GameObject _mainGUICanvas;
+    [SerializeField] private GameObject _loadingScreen;
+    [SerializeField] private GameObject _cameraController;
+    [SerializeField] private GameObject _victoryScreen;
+
     public static GameManager Instance;
 
     public GameState State { get; private set; }
@@ -18,11 +25,11 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    // void Start() => ChangeState(GameState.Starting);
-    void Start()
-    {
-        WorldManager.Instance.World.Create(new Vector3(50f, 2f, 50f));
-    }
+    void Start() => ChangeState(GameState.LoadingScreen);
+    // void Start()
+    // {
+    //     WorldManager.Instance.World.Create(new Vector3(50f, 2f, 50f));
+    // }
 
     public void ChangeState(GameState newState)
     {
@@ -32,20 +39,22 @@ public class GameManager : MonoBehaviour
         State = newState;
         switch (newState) 
         {
-            case GameState.Starting:
-                HandleStarting();
+            case GameState.LoadingScreen:
+                HandleLoading();
                 break;
-            case GameState.Waiting:
+            case GameState.MainMenu:
+                ShowMainMenu();
                 break;
-            case GameState.WorldGeneration:
-                HandleWorldGeneration();
+            case GameState.ChooseVictoryCondition:
+                ShowVictoryConditions();
                 break;
-            case GameState.ColonyGeneration:
-                HandleColonyGeneration();
-                break; 
-            case GameState.InProgress:
+            case GameState.StartRound:
+                StartRound();
                 break;
-            case GameState.InStartMenu:
+            case GameState.InRound:
+                break;
+            case GameState.VictoryScreen:
+                ShowVictoryScreen();
                 break;
             case GameState.Quitting:
                 HandleQuitting();
@@ -57,28 +66,55 @@ public class GameManager : MonoBehaviour
         OnAfterStateChanged?.Invoke(newState);
     }
 
-    private async void HandleStarting() 
+    private async void HandleLoading() 
     {
-        await Task.Delay(1000);
+        CreateBackgroundWorld();
 
-        ChangeState(GameState.WorldGeneration);
+        // show a loading screen and wait
+        _loadingScreen.SetActive(true);
+        await Task.Delay(2000);
+        _loadingScreen.SetActive(false);
+
+        // advance to MainMenu state
+        ChangeState(GameState.MainMenu);
     }
 
-
-    private async void HandleWorldGeneration()
+    private void CreateBackgroundWorld()
     {
-        // produce the world and environment
-        await Task.Delay(1000);
-
-        ChangeState(GameState.ColonyGeneration);
+        WorldManager.Instance.CreateNewWorld();
     }
 
-    private async void HandleColonyGeneration()
+    private void ShowMainMenu()
     {
-        // produce the colony
-        await Task.Delay(1000);
+        _victoryChoiceCanvas.SetActive(false);
+        _mainGUICanvas.SetActive(false);
+        _mainMenuCanvas.SetActive(true);
+    }
 
-        ChangeState(GameState.InProgress);
+    private void ShowVictoryConditions()
+    {
+        _mainMenuCanvas.SetActive(false);
+        _victoryChoiceCanvas.SetActive(true);
+    }
+
+    private void StartRound()
+    {
+        _victoryChoiceCanvas.SetActive(false);
+        _mainMenuCanvas.SetActive(false);
+        _mainGUICanvas.SetActive(true);
+        WorldManager.Instance.CreateNewWorld();
+        WorldManager.Instance.ConnectToGUI();
+
+        ChangeState(GameState.InRound);
+    }
+
+    private void ShowVictoryScreen()
+    {
+        Destroy(WorldManager.Instance.World.gameObject);
+        _victoryChoiceCanvas.SetActive(false);
+        _mainMenuCanvas.SetActive(false);
+        _mainGUICanvas.SetActive(false);
+        _victoryScreen.SetActive(true);
     }
 
     private void HandleQuitting()
@@ -90,12 +126,12 @@ public class GameManager : MonoBehaviour
 
 public enum GameState
 {
-    Starting,
-    Waiting,
-    WorldGeneration,
-    ColonyGeneration,
-    InProgress,
-    InStartMenu,
+    LoadingScreen,
+    MainMenu,
+    ChooseVictoryCondition,
+    StartRound,
+    InRound,
+    VictoryScreen,
     Win,
     Lose,
     Quitting

@@ -7,6 +7,8 @@ class QueenPheromone : IPheromone
 {
     private Ant _ant;
 
+    public PheromoneName PheromoneName { get; set; } = PheromoneName.Queen;
+
     public QueenPheromone()
     {}
     
