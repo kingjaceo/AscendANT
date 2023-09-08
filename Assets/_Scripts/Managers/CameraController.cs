@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour 
 {
@@ -21,13 +22,11 @@ public class CameraController : MonoBehaviour
     float mainSpeed = 10.0f; //regular speed
     float shiftAdd = 25.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 100.0f; //Maximum speed when holdin gshift
-    float camSens = 0.25f; //How sensitive it with mouse
     float minHeight = 3;
     float maxHeight = 100;
-    private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun= 1.0f;
 
-    [SerializeField] private float cameraHeight = 20;
+    [SerializeField] private float _cameraHeight = 20;
     public int interpolationFramesCount = 45;
     int elapsedFrames = 0;
         
@@ -39,7 +38,6 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         _cameraTransform = _camera.transform;
-        GameManager.OnAfterStateChanged += GameManager_OnAfterStateChanged;
     }
 
     void Update () 
@@ -52,21 +50,22 @@ public class CameraController : MonoBehaviour
 
     void InputUpdate()
     {
-        lastMouse = Input.mousePosition - lastMouse ;
-        lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
-        lastMouse = new Vector3(_cameraTransform.eulerAngles.x + lastMouse.x , _cameraTransform.eulerAngles.y + lastMouse.y, 0);
-        // transform.eulerAngles = lastMouse;
-        lastMouse =  Input.mousePosition;
-        //Mouse  camera angle done.  
-        
+        // control camera translation
+        CameraTranslation();
+
+        // control camera zoom
+        CameraZoom();
+    }
+
+    private void CameraTranslation()
+    {
         //Keyboard commands
-        float zoomScale = 1f;
         Vector3 p = GetBaseInput();
         if (p.sqrMagnitude > 0)
         { // only move while a direction key is pressed
-            if (Input.GetKey (KeyCode.LeftShift))
+            if (Keyboard.current.shiftKey.IsPressed())
             {
-                totalRun += Time.deltaTime;
+                totalRun += Time.unscaledDeltaTime;
                 p  = p * totalRun * shiftAdd;
                 p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
                 p.y = Mathf.Clamp(p.y, -maxShift, maxShift);
@@ -78,50 +77,49 @@ public class CameraController : MonoBehaviour
                 p = p * mainSpeed;
             }
 
-                p = p * Time.deltaTime;
-                Vector3 newPosition = _cameraTransform.position;
-                if (Input.GetKey(KeyCode.Space))
-                { //If player wants to move on X and Z axis only
-                    _cameraTransform.Translate(p);
-                    newPosition.x = _cameraTransform.position.x;
-                    newPosition.z = _cameraTransform.position.z;
-                    _cameraTransform.position = newPosition;
-                } 
-                else 
-                {
-                    _cameraTransform.Translate(p);
-                }
+                p = p * Time.unscaledDeltaTime;
+                // Vector3 newPosition = _cameraTransform.position;
+ 
+                _cameraTransform.Translate(p);
         }
+    }
 
-        // camera.fieldOfView += 5 * Input.mouseScrollDelta.y;
-        // camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, min, max);
+    private void CameraZoom()
+    {
+        if (Mouse.current.scroll.IsActuated())
+        {
+            float zoomScale = 0.01f;
 
-        if (Input.GetKey (KeyCode.LeftShift)) 
-        {
-            totalRun += Time.deltaTime;
-            zoomScale = zoomScale * totalRun * shiftAdd;
+            if (Keyboard.current.shiftKey.IsPressed()) 
+            {
+                totalRun += Time.unscaledDeltaTime;
+                zoomScale = zoomScale * totalRun * shiftAdd;
+            }
+        
+            float newScrollValue = Mouse.current.scroll.ReadValue().y;
+
+            _cameraHeight = Mathf.Clamp(_cameraHeight - newScrollValue * zoomScale, minHeight, maxHeight);
+
+            ZoomSmooth();
         }
-        else
-        {
-            totalRun = Mathf.Clamp(totalRun * 0.5f, 1f, 1000f);
-            zoomScale = zoomScale * mainSpeed;
-        }
-        cameraHeight = Mathf.Clamp(cameraHeight - Input.GetAxis("Mouse ScrollWheel") * zoomScale, minHeight, maxHeight);
-        ZoomSmooth();
     }
         
     private Vector3 GetBaseInput() { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
-        if (Input.GetKey (KeyCode.W)){
+        if (Keyboard.current.wKey.IsPressed())
+        {
             p_Velocity += new Vector3(0, 0 , 1);
         }
-        if (Input.GetKey (KeyCode.S)){
+        if (Keyboard.current.sKey.IsPressed())
+        {
             p_Velocity += new Vector3(0, 0, -1);
         }
-        if (Input.GetKey (KeyCode.A)){
+        if (Keyboard.current.aKey.IsPressed())
+        {
             p_Velocity += new Vector3(-1, 0, 0);
         }
-        if (Input.GetKey (KeyCode.D)){
+        if (Keyboard.current.dKey.IsPressed())
+        {
             p_Velocity += new Vector3(1, 0, 0);
         }
         return p_Velocity;
@@ -130,25 +128,8 @@ public class CameraController : MonoBehaviour
     private void ZoomSmooth()
     {
         float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
-        // var mouseWorldPosStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 newPosition = new Vector3(_cameraTransform.position.x, cameraHeight, _cameraTransform.position.z);
+        Vector3 newPosition = new Vector3(_cameraTransform.position.x, _cameraHeight, _cameraTransform.position.z);
         _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, newPosition, interpolationRatio);
         elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
-        // Mathf.Lerp(Camera.main.orthographicSize, zoom, interpolationFactor * Time.deltaTime);
-        // var mouseWorldPosDiff = mouseWorldPosStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // transform.position += mouseWorldPosDiff;
-    }
-
-    private void GameManager_OnAfterStateChanged(GameState gameState)
-    {
-    //     switch (gameState)
-    //     {
-    //         case GameState.InProgress:
-    //             _receivingInput = true;
-    //             break;
-    //         default:
-    //             _receivingInput = false;
-    //             break;
-    //     }
     }
 }

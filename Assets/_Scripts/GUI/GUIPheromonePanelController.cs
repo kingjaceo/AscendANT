@@ -15,6 +15,8 @@ public class GUIPheromonePanelController : MonoBehaviour
     [SerializeField] private Button _selectedPheromoneButton;
     private List<Button> _pheromoneButtons = new List<Button>();
 
+    [SerializeField] private GUIClickAwayPanel _clickAwayPanel;
+
     void Awake()
     {
         // create a button for each pheromone
@@ -40,7 +42,7 @@ public class GUIPheromonePanelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // connect the buttons to the castes themselves
+        // _clickAwayPanel.
     }
 
     // Update is called once per frame

@@ -22,6 +22,7 @@ public class CircleBehavior : IAntBehavior
 
     public void Begin()
     {
+        // Debug.Log("CIRCLE: " + _ant + " begins circling " + _targetPosition);
     }
 
     public void Update()
@@ -46,6 +47,7 @@ public class CircleBehavior : IAntBehavior
             direction = -direction;
         }
         
+        Debug.Log("CIRCLE: Setting " + _ant + " direction to " + direction);
         _ant.SetDirection(direction);
     }
 
@@ -53,10 +55,10 @@ public class CircleBehavior : IAntBehavior
     {
     }
 
-    public void SetTarget(LocationType location, Vector3 target)
+    public void SetTarget(LocationType location, Vector3 position)
     {
         _targetLocation = location;
-        _targetPosition = target;
+        _targetPosition = position;
     }
 
     public void SetMinMaxRadius(float minRadius, float maxRadius)

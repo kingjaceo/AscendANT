@@ -21,6 +21,8 @@ public class GUIMainPanelController : MonoBehaviour
     [SerializeField] private GameObject _casteButtonTemplate;
     public List<GUICastePanelController> CastePanels;
 
+    [SerializeField] public GameObject ClickAwayPanel;
+
     private float[] _previousCastePercentages = new float[] {10, 80, 10};
  
     void OnEnable()

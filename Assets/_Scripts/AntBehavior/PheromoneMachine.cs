@@ -43,7 +43,7 @@ public class PheromoneMachine
     {
         foreach (IPheromone pheromone in pheromones)
         {
-            Debug.Log("PHEROMONE: Setting pheromone for " + _ant + pheromone.ToString());
+            Debug.Log("PHEROMONE: Setting pheromone for " + _ant + " " + pheromone.ToString());
             _pheromoneSequence.Add(pheromone.Copy(_ant));
         }
     }

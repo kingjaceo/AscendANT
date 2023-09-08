@@ -19,15 +19,14 @@ class QueenPheromone : IPheromone
 
     public void Start()
     {
-        Debug.Log("Starting the Queen pheromone ... ");
         Colony colony = _ant.Colony;
         Vector3 position = colony.Transform.position;
         AntBehaviorMachine machine = _ant.AntBehaviorMachine;
-        Debug.Log("Machine: " + machine.ToString());
         CircleBehavior circle = machine.Circle;
         
         circle.SetTarget(LocationType.Colony, position);
         circle.SetMinMaxRadius(2f, 3f);
+
         machine.TransitionTo(circle);
     }
 

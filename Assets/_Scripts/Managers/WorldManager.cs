@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,28 +11,33 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private GameObject _worldPrefab;
     public World World;
     private Vector3 _scale;
+    private WorldState _state;
 
     void Awake()
     {
         Instance = this;
-        GameManager.OnAfterStateChanged += GameManager_OnAfterStateChanged;
         AllPheromones Pheromones = new AllPheromones();
         _scale = new Vector3(50f, 2f, 50f);
+        _state = WorldState.None;
     }
     
-    private void GameManager_OnAfterStateChanged(GameState state)
+    private void ChangeState(WorldState state)
     {
-        // switch (state)
-        // {
-        //     case GameState.MainMenu:
-        //         CreateNewWorld(_scale);
-        //         break;
-        //     case GameState.InProgress:
-        //         CreateNewWorld(_scale);
-        //         break;
-        //     default:
-        //         break;
-        // }
+        _state = state;
+
+        switch (state)
+        {
+            case WorldState.Creating:
+                break;
+            case WorldState.PlayableWorld:
+                StartCoroutine(WorldAlive());
+                break;
+            case WorldState.DestroyingWorld:
+                StopCoroutine(WorldAlive());
+                break;
+            default:
+                break;
+        }
     }
 
     public void ConnectToGUI()
@@ -39,13 +45,27 @@ public class WorldManager : MonoBehaviour
         World.MakePlayable();
     }
 
-    public void CreateNewWorld()
+    public void CreateDemoWorld()
     {
-        if (World != null)
-        {
-            Debug.Log("WORLD: Destroying world ... ");
-            Destroy(World.gameObject);
-        }
+        ChangeState(WorldState.Creating);
+
+        CreateWorld();
+
+        ChangeState(WorldState.DemoWorld);
+    }
+
+    public void CreatePlayableWorld()
+    {
+        ChangeState(WorldState.Creating);
+        
+        CreateWorld();
+
+        ChangeState(WorldState.PlayableWorld);
+    }
+
+    public void CreateWorld()
+    {
+        DestroyWorld();
         
         Debug.Log("WORLD: Creating new world ... ");
 
@@ -53,5 +73,38 @@ public class WorldManager : MonoBehaviour
         World.gameObject.name = "CurrentWorld";
         World.transform.parent = _worldParent.transform;
         World.Create(_scale);
+    }
+
+    public void DestroyWorld()
+    {
+        ChangeState(WorldState.DestroyingWorld);
+
+        if (World != null)
+        {
+            Debug.Log("WORLD: Destroying the old world ... ");
+            Destroy(World.gameObject);
+        }
+        
+        ChangeState(WorldState.None);
+    }
+
+    private IEnumerator WorldAlive()
+    {
+        while (true)
+        {
+            // every 1 minute a new food resource will appear
+            yield return new WaitForSeconds(30);
+
+            World.SpawnFood();
+        }
+    }
+
+    private enum WorldState
+    {
+        None,
+        Creating,
+        DemoWorld,
+        PlayableWorld,
+        DestroyingWorld,
     }
 }

@@ -50,7 +50,7 @@ public class Colony : MonoBehaviour
     private void InitializeColony()
     {
         Dictionary<ResourceType, float> resourceAmounts = new Dictionary<ResourceType, float>();
-        resourceAmounts[ResourceType.Food] = 990f;
+        resourceAmounts[ResourceType.Food] = 500;
         resourceAmounts[ResourceType.Water] = 990f;
         resourceAmounts[ResourceType.Eggs] = 95f;
 
@@ -140,7 +140,7 @@ public class Colony : MonoBehaviour
 
     public void TendEggs()
     {
-        float tendAmount = 0.1f;
+        float tendAmount = 10f * Time.deltaTime;
 
         if (ColonyResources.Amount(ResourceType.Food) > 10)
         {

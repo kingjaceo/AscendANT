@@ -22,6 +22,8 @@ public class Ant : MonoBehaviour
     protected Transform _transform;
     public Transform Transform => _transform;
 
+    private float _rotateSpeed = 10f;
+
     protected AntBehaviorMachine _antBehaviorMachine;
     public AntBehaviorMachine AntBehaviorMachine => _antBehaviorMachine;
 
@@ -63,11 +65,19 @@ public class Ant : MonoBehaviour
         // AntBehaviorMachine determines the execution of the current specific behavior
         _antBehaviorMachine.Update();
 
+        Turn();
         Move();
+    }
+
+    public virtual void Turn()
+    {
+        float singleStep = _rotateSpeed * Time.deltaTime;
+        _transform.forward = Vector3.RotateTowards(_transform.forward, _direction, singleStep, 0.0f);
     }
 
     public virtual void Move()
     {
+
         _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
     }
 
@@ -122,7 +132,7 @@ public class Ant : MonoBehaviour
 
     public void SetDirection(Vector3 direction)
     {
-        _transform.forward = direction;
+        _direction = direction;
     }
 
     public void CarryResource(ResourceType resource, float amount)
@@ -149,6 +159,6 @@ public class Ant : MonoBehaviour
 
     public override string ToString()
     {
-        return Caste.Name + "Ant" + ID;
+        return "Ant" ;
     }
 }

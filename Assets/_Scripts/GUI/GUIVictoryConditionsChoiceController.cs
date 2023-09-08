@@ -16,7 +16,7 @@ public class GUIVictoryConditionsChoiceController : MonoBehaviour
 
     public CurrentVictoryCondition CurrentVictoryCondition = new CurrentVictoryCondition();
 
-    private int _numConditions = 1;
+    private int _numConditions;
 
     void Awake()
     {
@@ -49,10 +49,12 @@ public class GUIVictoryConditionsChoiceController : MonoBehaviour
         float[] requiredAmounts = new float[] { 1000 };
         string reward = "1 Adaptation";
         _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
-        // requiredResources = new ResourceType[] { ResourceType.Eggs };
-        // requiredAmounts = new float[] { 100 };
-        // reward = "1 Insight";
-        // _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
+        requiredResources = new ResourceType[] { ResourceType.Eggs };
+        requiredAmounts = new float[] { 100 };
+        reward = "1 Insight";
+        _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
+
+        _numConditions = _victoryConditions.Count;
     }
 
     private void VictoryButtonClicked(int index)

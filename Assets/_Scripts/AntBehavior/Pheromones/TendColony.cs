@@ -26,7 +26,7 @@ class TendColony : IPheromone
 
     public void Update()
     {
-        // Circle the Queen
+        // After a few seconds, circle the Queen
         if (_timeElapsed > 3)
         {
             _ant.AntBehaviorMachine.Circle.SetTarget(LocationType.Queen, _ant.Colony.Queen.Transform.position);
@@ -52,33 +52,10 @@ class TendColony : IPheromone
         return new TendColony(ant);
     }
 
-    // public void CollidedWithTarget(GameObject target)
-    // {
-        
-    // }
-
     public void OnCollision(GameObject collider)
     {
         
     }
-
-    // public override Vector3 GetDirection(Ant ant)
-    // {
-    //     Vector3 direction = ant.Colony.GetQueenPosition() - ant.transform.position;
-    //     direction.y = 0;
-    //     return direction;
-    // }
-
-    // public override void UpdateStates(Ant ant, Collision collision)
-    // {
-    //     ant.SetAntState(AntState.TendingColony);
-    //     if (collision.gameObject.name == "Queen(Clone)")
-    //     {
-    //         // give some attention to the nest's eggs
-    //         Debug.Log("Ant" + ant.ID + " collides with the Queen, tending eggs");
-    //         ant.Colony.TendEggs();
-    //     }
-    // }
 
     public override string ToString()
     {

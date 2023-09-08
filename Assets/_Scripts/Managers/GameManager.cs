@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _victoryChoiceCanvas;
     [SerializeField] private GameObject _mainGUICanvas;
     [SerializeField] private GameObject _loadingScreen;
-    [SerializeField] private GameObject _cameraController;
     [SerializeField] private GameObject _victoryScreen;
+
+    [SerializeField] private GameObject _cameraController;
+    [SerializeField] private GameObject _timeController;
 
     public static GameManager Instance;
 
@@ -81,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     private void CreateBackgroundWorld()
     {
-        WorldManager.Instance.CreateNewWorld();
+        WorldManager.Instance.CreateDemoWorld();
     }
 
     private void ShowMainMenu()
@@ -102,15 +104,18 @@ public class GameManager : MonoBehaviour
         _victoryChoiceCanvas.SetActive(false);
         _mainMenuCanvas.SetActive(false);
         _mainGUICanvas.SetActive(true);
-        WorldManager.Instance.CreateNewWorld();
+
+        WorldManager.Instance.CreatePlayableWorld();
         WorldManager.Instance.ConnectToGUI();
+
+        TimeController.Instance.Activate();
 
         ChangeState(GameState.InRound);
     }
 
     private void ShowVictoryScreen()
     {
-        Destroy(WorldManager.Instance.World.gameObject);
+        TimeController.Instance.Deactivate();
         _victoryChoiceCanvas.SetActive(false);
         _mainMenuCanvas.SetActive(false);
         _mainGUICanvas.SetActive(false);

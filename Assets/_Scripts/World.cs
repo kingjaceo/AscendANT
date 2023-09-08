@@ -127,4 +127,16 @@ public class World : MonoBehaviour
     {
         Debug.Log("WORLD: World Destroyed!");
     }
+
+    public void SpawnFood()
+    {
+        Vector3 location = RandomLocationInWorld();
+
+        GameObject food = Instantiate(_foodPrefab);
+        food.transform.position = location;
+        food.transform.parent = transform;
+        food.name = "Food";
+
+        Debug.Log("WORLD: Created new food at " + location);
+    }
 }

@@ -20,7 +20,9 @@ public class GUICastePanelController : MonoBehaviour
     [SerializeField] private GameObject _casteStatsPanel;
     [SerializeField] private TMP_Text _casteStatsText;
     [SerializeField] private GameObject _pheromonePanel;
-    private GUIPheromonePanelController _pheromonePanelController;
+    [SerializeField] private GUIPheromonePanelController _pheromonePanelController;
+
+    [SerializeField] private GUIClickAwayPanel _clickAwayPanel;
 
     // Start is called before the first frame update
     void Awake()
@@ -34,13 +36,18 @@ public class GUICastePanelController : MonoBehaviour
     {
         _pheromoneButton.onClick.AddListener(PheromoneButtonClicked);
         _mainButton.onClick.AddListener(MainButtonClicked);
+
+        // GUIMainPanelController.Instance.ClickAwayPanel.onClick
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateCasteText();
-        UpdateCasteStats();
+        if (_caste != null)
+        {
+            UpdateCasteText();
+            UpdateCasteStats();
+        }
     }
 
     public int GetCastePercentageSliderValue()

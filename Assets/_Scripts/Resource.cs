@@ -12,6 +12,16 @@ public class Resource : MonoBehaviour
     {
         amount = Math.Min(amount, AmountRemaining);
         AmountRemaining -= amount;
+        if (AmountRemaining <= 0){
+            StartCoroutine(DestroySelf());
+        }
         return amount;
+    }
+
+    private IEnumerator DestroySelf()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        Destroy(gameObject);
     }
 }

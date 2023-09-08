@@ -35,7 +35,7 @@ public class AntBehaviorMachine
 
     public void Initialize(IAntBehavior behavior)
     {
-        Debug.Log("AntBehavior machine created!");
+        Debug.Log("AntBehavior machine for " + _ant + " initialized!");
         
         CurrentBehavior = behavior;
 
