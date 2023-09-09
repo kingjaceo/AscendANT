@@ -22,7 +22,7 @@ public class AntBehaviorMachine
     private IdleBehavior _idle;
     public IdleBehavior Idle => _idle;
 
-    public event Action<IAntBehavior> BehaviorChanged;
+    // public event Action<IAntBehavior> BehaviorChanged;
 
     public AntBehaviorMachine(Ant ant)
     {
@@ -35,22 +35,22 @@ public class AntBehaviorMachine
 
     public void Initialize(IAntBehavior behavior)
     {
-        Debug.Log("AntBehavior machine for " + _ant + " initialized!");
+        // Debug.Log("AntBehavior machine for " + _ant + " initialized!");
         
         CurrentBehavior = behavior;
 
         CurrentBehavior.Begin();
 
-        BehaviorChanged?.Invoke(CurrentBehavior);
+        // BehaviorChanged?.Invoke(CurrentBehavior);
     }
 
     public void TransitionTo(IAntBehavior nextBehavior)
     {
-        CurrentBehavior.End();
+        CurrentBehavior?.End();
         CurrentBehavior = nextBehavior;
         CurrentBehavior.Begin();
 
-        BehaviorChanged?.Invoke(nextBehavior);
+        // BehaviorChanged?.Invoke(nextBehavior);
     }
 
     public void Update()

@@ -15,7 +15,9 @@ public class GUIMainPanelController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _colonyStatsText;
 
     [SerializeField] private Slider _hatchProgressSlider;
+    [SerializeField] private TMP_Text _hatchProgress;
     [SerializeField] private Slider _layProgressSlider;
+    [SerializeField] private TMP_Text _layProgress;
 
     [SerializeField] private GameObject _castesParent;
     [SerializeField] private GameObject _casteButtonTemplate;
@@ -127,10 +129,12 @@ public class GUIMainPanelController : MonoBehaviour
     private void UpdateHatchProgress()
     {
         _hatchProgressSlider.value = _colony.HatchProgress;
+        _hatchProgress.text = "Next Ant: " + Mathf.Round(_hatchProgressSlider.value) + "%";
     }
 
     private void UpdateLayProgress()
     {
         _layProgressSlider.value = _colony.Queen.TimeSinceLastEgg / _colony.Queen.TimeToLayEgg * 100;
+        _layProgress.text = "Next Egg: " + Mathf.Round(_layProgressSlider.value) + "%";
     }
 }

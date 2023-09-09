@@ -24,7 +24,8 @@ public class PheromoneMachine
     {
         SetPheromoneSequence(pheromones);
         
-        CurrentPheromone = _pheromoneSequence[0];
+        _currentPheromoneIndex = 0;
+        CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
 
         CurrentPheromone.Start();
 
@@ -41,27 +42,45 @@ public class PheromoneMachine
 
     public void SetPheromoneSequence(List<IPheromone> pheromones)
     {
+        CurrentPheromone?.Finish();
+        
+        _pheromoneSequence = new List<IPheromone>();
+
         foreach (IPheromone pheromone in pheromones)
         {
-            Debug.Log("PHEROMONE: Setting pheromone for " + _ant + " " + pheromone.ToString());
+            // Debug.Log("PHEROMONE: Setting pheromone for " + _ant + " " + pheromone.ToString());
             _pheromoneSequence.Add(pheromone.Copy(_ant));
         }
+
+        pheromones.Add(new ResupplySelf(_ant));
+
+        CurrentPheromone?.Start();
     }
 
-    public void UpdatePheromoneSequence(List<IPheromone> pheromones)
+    public void ForceResupply()
     {
-        Debug.Log("PHEROMONE: Updating pheromone list for " + _ant + " to " + pheromones[0]);
+        CurrentPheromone?.Finish();
+        
+        _currentPheromoneIndex = _pheromoneSequence.Count - 1;
+        CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
+        Debug.Log("PHEROMONE MACHINE: Forced resupply ... , " + CurrentPheromone.ToString());
 
-        for (int i = 0; i < pheromones.Count; i++)
-        {
-            if (pheromones[i].PheromoneName != _pheromoneSequence[i].PheromoneName)
-            {
-                _pheromoneSequence[i] = pheromones[i].Copy(_ant);
-            } 
-        } 
-
-        CurrentPheromone.Finish();
-        CurrentPheromone = _pheromoneSequence[0];
         CurrentPheromone.Start();
+    }
+
+    public void ForceNextPheromone()
+    {
+        CurrentPheromone?.Finish();
+        
+        _currentPheromoneIndex = _currentPheromoneIndex++ % _pheromoneSequence.Count;
+        CurrentPheromone = _pheromoneSequence[_currentPheromoneIndex];
+        Debug.Log("PHEROMONE MACHINE: Forced next pheromone ... , " + CurrentPheromone + " at " + _currentPheromoneIndex);
+
+        CurrentPheromone.Start();
+    }
+    
+    public PheromoneName GetCurrentPheromone()
+    {
+        return CurrentPheromone.PheromoneName;
     }
 }

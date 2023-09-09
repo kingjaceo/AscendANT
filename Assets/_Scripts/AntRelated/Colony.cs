@@ -121,7 +121,7 @@ public class Colony : MonoBehaviour
             AntsByCaste[i] = new List<Ant>();
             for (int j = 0; j < amountOfAntsInCastes[i]; j++)
             {
-                Debug.Log("Creating ant " + NumAnts); 
+                // Debug.Log("Creating ant " + NumAnts); 
                 NextAnt(i);
 
                 yield return new WaitForSeconds(0.01f);
@@ -155,7 +155,7 @@ public class Colony : MonoBehaviour
         {
             if (HatchProgress > 100 & ColonyResources.Amount(ResourceType.Eggs) > 0) {
                 // reduce eggs and reset hatchProgress
-                ColonyResources.DepleteResource(ResourceType.Food, 1);
+                ColonyResources.DepleteResource(ResourceType.Eggs, 1);
                 HatchProgress = 0;
 
                 // produce a new ant
@@ -187,7 +187,7 @@ public class Colony : MonoBehaviour
         Color color = PaletteManager.Colors[casteIndex * 2];
         ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
         antObject.name = caste.Name + "Ant" + ant.ID;
-        Debug.Log(antObject.name + " gets color: " + color.ToString());
+        // Debug.Log(antObject.name + " gets color: " + color.ToString());
 
         // update colony variables
         NumAnts++;
@@ -200,11 +200,14 @@ public class Colony : MonoBehaviour
         // compare Caste percentages to real percentages:
         int casteIndex = 0;
         float maxPercentageDifference = 0;
+        string percentages = "";
+
         for (int i = 0; i < Castes.Length; i++) 
         {
             float realPercentage = AntCountByCaste[i] / (float) NumAnts;
-            float targetPercentage = Castes[i].Percentage;
+            float targetPercentage = Castes[i].Percentage / 100;
             float percentageDifference = targetPercentage - realPercentage;
+            percentages += realPercentage + " vs " + targetPercentage + ", ";
             if (percentageDifference > maxPercentageDifference)
             {
                 casteIndex = i;
@@ -212,7 +215,7 @@ public class Colony : MonoBehaviour
             }
         }
         
-        // Debug.Log("Next Caste chosen to be " + casteIndex + ", since real percentage is " + AntCountByCaste[casteIndex] + " / " +  NumAnts + " and caste percentage is " + Castes[casteIndex].Percentage);
+        Debug.Log("COLONY: Next ant chosen to be " + casteIndex + ", with: " + percentages);
         return casteIndex;
     }
 
@@ -252,5 +255,12 @@ public class Colony : MonoBehaviour
             Ant ant = AntsByCaste[casteIndex][j];
             ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
         }  
+    }
+
+    public float TryTakeFood(float amount)
+    {
+        amount = Mathf.Min(amount, ColonyResources.Amount(ResourceType.Food));
+        ColonyResources.DepleteResource(ResourceType.Food, amount);
+        return amount;
     }
 }

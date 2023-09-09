@@ -18,4 +18,8 @@ public abstract class VictoryCondition
     public abstract void CheckConditionMet();
 
     public abstract void BeginListening();
+
+    public abstract void StopListening();
+
+    public abstract string Progress();
 }

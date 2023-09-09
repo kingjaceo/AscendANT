@@ -45,7 +45,6 @@ class Harvest : IPheromone
     public void Update()
     {
         UpdateTarget();
-
         // ant approaches target
         if (_hasTargetResourcePosition & _harvestState == HarvestState.AtColony)
         {
@@ -64,7 +63,7 @@ class Harvest : IPheromone
             _ant.AntBehaviorMachine.Approach.SetTargetPosition(_targetPosition);
             _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
 
-            HarvestResource();
+            TryHarvestResource();
         }
 
         _timeElapsed += Time.deltaTime;
@@ -117,8 +116,9 @@ class Harvest : IPheromone
         if ((TargetResourceType & ResourceType.Food) ==  ResourceType.Food)
         {
             Vector3 location;
-            if (_ant.Memory.nearestResource.TryGetValue(ResourceType.Food, out location))
+            if (_ant.Memory.TrySetNearest(TargetResourceType))
             {
+                location = _ant.Memory.nearestResource[TargetResourceType];
                 _targetPosition = location;
                 _hasTargetResourcePosition = true;
             }
@@ -130,10 +130,18 @@ class Harvest : IPheromone
         }
     }
 
-    private void HarvestResource()
+    private void TryHarvestResource()
     {
-        float amountHarvested = _targetResource.Harvest(_ant.Caste.HarvestAmount);
-        _ant.CarryResource(TargetResourceType, amountHarvested);
+        try
+        {
+            float amountHarvested = _targetResource.Harvest(_ant.Caste.HarvestAmount);
+            _ant.CarryResource(TargetResourceType, amountHarvested);
+        }
+        catch (MissingReferenceException)
+        {
+            Debug.Log("RESOURCE: " + _ant + " attempts to harvest resource that does not exist");
+            _ant.Memory.RememberDepletedResource(TargetResourceType);
+        }
     }
 
     private void DumpFood()

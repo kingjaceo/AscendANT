@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.GameCenter;
 using UnityEngine.UIElements;
 
 public class WorldManager : MonoBehaviour
@@ -50,6 +51,7 @@ public class WorldManager : MonoBehaviour
         ChangeState(WorldState.Creating);
 
         CreateWorld();
+        CenterCameraOnColony();
 
         ChangeState(WorldState.DemoWorld);
     }
@@ -59,6 +61,7 @@ public class WorldManager : MonoBehaviour
         ChangeState(WorldState.Creating);
         
         CreateWorld();
+        CenterCameraOnColony();
 
         ChangeState(WorldState.PlayableWorld);
     }
@@ -93,10 +96,15 @@ public class WorldManager : MonoBehaviour
         while (true)
         {
             // every 1 minute a new food resource will appear
-            yield return new WaitForSeconds(30);
+            yield return new WaitForSeconds(60);
 
             World.SpawnFood();
         }
+    }
+
+    private void CenterCameraOnColony()
+    {
+        CameraController.Instance.transform.position = World.Colony.transform.position + new Vector3(0, CameraController.Instance.transform.position.y, 0);
     }
 
     private enum WorldState

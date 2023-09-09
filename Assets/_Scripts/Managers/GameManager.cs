@@ -127,6 +127,16 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager quits out of the game.");
         Application.Quit();
     }
+
+    public void ToMainMenu()
+    {
+        // silence all UI except the start menu
+        // GUIManager.SilenceAllExcept(_mainMenuCanvas);
+        _victoryScreen.SetActive(false);
+        ChangeState(GameState.MainMenu);
+    }
+
+    
 }
 
 public enum GameState

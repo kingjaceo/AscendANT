@@ -29,7 +29,7 @@ public class ColonyResources
     public void AddResource(ResourceType resourceType, float amount)
     {
         ResourceAmounts[resourceType] = Math.Min(ResourceAmounts[resourceType] + amount, ResourceCapacities[resourceType]);
-        Debug.Log("COLONYRESOURCES: Invoking ResourceIncreased UnityEvent");
+        // Debug.Log("COLONYRESOURCES: Invoking ResourceIncreased UnityEvent");
         ResourceIncreased?.Invoke();
     }
 

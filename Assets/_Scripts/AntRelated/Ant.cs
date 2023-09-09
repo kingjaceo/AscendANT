@@ -17,6 +17,10 @@ public class Ant : MonoBehaviour
     private Dictionary<ResourceType, float> _carrying = new Dictionary<ResourceType, float>();
 
     protected float _antennaRadius = 0.25f;
+    protected float _energy = 100;
+    protected float _energyBurnedPerSecond = 1;
+    protected float _resupplyThreshold = 10;
+    protected float _metabolism = 10;
 
     protected Vector3 _direction;
     protected Transform _transform;
@@ -59,6 +63,8 @@ public class Ant : MonoBehaviour
 
     public virtual void Update()
     {
+        UseEnergy();
+        
         // PheromoneMachine determines the behavior pattern for the ant
         _pheromoneMachine.Update();
 
@@ -81,6 +87,24 @@ public class Ant : MonoBehaviour
         _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
     }
 
+    private void UseEnergy()
+    {
+        _energy -= Math.Max(0, _energyBurnedPerSecond * Time.deltaTime);
+        if (_energy < _resupplyThreshold && PheromoneMachine.GetCurrentPheromone() != PheromoneName.ResupplySelf)
+        {
+            Debug.Log("ANT ENERGY: " + ToString() + " falls below energy threshold: " + Mathf.Round(_energy) + " / " + _resupplyThreshold);
+            PheromoneMachine.ForceResupply();
+        }
+    }
+
+    public void ConsumeColonyResources()
+    {
+        float amount = Colony.TryTakeFood(10);
+        _energy += amount * _metabolism;
+        Debug.Log("ANT ENERGY: " + ToString() + " consumes colony resources, now: " + _energy + " = " + amount + " * " + _metabolism);
+
+    }
+
     // An ant's behavior might change on collision with another object
     void OnCollisionEnter(Collision collision)
     {
@@ -100,7 +124,7 @@ public class Ant : MonoBehaviour
             
             if (Caste.HasNewSequence(_timeOfLastPheromoneChange))
             {
-                _pheromoneMachine.UpdatePheromoneSequence(Caste.PheromoneSequence);
+                _pheromoneMachine.SetPheromoneSequence(Caste.PheromoneSequence);
                 _timeOfLastPheromoneChange = Time.time;
             }
         }
@@ -159,6 +183,10 @@ public class Ant : MonoBehaviour
 
     public override string ToString()
     {
-        return "Ant" ;
+        if (Caste != null)
+        {
+            return Caste.Name + "Ant" + ID;
+        }
+        return "Ant" + ID;
     }
 }

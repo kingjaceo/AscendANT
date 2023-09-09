@@ -28,7 +28,8 @@ public enum PheromoneName
     Scout,
     Harvest,
     TendEggs,
-    Queen
+    Queen,
+    ResupplySelf
 }
 
 [Flags]

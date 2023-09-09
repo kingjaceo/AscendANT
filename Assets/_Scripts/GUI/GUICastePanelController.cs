@@ -76,6 +76,7 @@ public class GUICastePanelController : MonoBehaviour
         _caste = caste;
         _pheromonePanelController.SetCaste(caste);
         _castePercentageSlider.onValueChanged.AddListener((v) => { GUIMainPanelController.Instance.UpdateSliderLevels(_casteIndex);});
+        UpdatePheromoneButtonText();
         // GUIMainPanelController.Instance.UpdateSliderLevels(_casteIndex);
     }
 
@@ -106,6 +107,11 @@ public class GUICastePanelController : MonoBehaviour
     {
         string newText = _caste.CasteStats.ToString();
         _casteStatsText.text = newText;
+    }
+
+    private void UpdatePheromoneButtonText()
+    {
+        _pheromoneButton.GetComponentInChildren<TMP_Text>().text = _caste.PheromoneSequence[0].ToString();
     }
     
     private void PheromoneButtonClicked()

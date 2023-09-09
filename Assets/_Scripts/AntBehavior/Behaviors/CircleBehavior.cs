@@ -47,7 +47,7 @@ public class CircleBehavior : IAntBehavior
             direction = -direction;
         }
         
-        Debug.Log("CIRCLE: Setting " + _ant + " direction to " + direction);
+        // Debug.Log("CIRCLE: Setting " + _ant + " direction to " + direction);
         _ant.SetDirection(direction);
     }
 
