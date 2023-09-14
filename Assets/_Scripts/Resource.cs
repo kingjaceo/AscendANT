@@ -6,7 +6,7 @@ using UnityEngine;
 public class Resource : MonoBehaviour
 {
     public ResourceType ResourceType;
-    public float AmountRemaining = 200;
+    public float AmountRemaining = 500;
 
     public float Harvest(float amount)
     {

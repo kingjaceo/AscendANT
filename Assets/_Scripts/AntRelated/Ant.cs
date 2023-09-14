@@ -12,21 +12,22 @@ public class Ant : MonoBehaviour
     [field: SerializeField] public int ID { get; protected set; }
 
     public float PheromoneProgress { get; private set; } = 0;
-    public Memory Memory { get; private set; }
+    public AntMemory Memory { get; private set; }
 
     private Dictionary<ResourceType, float> _carrying = new Dictionary<ResourceType, float>();
 
     protected float _antennaRadius = 0.25f;
-    protected float _energy = 100;
-    protected float _energyBurnedPerSecond = 1;
-    protected float _resupplyThreshold = 10;
-    protected float _metabolism = 10;
+    [SerializeField] protected float _energy;
+    [SerializeField] protected float _maxEnergy;
+    [SerializeField] protected float _energyBurnedPerSecond;
+    [SerializeField] protected float _resupplyThreshold;
+    [SerializeField] protected float _metabolism;
 
     protected Vector3 _direction;
     protected Transform _transform;
     public Transform Transform => _transform;
 
-    private float _rotateSpeed = 10f;
+    [SerializeField] private float _rotateSpeed = 10f;
 
     protected AntBehaviorMachine _antBehaviorMachine;
     public AntBehaviorMachine AntBehaviorMachine => _antBehaviorMachine;
@@ -43,11 +44,20 @@ public class Ant : MonoBehaviour
         body.freezeRotation = true;
 
         _transform = transform;
+
+        Vector3 originalDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(0, 360), _transform.up) * _transform.forward;
+        SetDirection(originalDirection);
+
+        _maxEnergy = 200;
+        _energyBurnedPerSecond = 0.1f;
+        _resupplyThreshold = 20;
+        _metabolism = 100;
+
+        OnStart();
     }
 
     void Start()
     {
-        OnStart();
     }
 
     protected virtual void OnStart()
@@ -65,7 +75,7 @@ public class Ant : MonoBehaviour
     {
         UseEnergy();
         
-        // PheromoneMachine determines the behavior pattern for the ant
+        // PheromoneMachine determines the behavior patstern for the ant
         _pheromoneMachine.Update();
 
         // AntBehaviorMachine determines the execution of the current specific behavior
@@ -83,13 +93,20 @@ public class Ant : MonoBehaviour
 
     public virtual void Move()
     {
-
         _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
     }
 
     private void UseEnergy()
     {
+        // Debug.Log("ANT ENERGY: " + ToString() + " has energy: " + _energy);
+        if (_energy <= 0)
+        {
+            Debug.Log("ANT ENERGY: " + ToString() + " energy falls below 0, dying!");
+            Destroy(gameObject);
+        }
+
         _energy -= Math.Max(0, _energyBurnedPerSecond * Time.deltaTime);
+
         if (_energy < _resupplyThreshold && PheromoneMachine.GetCurrentPheromone() != PheromoneName.ResupplySelf)
         {
             Debug.Log("ANT ENERGY: " + ToString() + " falls below energy threshold: " + Mathf.Round(_energy) + " / " + _resupplyThreshold);
@@ -97,9 +114,10 @@ public class Ant : MonoBehaviour
         }
     }
 
-    public void ConsumeColonyResources()
+    public virtual void ConsumeColonyResources()
     {
-        float amount = Colony.TryTakeFood(10);
+        float requiredFood = Mathf.Max(0, (_maxEnergy - _energy) / _metabolism);
+        float amount = Colony.TryTakeFood(requiredFood);
         _energy += amount * _metabolism;
         Debug.Log("ANT ENERGY: " + ToString() + " consumes colony resources, now: " + _energy + " = " + amount + " * " + _metabolism);
 
@@ -108,6 +126,8 @@ public class Ant : MonoBehaviour
     // An ant's behavior might change on collision with another object
     void OnCollisionEnter(Collision collision)
     {
+        // Debug.Log("ANT COLLISION: " + ToString() + " collides with a " + collision.gameObject.name);
+
         Location location;
         LocationType locationType = LocationType.None;
         if (collision.gameObject.TryGetComponent(out location))
@@ -116,12 +136,14 @@ public class Ant : MonoBehaviour
         }
 
         _pheromoneMachine.CurrentPheromone.OnCollision(collision.gameObject);
-
+    
         if (locationType == LocationType.Colony)
         {
-            Colony.Memory.UpdateColonyMemory(Memory);
-            Memory.UpdateAntMemory(Colony.Memory);
+            Colony.Memory.Update(Memory);
+            Memory.Update(Colony.Memory);
             
+            Debug.Log("ANT MEMORY: " + ToString() + " updates Colony and own memory: ");
+
             if (Caste.HasNewSequence(_timeOfLastPheromoneChange))
             {
                 _pheromoneMachine.SetPheromoneSequence(Caste.PheromoneSequence);
@@ -134,7 +156,7 @@ public class Ant : MonoBehaviour
     {
         Colony = colony;
         ID = colony.NumAnts;
-        Memory = new Memory(colony.Memory);
+        Memory = new AntMemory(this);
     }
 
     public void AssignCaste(Caste caste)
@@ -149,7 +171,7 @@ public class Ant : MonoBehaviour
         Colony = colony;
     }
 
-    public void SetMemory(Memory memory)
+    public void SetMemory(AntMemory memory)
     {
         Memory = memory;
     }
@@ -164,11 +186,14 @@ public class Ant : MonoBehaviour
         _carrying[resource] += amount;
     }
 
-    public float DumpResource(ResourceType resource)
+    public float TryDumpResource(ResourceType resource)
     {
-        float amount = _carrying[resource];
-        _carrying[resource] -= amount;
-        return amount;
+        if (_carrying.TryGetValue(resource, out float amount))
+        {
+            _carrying[resource] -= amount;
+            return amount;
+        }
+        return 0;
     }
 
     void OnDrawGizmos()

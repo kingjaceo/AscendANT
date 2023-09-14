@@ -29,4 +29,9 @@ public class CurrentVictoryCondition
 
         return "Current Victory Condition is Null";
     }
+
+    public void ConditionSatisfied()
+    {
+        _victoryCondition.StopListening();
+    }
 }

@@ -82,15 +82,29 @@ public class Memory
         // remove depleted resources from the colony memory
         if (antMemory._nearestResourceDepleted)
         {
+            Debug.Log("MEMORY: Before removing a resource: ");
+            for (int i = 0; i < resourceLocations[antMemory._depletedResourceType].Count; i++)
+            {
+                Debug.Log("  " + resourceLocations[antMemory._depletedResourceType][i]);
+            }
             resourceLocations[antMemory._depletedResourceType].Remove(antMemory._depletedResourceLocation);
+            Debug.Log("MEMORY: After removing a resource: ");
+            for (int i = 0; i < resourceLocations[antMemory._depletedResourceType].Count; i++)
+            {
+                Debug.Log("  " + resourceLocations[antMemory._depletedResourceType][i]);
+            }
         }
     }
 
     // ColonyInfoToAntMemory
     public void UpdateAntMemory(Memory colonyMemory)
     {
+        // reset Ant memory
+        resourceLocations = new Dictionary<ResourceType, List<Vector3>>();
+        
         foreach (ResourceType resourceType in Enum.GetValues(typeof(ResourceType)))
         {
+            resourceLocations[resourceType] = new List<Vector3>();
             UpdateResourceLocations(colonyMemory, resourceType);
         }
 
@@ -124,15 +138,19 @@ public class Memory
         _depletedResourceType = resourceType;
         _depletedResourceLocation = nearestResource[resourceType];
         resourceLocations[resourceType].Remove(_depletedResourceLocation);
+
+        Debug.Log("MEMORY: " + resourceType + " depleted at location " + _depletedResourceLocation);
         TrySetNearest(resourceType);
     }
 
     public bool TrySetNearest(ResourceType resourceType)
     {
-        List<Vector3> locations = resourceLocations[resourceType];
-        if (locations.Count > 0)
+        List<Vector3> locations;
+        resourceLocations.TryGetValue(resourceType, out locations);
+        if (locations != null && locations.Count > 0)
         {
             nearestResource[resourceType] = locations[0];
+            Debug.Log("MEMORY: Nearest " + resourceType + " is " + nearestResource[resourceType]);
             return true;
         }
 

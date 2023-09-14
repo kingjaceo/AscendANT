@@ -51,4 +51,5 @@ public enum LocationType
     Colony      = 0b_0000_0001, // 1
     Queen       = 0b_0000_0010, // 2
     Resource    = 0b_0000_0100, // 4
+    Wall        = 0b_0000_1000, // 8
 }

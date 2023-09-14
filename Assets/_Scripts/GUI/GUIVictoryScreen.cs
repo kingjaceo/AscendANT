@@ -7,6 +7,7 @@ public class GUIVictoryScreen : MonoBehaviour
     [SerializeField] private Button _collectRewardButton;
     [SerializeField] private Button _backToGameButton;
     [SerializeField] private Button _backToMenuButton;
+    private bool _rewardButtonClicked;
 
     void Awake()
     {
@@ -20,8 +21,10 @@ public class GUIVictoryScreen : MonoBehaviour
 
     private void RewardCollected()
     {
-        _backToGameButton.onClick.AddListener(Deactivate);
+        _backToGameButton.onClick.AddListener(GameManager.Instance.Resume);
         _backToMenuButton.onClick.AddListener(GameManager.Instance.ToMainMenu);
+
+        _collectRewardButton.interactable = false;
     }
 
     private void Deactivate()

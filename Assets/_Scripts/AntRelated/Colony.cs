@@ -8,7 +8,7 @@ public class Colony : MonoBehaviour
 { 
     public int NumAnts = 0;
 
-    public Memory Memory;
+    public ColonyMemory Memory;
     
     public ColonyResources ColonyResources { get; private set; }
 
@@ -35,7 +35,6 @@ public class Colony : MonoBehaviour
 
         InitializeColony();
         InitializeCastes();
-        
     }
 
     // Update is called once per frame
@@ -56,12 +55,12 @@ public class Colony : MonoBehaviour
 
         Dictionary<ResourceType, float> resourceCapacities = new Dictionary<ResourceType, float>();
         resourceCapacities[ResourceType.Food] = 1100f;
-        resourceCapacities[ResourceType.Water] = 1000f;
+        resourceCapacities[ResourceType.Water] = 1100;
         resourceCapacities[ResourceType.Eggs] = 110f;
 
         ColonyResources = new ColonyResources(resourceAmounts, resourceCapacities);
 
-        Memory = new Memory(this);        
+        Memory = new ColonyMemory(_transform.position);        
     }
 
     private void InitializeCastes()
@@ -110,7 +109,7 @@ public class Colony : MonoBehaviour
     // initializes the default number and types of ants
     private IEnumerator InitializeAnts()
     {
-        int[] amountOfAntsInCastes = { 1, 17, 2 };
+        int[] amountOfAntsInCastes = { 1, 30, 2 };
         AntCountByCaste = new int[Castes.Length];
         AntsByCaste = new List<Ant>[Castes.Length];
 
@@ -180,6 +179,8 @@ public class Colony : MonoBehaviour
 
         // set the Ant's position, colony, and caste
         ant.transform.position = RandomLocationAroundColony(0f, 1f);
+
+        Debug.Log("COLONY: Creating " + ant.ID + " with AntBehaviorMachine " + ant.AntBehaviorMachine);
         ant.AssignColony(this);
         ant.AssignCaste(caste);
 

@@ -22,6 +22,9 @@ public class AntBehaviorMachine
     private IdleBehavior _idle;
     public IdleBehavior Idle => _idle;
 
+    private AvoidBehavior _avoid;
+    public AvoidBehavior Avoid => _avoid;
+
     // public event Action<IAntBehavior> BehaviorChanged;
 
     public AntBehaviorMachine(Ant ant)
@@ -31,6 +34,7 @@ public class AntBehaviorMachine
         _approach = new ApproachBehavior(_ant);
         _circle = new CircleBehavior(_ant);
         _idle = new IdleBehavior(_ant);
+        _avoid = new AvoidBehavior(_ant);
     }
 
     public void Initialize(IAntBehavior behavior)

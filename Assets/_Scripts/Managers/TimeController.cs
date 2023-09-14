@@ -63,19 +63,33 @@ public class TimeController : MonoBehaviour
 
     private void ToggleTime()
     {
-        _pauseDisplay.SetActive(!_pauseDisplay.activeSelf);
         if (_state == TimeState.Paused)
         {
-            _state = _previousState;
-            SetTimeScale((float) _state);
-            
+            ResumeTime();
         }
         else
         {
-            _previousState = _state;
-            _state = TimeState.Paused;
-            Time.timeScale = 0;
+            PauseTime();
         }
+    }
+
+    public void PauseTime()
+    {
+        _pauseDisplay.SetActive(true);
+
+        _previousState = _state;
+        _state = TimeState.Paused;
+
+        SetTimeScale(0);
+    }
+
+    public void ResumeTime()
+    {
+        _pauseDisplay.SetActive(false);
+
+        _state = _previousState;
+        
+        SetTimeScale((int) _state);
     }
 
     private void SetTimeScale(float scale)

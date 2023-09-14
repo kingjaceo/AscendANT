@@ -17,6 +17,7 @@ public class Queen : Ant
         _transform = transform;
         ID = -1;
         base.OnStart();
+        _energyBurnedPerSecond = 0;
     }
 
     // Start is called before the first frame update
@@ -28,23 +29,6 @@ public class Queen : Ant
     // Update is called once per frame
     public override void Update()
     {
-        // Vector3 radius = _transform.position - Colony.transform.position;
-        // Vector2 radius2D = new Vector2(radius.x, radius.z);
-        // Vector2 newDirection2D = Vector2.Perpendicular(radius2D);
-
-        // _direction = new Vector3(newDirection2D.x, _transform.forward.y, newDirection2D.y);
-
-        // float radiusLength = radius.magnitude;
-        // if (radiusLength > 5f)
-        // {
-        //     _direction = Quaternion.AngleAxis(Random.Range(-10f, 5f), _transform.up) * _direction;
-        // }
-        // else if (radiusLength < 3f)
-        // {
-        //     _direction = Quaternion.AngleAxis(Random.Range(5f, 10f), _transform.up) * _direction;
-        // }
-        // _transform.forward = _direction;
-        // _transform.position += Time.deltaTime * Caste.Speed * _transform.forward;
         base.Update();
 
         _timeSinceLastEgg += Time.deltaTime;
@@ -64,6 +48,5 @@ public class Queen : Ant
     public new void AssignColony(Colony colony)
     {
         SetColony(colony);
-        SetMemory(new Memory(colony.Memory));
     }
 }

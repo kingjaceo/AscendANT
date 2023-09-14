@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     {
         _victoryChoiceCanvas.SetActive(false);
         _mainGUICanvas.SetActive(false);
+        _victoryScreen.SetActive(false);
         _mainMenuCanvas.SetActive(true);
     }
 
@@ -113,9 +114,25 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.InRound);
     }
 
+    public void Resume()
+    {
+        ChangeState(GameState.InRound);
+
+        _victoryChoiceCanvas.SetActive(false);
+        _mainMenuCanvas.SetActive(false);
+        _victoryScreen.SetActive(false);
+        _mainGUICanvas.SetActive(true);
+
+        TimeController.Instance.Activate();
+    }
+
     private void ShowVictoryScreen()
     {
+        TimeController.Instance.PauseTime();
         TimeController.Instance.Deactivate();
+
+        CurrentVictoryCondition.Instance.ConditionSatisfied();
+
         _victoryChoiceCanvas.SetActive(false);
         _mainMenuCanvas.SetActive(false);
         _mainGUICanvas.SetActive(false);
@@ -132,7 +149,6 @@ public class GameManager : MonoBehaviour
     {
         // silence all UI except the start menu
         // GUIManager.SilenceAllExcept(_mainMenuCanvas);
-        _victoryScreen.SetActive(false);
         ChangeState(GameState.MainMenu);
     }
 

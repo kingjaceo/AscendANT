@@ -8,6 +8,7 @@ class Scout : IPheromone
     private float _timeElapsed;
     private Ant _ant;
     private ScoutState _scoutState;
+    private ScoutState _previousState;
 
     public PheromoneName PheromoneName { get; set; } = PheromoneName.Scout;
 
@@ -23,25 +24,54 @@ class Scout : IPheromone
     public void Start()
     {
         Debug.Log("PHEROMONE: Scout begins for " + _ant);
-        _scoutState = ScoutState.None;
+        ChangeState(ScoutState.Idle);
         _timeElapsed = 0;
     }
 
     public void Update()
-    {
-        if (_scoutState == ScoutState.None)
-        {
-            _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
-            _scoutState = ScoutState.Idle;
-        }
-        
+    {      
         // Ant should begin scouting
-        if (_scoutState == ScoutState.Idle & _timeElapsed > 1)
+        if (_scoutState == ScoutState.Idle && _timeElapsed > 1)
         {
-            _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Wander);
+            ChangeState(ScoutState.Wandering);
+        }
+
+        if (_scoutState == ScoutState.Collided && _timeElapsed > 1)
+        {
+            ChangeState(_previousState);
         }
 
         _timeElapsed += Time.deltaTime;
+    }
+
+    private void ChangeState(ScoutState newState)
+    {
+        _scoutState = newState;
+        switch (newState)
+        {
+            case ScoutState.Wandering:
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Wander);
+                Debug.Log("SCOUT: " + _ant + " begins wandering");
+                break;
+            case ScoutState.DiscoveringResource:
+                break;
+            case ScoutState.ReturningHome:
+                _ant.AntBehaviorMachine.Approach.SetTargetPosition(_ant.Colony.Transform.position);
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
+                Debug.Log("SCOUT: " + _ant + " finds a resource and is returning home");
+                break;
+            case ScoutState.Idle:
+                _timeElapsed = 0;
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
+                Debug.Log("SCOUT: " + _ant + " is waiting to begin scouting again");
+                break;
+            case ScoutState.Collided:
+                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Avoid);
+                _timeElapsed = 0;
+                break;
+            default:
+                break;
+        }
     }
 
     public void Finish()
@@ -66,18 +96,19 @@ class Scout : IPheromone
                 ResourceType resourceType = collider.GetComponent<Resource>().ResourceType;
                 _ant.Memory.DiscoverResource(resourceType, collider.transform.position);
 
-                _ant.AntBehaviorMachine.Approach.SetTargetPosition(_ant.Colony.Transform.position);
-                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
-                _scoutState = ScoutState.ReturningHome;
+                ChangeState(ScoutState.ReturningHome);
             }
 
-            if (location.LocationType == LocationType.Colony)
+            if (_scoutState == ScoutState.ReturningHome && location.LocationType == LocationType.Colony)
             {
                 // Ant should begin idling
-                _timeElapsed = 0;
-                _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
-                _scoutState = ScoutState.Idle;
+                ChangeState(ScoutState.Idle);
             }
+        }
+        else if (_scoutState != ScoutState.Collided && _scoutState != ScoutState.ReturningHome)
+        {
+            _previousState = _scoutState;
+            ChangeState(ScoutState.Collided);
         }
 
     }
@@ -87,7 +118,9 @@ class Scout : IPheromone
         None,
         Idle,
         ReturningHome,
-        Wandering
+        Wandering,
+        DiscoveringResource,
+        Collided
     }
 
     public override string ToString()

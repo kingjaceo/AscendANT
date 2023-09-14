@@ -45,8 +45,9 @@ public class ResupplySelf : IPheromone
 
     public void Finish()
     {
+        _resupplyState = ResupplyState.Finished;
         Debug.Log("RESUPPLY: " + _ant + " ends resupply!");
-        _ant.PheromoneMachine.ForceNextPheromone();
+        _ant.PheromoneMachine.NextPheromone();
     }
 
     public IPheromone Copy(Ant ant)
@@ -57,6 +58,8 @@ public class ResupplySelf : IPheromone
     public void OnCollision(GameObject collider)
     {
         Location location;
+
+        // Debug.Log("RESUPPLY: " + _ant + " collides with " + collider.name);
 
         if (collider.TryGetComponent(out location))
         {
@@ -77,11 +80,6 @@ public class ResupplySelf : IPheromone
     {
         switch (newState)
         {
-            // case ResupplyState.Idle:
-            //     _timeElapsed = 0;
-            //     _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Idle);
-            //     Debug.Log("RESUPPLY: " + _ant + " is resupplied!");
-            //     break;
             case ResupplyState.ApproachingColony:
                 _ant.AntBehaviorMachine.Approach.SetTargetPosition(_targetPosition);
                 _ant.AntBehaviorMachine.TransitionTo(_ant.AntBehaviorMachine.Approach);
@@ -109,6 +107,7 @@ public class ResupplySelf : IPheromone
         Idle,
         ApproachingColony,
         Resupplying,
-        Resupplied
+        Resupplied,
+        Finished
     }
 }

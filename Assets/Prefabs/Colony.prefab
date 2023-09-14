@@ -52,6 +52,7 @@ MonoBehaviour:
     updatedResources: 
   HatchProgress: 0
   _antPrefab: {fileID: 1317557349863640888, guid: 6ec926140a8c6b1448a3d37288faefd2, type: 3}
+  AntCountByCaste: 
   _queenPrefab: {fileID: 1537797982187099633, guid: e203921d34af2dc41ade31a9dae45660, type: 3}
 --- !u!114 &-7724564094432201210
 MonoBehaviour:
@@ -76,7 +77,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.6
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
