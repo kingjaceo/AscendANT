@@ -23,12 +23,18 @@ public class ColonyMemory
     {
         if (antMemory.DiscoveredResourceType != ResourceType.None)
         {
-            _resourceLocations[antMemory.DiscoveredResourceType].Add(antMemory.DiscoveredResourceLocation);
-            UpdateNearest(antMemory.DiscoveredResourceType);
+            if (!_resourceLocations[antMemory.DiscoveredResourceType].Contains(antMemory.DiscoveredResourceLocation))
+            {
+                Debug.Log("COLONY MEMORY: Colony adds " + antMemory.DiscoveredResourceType + " at " + antMemory.DiscoveredResourceLocation + " to memory!");
+
+                _resourceLocations[antMemory.DiscoveredResourceType].Add(antMemory.DiscoveredResourceLocation);
+                UpdateNearest(antMemory.DiscoveredResourceType);
+            }
         }
 
         if (antMemory.DepletedResourceType != ResourceType.None)
         {
+            Debug.Log("COLONY MEMORY: Colony removes " + antMemory.DepletedResourceType + " at " + antMemory.DepletedResourceLocation + " to memory!");
             _resourceLocations[antMemory.DepletedResourceType].Remove(antMemory.DepletedResourceLocation);
             UpdateNearest(antMemory.DepletedResourceType);
         }
@@ -40,8 +46,10 @@ public class ColonyMemory
         float minDistance = 100000;
         float distance;
         bool nearestFound = false;
+        // Debug.Log("COLONY MEMORY: Updating nearest " + resourceType);
         foreach (Vector3 position in _resourceLocations[resourceType])
         {
+            // Debug.Log("COLONY MEMORY: Considering resource position " + position + " vs colony position " + _colonyPosition);
             distance = (position - _colonyPosition).sqrMagnitude;
             if (distance < minDistance)
             {
@@ -54,7 +62,7 @@ public class ColonyMemory
         if (nearestFound)
         {
             _nearestResources[resourceType] = nearestPosition;
-            Debug.Log("COLONYMEMORY: Nearest " + resourceType + " is at " + nearestPosition);
+            Debug.Log("COLONY MEMORY: Nearest " + resourceType + " is at " + nearestPosition);
         }
         else
         {

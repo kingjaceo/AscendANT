@@ -6,8 +6,13 @@ using UnityEngine;
 public class Resource : MonoBehaviour
 {
     public ResourceType ResourceType;
-    public float AmountRemaining = 500;
+    public float AmountRemaining;
 
+    void Start()
+    {
+        AmountRemaining = 500;
+    }
+    
     public float Harvest(float amount)
     {
         amount = Math.Min(amount, AmountRemaining);

@@ -52,15 +52,15 @@ public class GUIVictoryConditionsChoiceController : MonoBehaviour
         string reward = "1 Adaptation";
         _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
 
-        requiredResources = new ResourceType[] { ResourceType.Eggs };
-        requiredAmounts = new float[] { 100 };
-        reward = "1 Insight";
-        _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
+        // requiredResources = new ResourceType[] { ResourceType.Eggs };
+        // requiredAmounts = new float[] { 100 };
+        // reward = "1 Insight";
+        // _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
 
-        requiredResources = new ResourceType[] { ResourceType.Food, ResourceType.Eggs };
-        requiredAmounts = new float[] { 800, 80 };
-        reward = "1 Adaptation, 1 Insight";
-        _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
+        // requiredResources = new ResourceType[] { ResourceType.Food, ResourceType.Eggs };
+        // requiredAmounts = new float[] { 800, 80 };
+        // reward = "1 Adaptation, 1 Insight";
+        // _victoryConditions.Add(new SufficientResourcesCondition(requiredResources, requiredAmounts, reward));
 
         _numConditions = _victoryConditions.Count;
     }

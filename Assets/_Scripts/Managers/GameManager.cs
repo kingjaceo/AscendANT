@@ -9,11 +9,14 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnBeforeStateChanged;
     public static event Action<GameState> OnAfterStateChanged;
 
+    public GameEvent OnRoundStart;
+
     [SerializeField] private GameObject _mainMenuCanvas;
     [SerializeField] private GameObject _victoryChoiceCanvas;
     [SerializeField] private GameObject _mainGUICanvas;
     [SerializeField] private GameObject _loadingScreen;
     [SerializeField] private GameObject _victoryScreen;
+    [SerializeField] private GameObject _escapeMenu;
 
     [SerializeField] private GameObject _cameraController;
     [SerializeField] private GameObject _timeController;
@@ -25,6 +28,7 @@ public class GameManager : MonoBehaviour
     void Awake() 
     {
         Instance = this;
+        Debug.Log($"Main Menu: {_mainMenuCanvas}", _mainMenuCanvas);
     }
 
     void Start() => ChangeState(GameState.LoadingScreen);
@@ -88,7 +92,11 @@ public class GameManager : MonoBehaviour
 
     private void ShowMainMenu()
     {
+        TimeController.Instance.Deactivate();
+        InputManager.Instance.Deactivate();
+        
         _victoryChoiceCanvas.SetActive(false);
+        _escapeMenu.SetActive(false);
         _mainGUICanvas.SetActive(false);
         _victoryScreen.SetActive(false);
         _mainMenuCanvas.SetActive(true);
@@ -106,10 +114,13 @@ public class GameManager : MonoBehaviour
         _mainMenuCanvas.SetActive(false);
         _mainGUICanvas.SetActive(true);
 
+        OnRoundStart.Raise();
+        
         WorldManager.Instance.CreatePlayableWorld();
         WorldManager.Instance.ConnectToGUI();
 
         TimeController.Instance.Activate();
+        InputManager.Instance.Activate();
 
         ChangeState(GameState.InRound);
     }
@@ -124,12 +135,14 @@ public class GameManager : MonoBehaviour
         _mainGUICanvas.SetActive(true);
 
         TimeController.Instance.Activate();
+        InputManager.Instance.Activate();
     }
 
     private void ShowVictoryScreen()
     {
         TimeController.Instance.PauseTime();
         TimeController.Instance.Deactivate();
+        InputManager.Instance.Deactivate();
 
         CurrentVictoryCondition.Instance.ConditionSatisfied();
 
@@ -137,6 +150,11 @@ public class GameManager : MonoBehaviour
         _mainMenuCanvas.SetActive(false);
         _mainGUICanvas.SetActive(false);
         _victoryScreen.SetActive(true);
+    }
+
+    public void Quit()
+    {
+        ChangeState(GameState.Quitting);
     }
 
     private void HandleQuitting()

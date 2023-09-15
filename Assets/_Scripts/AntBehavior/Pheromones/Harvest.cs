@@ -10,7 +10,6 @@ class Harvest : IPheromone
     private Resource _targetResource;
     private Vector3 _targetPosition;
     private Ant _ant;
-    private bool _hasTargetResourcePosition = false;
     private HarvestState _harvestState;
     private float _timeElapsed;
     private float _errorTimeLimit = 15;
@@ -99,6 +98,7 @@ class Harvest : IPheromone
             float distance = GetDistanceToTarget();
             if (distance < 0.1f)
             {
+                _ant.Memory.DiscoverDepletedResource(TargetResourceType, _ant.AntBehaviorMachine.Approach.TargetPosition);
                 ChangeState(HarvestState.ResourceMissing);
             }
         }

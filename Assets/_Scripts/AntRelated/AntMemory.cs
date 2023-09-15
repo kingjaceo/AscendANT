@@ -25,12 +25,14 @@ public class AntMemory
 
     public void DiscoverResource(ResourceType resourceType, Vector3 location)
     {
+        Debug.Log("ANT MEMORY: " + _ant + " discovers " + resourceType + " at " + location + "!");
         _discoveredResourceType = resourceType;
         _discoveredResourceLocation = location;
     }
 
     public void DiscoverDepletedResource(ResourceType resourceType, Vector3 location)
     {
+        Debug.Log("ANT MEMORY: " + _ant + " discovers " + resourceType + " is depleted at " + location + "!");
         _depletedResourceType = resourceType;
         _depletedResourceLocation = location;
     }

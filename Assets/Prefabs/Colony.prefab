@@ -47,11 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NumAnts: 0
-  Memory:
-    colony: {fileID: 0}
-    updatedResources: 
   HatchProgress: 0
-  _antPrefab: {fileID: 1317557349863640888, guid: 6ec926140a8c6b1448a3d37288faefd2, type: 3}
+  _antPrefab: {fileID: 7048591551508522086, guid: 6f0e430dffc4f08439566c55e85fa533, type: 3}
   AntCountByCaste: 
   _queenPrefab: {fileID: 1537797982187099633, guid: e203921d34af2dc41ade31a9dae45660, type: 3}
 --- !u!114 &-7724564094432201210

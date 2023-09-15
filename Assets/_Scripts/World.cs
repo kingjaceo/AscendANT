@@ -89,8 +89,8 @@ public class World : MonoBehaviour
     private void CreateColony()
     {
         _colony = Instantiate(_colonyPrefab).GetComponent<Colony>();
-        _colony.transform.parent = transform;
-        _colony.transform.position = RandomLocationInWorld();
+        _colony.Initialize(RandomLocationInWorld());
+        _colony.Transform.parent = transform;
         _colony.name = "Colony";
 
         CameraController.Instance.transform.position = _colony.transform.position + new Vector3(0, 10, 0);

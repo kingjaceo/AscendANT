@@ -17,6 +17,7 @@ public class TimeController : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        Debug.Log($"This: {this}", this);
     }
 
     // Update is called once per frame
@@ -32,7 +33,7 @@ public class TimeController : MonoBehaviour
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            // Debug.Log("TIME: Spacebar pressed, toggling time scale");
+            Debug.Log("TIME: Spacebar pressed, toggling time scale");
             ToggleTime();
         }
 
@@ -75,20 +76,27 @@ public class TimeController : MonoBehaviour
 
     public void PauseTime()
     {
+        Debug.Log("TIME: Time is pausing!");
+        Debug.Log($"Display: {_pauseDisplay.name}", _pauseDisplay);
         _pauseDisplay.SetActive(true);
 
         _previousState = _state;
         _state = TimeState.Paused;
 
-        SetTimeScale(0);
+        Time.timeScale = 0;
+
+        Debug.Log("TIME: Time is paused!");
     }
 
     public void ResumeTime()
     {
+        
         _pauseDisplay.SetActive(false);
 
         _state = _previousState;
-        
+
+        Debug.Log("TIME: Time is resumed at speed " + _state + "!");
+
         SetTimeScale((int) _state);
     }
 

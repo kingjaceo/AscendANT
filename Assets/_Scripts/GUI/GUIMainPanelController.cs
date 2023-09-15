@@ -95,6 +95,7 @@ public class GUIMainPanelController : MonoBehaviour
     
     public void UpdateSliderLevels(int changedSliderIndex)
     {        
+        Debug.Log("PERCENTAGE SLIDERS: Sliders updating values!");
         // ** this should be called whenever the player changes any slider values **
         // Debug.Log("SLIDER: Changing Slider for Caste " + changedSliderIndex);
         // Debug.Log("SLIDER: Previous Percentages: " + _previousCastePercentages[0] + ", " +  _previousCastePercentages[1] + ", " +  _previousCastePercentages[2]);

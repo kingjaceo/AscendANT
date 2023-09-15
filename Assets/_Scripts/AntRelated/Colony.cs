@@ -30,16 +30,23 @@ public class Colony : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Debug.Log("New Colony starts up...");
-        _transform = transform;
-
-        InitializeColony();
-        InitializeCastes();
+        Debug.Log("COLONY: New Colony starts up at " + transform.position);
     }
 
     // Update is called once per frame
     void Start()
     {
+        
+    }
+
+    public void Initialize(Vector3 position)
+    {
+        transform.position = position;
+        _transform = transform;
+
+        InitializeColony();
+        InitializeCastes();
+
         InitializeQueen();
         StartCoroutine(InitializeAnts());
         StartCoroutine(HatchEggs());
@@ -60,6 +67,7 @@ public class Colony : MonoBehaviour
 
         ColonyResources = new ColonyResources(resourceAmounts, resourceCapacities);
 
+        Debug.Log("COLONY: Colony creates new memory centered at " + _transform.position);
         Memory = new ColonyMemory(_transform.position);        
     }
 
@@ -103,7 +111,7 @@ public class Colony : MonoBehaviour
 
         // set the Ant's position, colony, and caste
         _queen.Transform.position = RandomLocationAroundColony(2f, 1.5f);
-        _queen.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[PaletteManager.Colors.Count - 1];
+        // _queen.Transform.GetChild(0).GetComponent<Renderer>().material.color = PaletteManager.Colors[PaletteManager.Colors.Count - 1];
     }
 
     // initializes the default number and types of ants
@@ -186,7 +194,7 @@ public class Colony : MonoBehaviour
 
         // set the color and name
         Color color = PaletteManager.Colors[casteIndex * 2];
-        ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+        // ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
         antObject.name = caste.Name + "Ant" + ant.ID;
         // Debug.Log(antObject.name + " gets color: " + color.ToString());
 
@@ -237,7 +245,7 @@ public class Colony : MonoBehaviour
     {
         for (int i = 0; i < Castes.Length; i++)
         {
-            Debug.Log("Connecting Caste " + i + " to ColorDropdown " + i);
+            // Debug.Log("Connecting Caste " + i + " to ColorDropdown " + i);
             Caste caste = Castes[i];
             GUIMainPanelController.Instance.SetColony(this);
             GUIMainPanelController.Instance.CastePanels[i].SetCaste(caste);
@@ -254,7 +262,7 @@ public class Colony : MonoBehaviour
         for (int j = 0; j < AntCountByCaste[casteIndex]; j++)
         {
             Ant ant = AntsByCaste[casteIndex][j];
-            ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+            // ant.Transform.GetChild(0).GetComponent<Renderer>().material.color = color;
         }  
     }
 
