@@ -7,19 +7,19 @@ var _target_cell: Vector2i
 var _current_cell: Vector2i
 var _point_path
 var _current_point_index
-var _walk_speed = 2
+var _walk_speed = 30
 var _target_position: Vector2
 var _prev_position: Vector2
 var _next_cell_position: Vector2
 var _next_next_cell_position: Vector2
-var _turn_speed = 8 # seconds to rotate 360 degrees
+var _turn_speed = 6 # seconds to rotate 360 degrees
 enum AntState {NONE, MOVING, TURNING, CHOOSING}
 
 const EPSILON: float = 0.01
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_current_cell = Vector2i(16,0)
+	_current_cell = _colony_map.local_to_map(position)
 	position = _colony_map.map_to_local(_current_cell)
 	_state = AntState.CHOOSING
 
@@ -37,16 +37,26 @@ func _process(delta):
 		_next_next_cell_position = _point_path[next_point_index] + Vector2(8, 8)
 		_target_position = _colony_map.map_to_local(_target_cell)
 		_prev_position = position
-		_state = AntState.MOVING
+		_state = AntState.TURNING
 		
 func _physics_process(delta):
 	if _state == AntState.MOVING:
-		_move_to_target(delta)
 		_rotate_to_target(delta)
+		_move_forward(delta)
+
 		
-	#if _state == AntState.TURNING:
-		#_rotate_to_target(delta)
+	if _state == AntState.TURNING:
+		_rotate_to_target(delta)
+
+func _move_forward(delta):
+	var direction = (_next_cell_position - _prev_position)
+	var distance_left = (position - _next_cell_position).length_squared()
 	
+	if distance_left < EPSILON:
+		_arrive_at_new_tile()
+	else:
+		position += transform.x * delta * _walk_speed
+		
 func _move_to_target(delta):
 	var direction = (_next_cell_position - _prev_position)
 	var distance_left = (position - _next_cell_position).length_squared()
@@ -72,4 +82,6 @@ func _rotate_to_target(delta):
 	var direction = (_next_next_cell_position - position)
 	if direction.length() > EPSILON:
 		var angle_to = transform.x.angle_to(direction)
+		if -PI / 2 < angle_to and angle_to < PI / 2:
+			_state = AntState.MOVING
 		rotate(sign(angle_to) * min(delta * _turn_speed, abs(angle_to)))

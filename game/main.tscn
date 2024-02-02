@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=9 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
 [ext_resource type="PackedScene" uid="uid://dyyhmnfv5rr5n" path="res://game/aerial_view.tscn" id="3_c0sg6"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
 [ext_resource type="Script" path="res://camera/camera_debugger.gd" id="6_ue7qe"]
+[ext_resource type="Script" path="res://game/camera_debugger.gd" id="7_qsiuh"]
 [ext_resource type="PackedScene" uid="uid://qr20wmxddfv2" path="res://game/colony_view.tscn" id="10_1v0gr"]
 [ext_resource type="Script" path="res://ants/queen.gd" id="11_w21dl"]
 
@@ -21,15 +22,6 @@ script = ExtResource("11_w21dl")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
-
-[node name="Label" type="Label" parent="."]
-z_index = 4
-offset_left = 181.0
-offset_top = 276.0
-offset_right = 675.0
-offset_bottom = 302.0
-text = "Camera Coordinates:"
-script = ExtResource("6_ue7qe")
 
 [node name="MainDisplays" type="HBoxContainer" parent="."]
 top_level = true
@@ -64,18 +56,34 @@ handle_input_locally = false
 size = Vector2i(462, 1048)
 render_target_update_mode = 4
 
-[node name="VerticalGame" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" instance=ExtResource("10_1v0gr")]
+[node name="GameContainer" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport"]
 
-[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
+[node name="VerticalGame" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer" instance=ExtResource("10_1v0gr")]
+
+[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer" node_paths=PackedStringArray("_tile_map", "_subviewport")]
 unique_name_in_owner = true
 zoom = Vector2(0.88, 0.88)
-limit_left = 0
-limit_top = -400
-limit_right = 528
+limit_left = 463
+limit_top = -1000
+limit_right = 0
 limit_bottom = 2000
+editor_draw_limits = true
 script = ExtResource("5_fy3uy")
 _tile_map = NodePath("../VerticalGame/ColonyMap")
-_subviewport = NodePath("..")
+_subviewport = NodePath("../..")
+
+[node name="Node2D" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera"]
+visible = false
+script = ExtResource("7_qsiuh")
+
+[node name="Label" type="Label" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera/Node2D"]
+z_index = 4
+offset_left = 181.0
+offset_top = 276.0
+offset_right = 675.0
+offset_bottom = 302.0
+text = "Camera Coordinates:"
+script = ExtResource("6_ue7qe")
 
 [node name="AerialView" type="PanelContainer" parent="MainDisplays"]
 custom_minimum_size = Vector2(1000, 0)
@@ -109,10 +117,7 @@ script = ExtResource("5_fy3uy")
 _tile_map = NodePath("../AerialView/PheromoneMap")
 _subviewport = NodePath("..")
 
-[connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_entered"]
-[connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_exited"]
+[connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera" method="_on_vertical_view_mouse_entered"]
+[connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera" method="_on_vertical_view_mouse_exited"]
 [connection signal="mouse_entered" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_entered"]
 [connection signal="mouse_exited" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_exited"]
-
-[editable path="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalGame"]
-[editable path="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialView"]

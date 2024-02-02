@@ -29,9 +29,9 @@ func _process(delta):
 
 func _draw():
 	if _parent._point_path:
-		draw_line(_parent.position, _parent._target_position, Color.BLUE, 0)
-		draw_line(_parent._next_cell_position, _parent._prev_position, Color.BLACK, 0)
-		draw_line(_parent.position, _parent._next_cell_position, Color.RED, 0)
+		draw_line(_parent.position, _parent._target_position, Color.BLUE, 1)
+		draw_line(_parent._next_cell_position, _parent._prev_position, Color.BLACK, 1)
+		draw_line(_parent.position, _parent._next_cell_position, Color.RED, 1)
 		for point in _parent._point_path:
 			point += Vector2(8, 8)
 			draw_circle(point, 1, Color.WHITE)

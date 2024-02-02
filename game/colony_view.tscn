@@ -80,7 +80,7 @@ visible = false
 script = ExtResource("3_avj5j")
 
 [node name="descendANT" type="Node2D" parent="." node_paths=PackedStringArray("_colony_map")]
-position = Vector2(248, 83)
+position = Vector2(263, 83)
 scale = Vector2(0.519995, 0.519995)
 script = ExtResource("3_tr52m")
 _colony_map = NodePath("../ColonyMap")
@@ -93,12 +93,11 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="AntDebugger" parent="descendANT" node_paths=PackedStringArray("_parent") instance=ExtResource("5_rlc3i")]
-visible = false
 script = ExtResource("6_qsmgk")
 _parent = NodePath("..")
 
 [node name="descendANT2" type="Node2D" parent="." node_paths=PackedStringArray("_colony_map")]
-position = Vector2(248, 83)
+position = Vector2(315, 263)
 scale = Vector2(0.519995, 0.519995)
 script = ExtResource("3_tr52m")
 _colony_map = NodePath("../ColonyMap")
@@ -111,7 +110,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="descendANT3" type="Node2D" parent="." node_paths=PackedStringArray("_colony_map")]
-position = Vector2(248, 83)
+position = Vector2(328, 264)
 scale = Vector2(0.519995, 0.519995)
 script = ExtResource("3_tr52m")
 _colony_map = NodePath("../ColonyMap")
@@ -124,7 +123,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="descendANT4" type="Node2D" parent="." node_paths=PackedStringArray("_colony_map")]
-position = Vector2(248, 83)
+position = Vector2(329, 277)
 scale = Vector2(0.519995, 0.519995)
 script = ExtResource("3_tr52m")
 _colony_map = NodePath("../ColonyMap")
@@ -137,7 +136,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="descendANT5" type="Node2D" parent="." node_paths=PackedStringArray("_colony_map")]
-position = Vector2(248, 83)
+position = Vector2(201, 250)
 scale = Vector2(0.519995, 0.519995)
 script = ExtResource("3_tr52m")
 _colony_map = NodePath("../ColonyMap")
@@ -145,6 +144,52 @@ _colony_map = NodePath("../ColonyMap")
 [node name="Sprite2D" type="Sprite2D" parent="descendANT5"]
 texture_filter = 1
 rotation = 1.5708
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="MeasuringStick" type="Node2D" parent="."]
+position = Vector2(239, 1917)
+rotation = 1.5708
+scale = Vector2(0.519995, 0.519995)
+
+[node name="Sprite2D2" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
+position = Vector2(-3980.81, 28.8609)
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D3" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
+position = Vector2(-4384.66, 9.63138)
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D4" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
+position = Vector2(-3771.19, 21.1677)
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D5" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
+position = Vector2(-4794.28, 55.7871)
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D6" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
+position = Vector2(-5209.67, 73.0965)
+texture = ExtResource("2_18owu")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D7" type="Sprite2D" parent="MeasuringStick"]
+texture_filter = 1
 texture = ExtResource("2_18owu")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
