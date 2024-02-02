@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://bt3iko2y40ilq"]
+
+[ext_resource type="Script" path="res://ui/pheromone_toggle.gd" id="1_rp7xu"]
+[ext_resource type="Script" path="res://ui/outline_toggle.gd" id="2_kv02s"]
+[ext_resource type="Script" path="res://ui/terrain_toggle.gd" id="3_7qyjs"]
+
+[node name="ViewToggleBox" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(4.26397, 3.75422)
+
+[node name="PheromonePanel" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="PheromoneBox" type="HBoxContainer" parent="PheromonePanel"]
+layout_mode = 2
+
+[node name="Pheromones" type="Label" parent="PheromonePanel/PheromoneBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pheromones"
+
+[node name="PheromoneToggle" type="CheckButton" parent="PheromonePanel/PheromoneBox"]
+layout_mode = 2
+script = ExtResource("1_rp7xu")
+
+[node name="OutlinePanel" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="OutlineBox" type="HBoxContainer" parent="OutlinePanel"]
+layout_mode = 2
+
+[node name="Outlines" type="Label" parent="OutlinePanel/OutlineBox"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Outlines"
+
+[node name="OutlineToggle" type="CheckButton" parent="OutlinePanel/OutlineBox"]
+layout_mode = 2
+script = ExtResource("2_kv02s")
+
+[node name="TerrainPanel" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="TerrainBox" type="HBoxContainer" parent="TerrainPanel"]
+layout_mode = 2
+
+[node name="Terrain" type="Label" parent="TerrainPanel/TerrainBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Terrain"
+
+[node name="TerrainToggle" type="CheckButton" parent="TerrainPanel/TerrainBox"]
+layout_mode = 2
+script = ExtResource("3_7qyjs")
+
+[connection signal="toggled" from="PheromonePanel/PheromoneBox/PheromoneToggle" to="PheromonePanel/PheromoneBox/PheromoneToggle" method="_on_toggled"]
+[connection signal="toggled" from="OutlinePanel/OutlineBox/OutlineToggle" to="OutlinePanel/OutlineBox/OutlineToggle" method="_on_toggled"]
+[connection signal="toggled" from="TerrainPanel/TerrainBox/TerrainToggle" to="TerrainPanel/TerrainBox/TerrainToggle" method="_on_toggled"]

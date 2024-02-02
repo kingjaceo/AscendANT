@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3 uid="uid://dsgu71t2dfdcb"]
+
+[ext_resource type="Script" path="res://ui/ant_populatin_controller.gd" id="1_6fxsi"]
+[ext_resource type="Texture2D" uid="uid://rrx57oeletue" path="res://ui/icons/increase.ase" id="2_8glxv"]
+[ext_resource type="Texture2D" uid="uid://dmprv8lo3jpah" path="res://ui/icons/increase_pressed.ase" id="3_2bmo4"]
+[ext_resource type="Texture2D" uid="uid://bho7xtxjp01bq" path="res://ui/icons/increase_hover.ase" id="4_y3qsr"]
+[ext_resource type="Texture2D" uid="uid://dwvgosd7skra0" path="res://ui/icons/decrease.ase" id="5_2hfdw"]
+[ext_resource type="Texture2D" uid="uid://ute0f10lppii" path="res://ui/icons/decrease_pressed.ase" id="6_3y1o1"]
+[ext_resource type="Texture2D" uid="uid://c1v20immo14i8" path="res://ui/icons/decrease_hover.ase" id="7_8n3l3"]
+
+[node name="AntPopulationPanel" type="PanelContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -33.0
+offset_right = 27.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6fxsi")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="PopulationInformation" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="CurrentPopulation" type="Label" parent="MarginContainer/HBoxContainer/PopulationInformation"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"SmallTextLabel"
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OutOf" type="Label" parent="MarginContainer/HBoxContainer/PopulationInformation"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"SmallTextLabel"
+text = "out of"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TargetPopulation" type="Label" parent="MarginContainer/HBoxContainer/PopulationInformation"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlButtons" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer/ControlButtons"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Increase" type="TextureButton" parent="MarginContainer/HBoxContainer/ControlButtons"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+size_flags_stretch_ratio = 0.0
+texture_normal = ExtResource("2_8glxv")
+texture_pressed = ExtResource("3_2bmo4")
+texture_hover = ExtResource("4_y3qsr")
+stretch_mode = 0
+
+[node name="Decrease" type="TextureButton" parent="MarginContainer/HBoxContainer/ControlButtons"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture_normal = ExtResource("5_2hfdw")
+texture_pressed = ExtResource("6_3y1o1")
+texture_hover = ExtResource("7_8n3l3")

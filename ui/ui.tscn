@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://dymqs7qdu30pn"]
+
+[ext_resource type="PackedScene" uid="uid://bt3iko2y40ilq" path="res://ui/view_toggle_box.tscn" id="1_0rsbx"]
+[ext_resource type="Script" path="res://ui/ui.gd" id="1_vp56c"]
+[ext_resource type="PackedScene" uid="uid://ytifdcxinxf7" path="res://ui/ants_container.tscn" id="2_2e8et"]
+[ext_resource type="PackedScene" uid="uid://cfbw6cl2jsotv" path="res://ui/colony_statistics_panel.tscn" id="3_k50fe"]
+
+[node name="MainUI" type="CanvasLayer"]
+script = ExtResource("1_vp56c")
+
+[node name="MainControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -151.0
+offset_top = 8.0
+offset_right = -151.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="MainUIPanel" type="PanelContainer" parent="MainControl/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MainControl/MarginContainer/MainUIPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MainUIBox" type="VBoxContainer" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Options" type="Label" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox"]
+layout_mode = 2
+text = "Options"
+horizontal_alignment = 1
+
+[node name="ViewOptions" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox" instance=ExtResource("1_0rsbx")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Resources" type="Label" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox"]
+layout_mode = 2
+text = "Resources"
+horizontal_alignment = 1
+
+[node name="Statistics" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox" instance=ExtResource("3_k50fe")]
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Ants" type="Label" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox"]
+layout_mode = 2
+text = "Ants"
+horizontal_alignment = 1
+
+[node name="AntsScroller" parent="MainControl/MarginContainer/MainUIPanel/MarginContainer/MainUIBox" instance=ExtResource("2_2e8et")]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0

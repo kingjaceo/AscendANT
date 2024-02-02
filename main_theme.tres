@@ -1,0 +1,9 @@
+[gd_resource type="Theme" format=3 uid="uid://drhulf7ugq5j3"]
+
+[resource]
+Button/font_sizes/font_size = 16
+HeaderLarge/font_sizes/font_size = 32
+HeaderMedium/font_sizes/font_size = 50
+Label/font_sizes/font_size = 18
+SmallTextLabel/base_type = &"Label"
+SmallTextLabel/font_sizes/font_size = 10

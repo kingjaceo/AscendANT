@@ -25,4 +25,4 @@ func _process(delta):
 	
 
 func _draw():
-	draw_line(Vector2.ZERO, to_local(_parent._target_tile_position), Color(1, 1, 1), 5)
+	draw_line(Vector2.ZERO, to_local(_parent._target_tile_position), Color.RED, 5)
