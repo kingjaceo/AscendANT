@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://da66apdekq5y0"]
 
-[ext_resource type="Script" path="res://levels/messenger.gd" id="1_njwge"]
+[ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
-[ext_resource type="PackedScene" uid="uid://dyyhmnfv5rr5n" path="res://aerial_view.tscn" id="3_c0sg6"]
-[ext_resource type="Script" path="res://levels/camera_controller.gd" id="5_fy3uy"]
-[ext_resource type="Script" path="res://levels/camera_debugger.gd" id="6_ue7qe"]
-[ext_resource type="PackedScene" uid="uid://qr20wmxddfv2" path="res://colony_view.tscn" id="10_1v0gr"]
+[ext_resource type="PackedScene" uid="uid://dyyhmnfv5rr5n" path="res://game/aerial_view.tscn" id="3_c0sg6"]
+[ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
+[ext_resource type="Script" path="res://camera/camera_debugger.gd" id="6_ue7qe"]
+[ext_resource type="PackedScene" uid="uid://qr20wmxddfv2" path="res://game/colony_view.tscn" id="10_1v0gr"]
 [ext_resource type="Script" path="res://ants/queen.gd" id="11_w21dl"]
 
 [node name="Game" type="Node2D"]

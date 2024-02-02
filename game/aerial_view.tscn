@@ -1,14 +1,14 @@
 [gd_scene load_steps=6 format=3 uid="uid://dyyhmnfv5rr5n"]
 
-[ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://pheromone_map.tscn" id="1_5r54e"]
+[ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://pheromones/pheromone_map.tscn" id="1_axu0g"]
 [ext_resource type="Script" path="res://pheromones/pheromone_map.gd" id="2_5bixm"]
 [ext_resource type="Script" path="res://pheromones/pheromone_map_debugger.gd" id="2_b8yce"]
-[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://Sprites.ase" id="2_yt18j"]
-[ext_resource type="Script" path="res://ants/colony.gd" id="3_rcr6a"]
+[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://pheromones/Sprites.ase" id="2_yt18j"]
+[ext_resource type="Script" path="res://colony/colony.gd" id="3_rcr6a"]
 
 [node name="AerialView" type="Node2D"]
 
-[node name="PheromoneMap" parent="." instance=ExtResource("1_5r54e")]
+[node name="PheromoneMap" parent="." instance=ExtResource("1_axu0g")]
 script = ExtResource("2_5bixm")
 
 [node name="Node2D" type="Node2D" parent="PheromoneMap"]

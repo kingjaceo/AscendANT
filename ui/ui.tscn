@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bt3iko2y40ilq" path="res://ui/view_toggle_box.tscn" id="1_0rsbx"]
 [ext_resource type="Script" path="res://ui/ui.gd" id="1_vp56c"]
-[ext_resource type="PackedScene" uid="uid://ytifdcxinxf7" path="res://ui/ants_container.tscn" id="2_2e8et"]
+[ext_resource type="PackedScene" uid="uid://ytifdcxinxf7" path="res://ui/ants/ants_container.tscn" id="2_2e8et"]
 [ext_resource type="PackedScene" uid="uid://cfbw6cl2jsotv" path="res://ui/colony_statistics_panel.tscn" id="3_k50fe"]
 
 [node name="MainUI" type="CanvasLayer"]

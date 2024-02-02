@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmwn1gewfukua"]
 
 [ext_resource type="Texture2D" uid="uid://brqbyakmb4vh2" path="res://ui/icons/ant.ase" id="1_6fhbq"]
-[ext_resource type="PackedScene" uid="uid://dsgu71t2dfdcb" path="res://ui/ant_population_panel.tscn" id="2_t445l"]
+[ext_resource type="PackedScene" uid="uid://dsgu71t2dfdcb" path="res://ui/ants/ant_population_panel.tscn" id="2_t445l"]
 [ext_resource type="Texture2D" uid="uid://rrx57oeletue" path="res://ui/icons/increase.ase" id="3_mv8lh"]
 
 [node name="AntPanel" type="PanelContainer"]

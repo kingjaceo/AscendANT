@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ytifdcxinxf7"]
 
-[ext_resource type="PackedScene" uid="uid://dmwn1gewfukua" path="res://ui/ant_panel.tscn" id="1_ngrt2"]
+[ext_resource type="PackedScene" uid="uid://dmwn1gewfukua" path="res://ui/ants/ant_panel.tscn" id="1_ngrt2"]
 [ext_resource type="Texture2D" uid="uid://cmpeaf8rrsrk5" path="res://plus.ase" id="2_m74f3"]
 
 [node name="PanelContainer" type="PanelContainer"]

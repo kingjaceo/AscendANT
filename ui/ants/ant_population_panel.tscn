@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dsgu71t2dfdcb"]
 
-[ext_resource type="Script" path="res://ui/ant_populatin_controller.gd" id="1_6fxsi"]
+[ext_resource type="Script" path="res://ui/ants/ant_population_controller.gd" id="1_6fxsi"]
 [ext_resource type="Texture2D" uid="uid://rrx57oeletue" path="res://ui/icons/increase.ase" id="2_8glxv"]
 [ext_resource type="Texture2D" uid="uid://dmprv8lo3jpah" path="res://ui/icons/increase_pressed.ase" id="3_2bmo4"]
 [ext_resource type="Texture2D" uid="uid://bho7xtxjp01bq" path="res://ui/icons/increase_hover.ase" id="4_y3qsr"]

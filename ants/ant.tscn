@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://y8u18ioio5ka"]
 
 [ext_resource type="Script" path="res://ants/ant.gd" id="1_ekkib"]
-[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://Sprites.ase" id="1_fw486"]
+[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://pheromones/Sprites.ase" id="1_fw486"]
 
 [node name="Ant" type="Node2D"]
 z_index = 3

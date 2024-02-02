@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bt3iko2y40ilq"]
 
-[ext_resource type="Script" path="res://ui/pheromone_toggle.gd" id="1_rp7xu"]
-[ext_resource type="Script" path="res://ui/outline_toggle.gd" id="2_kv02s"]
-[ext_resource type="Script" path="res://ui/terrain_toggle.gd" id="3_7qyjs"]
+[ext_resource type="Script" path="res://ui/toggle/pheromone_toggle.gd" id="1_rp7xu"]
+[ext_resource type="Script" path="res://ui/toggle/outline_toggle.gd" id="2_kv02s"]
+[ext_resource type="Script" path="res://ui/toggle/terrain_toggle.gd" id="3_7qyjs"]
 
 [node name="ViewToggleBox" type="VBoxContainer"]
 offset_right = 40.0

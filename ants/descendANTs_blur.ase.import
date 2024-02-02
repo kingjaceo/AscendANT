@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://di1epdcpg7jpu"
-path="res://.godot/imported/descendANTs_blur.ase-29296af84260de2dfb7c2a50855f3454.ctex"
+path="res://.godot/imported/descendANTs_blur.ase-658e77d6b91284341d5d1099142f9cfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://descendANTs_blur.ase"
-dest_files=["res://.godot/imported/descendANTs_blur.ase-29296af84260de2dfb7c2a50855f3454.ctex"]
+source_file="res://ants/descendANTs_blur.ase"
+dest_files=["res://.godot/imported/descendANTs_blur.ase-658e77d6b91284341d5d1099142f9cfd.ctex"]
 
 [params]
 

@@ -1,13 +1,13 @@
 [gd_scene load_steps=12 format=3 uid="uid://qr20wmxddfv2"]
 
-[ext_resource type="Texture2D" uid="uid://bn6xvnh025umv" path="res://colony_tilesheet.ase" id="1_0apls"]
-[ext_resource type="Script" path="res://colony_map.gd" id="2_5x2fo"]
-[ext_resource type="Texture2D" uid="uid://di1epdcpg7jpu" path="res://descendANTs_blur.ase" id="2_18owu"]
+[ext_resource type="Texture2D" uid="uid://bn6xvnh025umv" path="res://colony/colony_tilesheet.ase" id="1_0apls"]
+[ext_resource type="Script" path="res://colony/colony_map.gd" id="2_5x2fo"]
+[ext_resource type="Texture2D" uid="uid://di1epdcpg7jpu" path="res://ants/descendANTs_blur.ase" id="2_18owu"]
 [ext_resource type="Texture2D" uid="uid://wf1hnm4ncjrb" path="res://single_tile.ase" id="2_cmsu2"]
-[ext_resource type="Script" path="res://colony_map_debugger.gd" id="3_avj5j"]
-[ext_resource type="Script" path="res://descedANT.gd" id="3_tr52m"]
+[ext_resource type="Script" path="res://colony/colony_map_debugger.gd" id="3_avj5j"]
+[ext_resource type="Script" path="res://ants/descedANT.gd" id="3_tr52m"]
 [ext_resource type="PackedScene" uid="uid://wa4shnb8tgs1" path="res://ants/ant_debugger.tscn" id="5_rlc3i"]
-[ext_resource type="Script" path="res://descendANTdebugger.gd" id="6_qsmgk"]
+[ext_resource type="Script" path="res://ants/descendANTdebugger.gd" id="6_qsmgk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_li7mm"]
 texture = ExtResource("1_0apls")

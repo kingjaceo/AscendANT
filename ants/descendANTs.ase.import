@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn6xvnh025umv"
-path="res://.godot/imported/colony_tilesheet.ase-01ff9cac1fa9409044a97eb71259fd86.ctex"
+uid="uid://hxi6iranaj1a"
+path="res://.godot/imported/descendANTs.ase-155cfd1daccf19e7dba60e68a77483d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://colony_tilesheet.ase"
-dest_files=["res://.godot/imported/colony_tilesheet.ase-01ff9cac1fa9409044a97eb71259fd86.ctex"]
+source_file="res://ants/descendANTs.ase"
+dest_files=["res://.godot/imported/descendANTs.ase-155cfd1daccf19e7dba60e68a77483d4.ctex"]
 
 [params]
 
