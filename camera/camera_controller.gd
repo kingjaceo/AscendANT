@@ -97,13 +97,13 @@ func _on_vertical_view_mouse_exited():
 	set_process(false)
 
 func set_attributes():
-	set_process(true)
+	set_process(false)
 	_bounds = _tile_map.get_bounds()
 	var viewport_width = _subviewport.size.x
 	var viewport_halfwidth = viewport_width / 2
 	var viewport_halfheight = _subviewport.size.y / 2
 
-	var max_zoom = 4
+	var max_zoom = 8
 	_max_zoom = Vector2(max_zoom, max_zoom)
 	_zoom_ratio =  float(viewport_width) / float(_bounds[1] - _bounds[0])
 	#min_zoom = 0.846

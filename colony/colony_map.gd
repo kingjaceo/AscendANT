@@ -1,14 +1,16 @@
 class_name ColonyMap extends TileMap
 
 var astar_grid = AStarGrid2D.new()
-
+var cell_size = Vector2(16, 16)
+var adjustment = cell_size / 2
+var entrance = Vector2i(16, 0)
 const DIRT_LAYER = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Messenger._colony_map = self
 	astar_grid.region = Rect2i(0, 0, 33, 65)
-	astar_grid.cell_size = Vector2(16, 16)
+	astar_grid.cell_size = cell_size
 	var solid_tiles = get_used_cells(DIRT_LAYER)
 	astar_grid.diagonal_mode = 3
 	astar_grid.update()
@@ -27,3 +29,12 @@ func get_bounds():
 	
 	return bounds
 	
+
+func choose_random_cell():
+	var allowed_cells = get_used_cells(1)
+	var choice = allowed_cells[randi() % len(allowed_cells)]
+	return choice
+	
+	
+func get_entrance():
+	return entrance

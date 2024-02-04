@@ -1,6 +1,6 @@
 class_name Colony extends Node2D
 
-@export var ant = preload("res://ants/ant.tscn")
+@export var ant = preload("res://ants/baseANT.tscn")
 #@export var _messenger: Messenger
 var food: float
 var eggs: float
@@ -23,7 +23,7 @@ func _ready():
 	_egg_hatch_time = 5
 	
 	current_population = 0
-	target_population = 5
+	target_population = 0
 	
 	for i in range(target_population):
 		var instance = ant.instantiate()

@@ -153,3 +153,7 @@ func get_bounds():
 	bounds[3] = map_limits.end.y * map_cellsize.y
 	
 	return bounds
+
+func _choose_random_neighbor(cell):
+	var neighbors = get_surrounding_pheromone_cells(cell)
+	return neighbors[randi() % len(neighbors)]

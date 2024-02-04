@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3 uid="uid://cavji350dfjf4"]
+
+[ext_resource type="Script" path="res://ants/descedANT.gd" id="1_fevcs"]
+[ext_resource type="Texture2D" uid="uid://di1epdcpg7jpu" path="res://ants/descendANTs_blur.ase" id="2_hf2o7"]
+
+[sub_resource type="Animation" id="Animation_gwau4"]
+resource_name = "walk"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(16, 16, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_fodag"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 16, 16)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_euxcw"]
+_data = {
+"RESET": SubResource("Animation_fodag"),
+"walk": SubResource("Animation_gwau4")
+}
+
+[node name="descendANT" type="Node2D"]
+scale = Vector2(0.519995, 0.519995)
+script = ExtResource("1_fevcs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5708
+texture = ExtResource("2_hf2o7")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_euxcw")
+}
+speed_scale = 3.0

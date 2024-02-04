@@ -1,5 +1,5 @@
 extends Node2D
-
+@onready var animation_player = $AnimationPlayer
 '''
 The Ant needs the following functionality:
 	1. know what tile it is currently located on
@@ -19,9 +19,9 @@ var _mark_pheromone: Pheromone
 var _state: AntState
 var _scout_state: ScoutState
 
-var _hunger_return_time: float = 10 # seconds before returning home to eat
+var _hunger_return_time: float = 60 # seconds before returning home to eat
 var _hunger_return_timer: float = 0
-var _starvation_time: float = 10
+var _starvation_time: float = 20
 var _starvation_timer: float = 0
 var _food_held: float = 0
 var _food_capacity: float = 25
@@ -32,13 +32,14 @@ enum ScoutState {SCOUTING, TO_HOME, TO_FOOD}
 
 var _time_elapsed = 0
 var _wait_time = 0.0 # seconds to wait before choosing next action
-var _walk_speed = 3 # tiles per second
+var _walk_speed = 1 # tiles per second
 var _turn_speed = 10 # seconds to rotate 360 degrees
 
 const EPSILON = 0.1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	animation_player.play("walking")
 	$Lifetime.timeout.connect(die)
 	
 	# set first state

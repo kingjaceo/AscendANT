@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cwl31u7x6k44h"]
 
-[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://pheromones/Sprites.ase" id="1_eesmo"]
+[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://game/Sprites.ase" id="1_eesmo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cd5rb"]
 texture = ExtResource("1_eesmo")

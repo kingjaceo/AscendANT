@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1o22lmwt7k0l"
-path="res://.godot/imported/Sprites.ase-4291f5f8af28bc56fafc18682b8736be.ctex"
+uid="uid://b0v56hi6hp7rh"
+path="res://.godot/imported/panel1.ase-0ea8cb213a9436b1cd081cf09c66dbb8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pheromones/Sprites.ase"
-dest_files=["res://.godot/imported/Sprites.ase-4291f5f8af28bc56fafc18682b8736be.ctex"]
+source_file="res://ui/panel1.ase"
+dest_files=["res://.godot/imported/panel1.ase-0ea8cb213a9436b1cd081cf09c66dbb8.ctex"]
 
 [params]
 

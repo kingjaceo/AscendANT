@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var _colony_map: ColonyMap
+@onready var animation_player = $AnimationPlayer
 
 var _state
 var _target_cell: Vector2i
@@ -19,13 +20,15 @@ const EPSILON: float = 0.01
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_current_cell = _colony_map.local_to_map(position)
-	position = _colony_map.map_to_local(_current_cell)
+	animation_player.play("walk")
+	#_current_cell = _colony_map.local_to_map(position)
+	#position = _colony_map.map_to_local(_current_cell)
 	_state = AntState.CHOOSING
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	_current_cell = _colony_map.local_to_map(position)
 	if _state == AntState.CHOOSING:
 		var allowed_cells = _colony_map.get_used_cells(1)
 		var choice = allowed_cells[randi() % len(allowed_cells)]

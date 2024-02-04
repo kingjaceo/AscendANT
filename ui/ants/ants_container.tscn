@@ -32,27 +32,6 @@ size_flags_vertical = 3
 [node name="AntPanel" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
 layout_mode = 2
 
-[node name="AntPanel2" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel3" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel4" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel5" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel6" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel7" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
-[node name="AntPanel8" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_ngrt2")]
-layout_mode = 2
-
 [node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer"]
 texture_filter = 1
 layout_mode = 2

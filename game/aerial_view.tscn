@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://pheromones/pheromone_map.tscn" id="1_axu0g"]
 [ext_resource type="Script" path="res://pheromones/pheromone_map.gd" id="2_5bixm"]
 [ext_resource type="Script" path="res://pheromones/pheromone_map_debugger.gd" id="2_b8yce"]
-[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://pheromones/Sprites.ase" id="2_yt18j"]
 [ext_resource type="Script" path="res://colony/colony.gd" id="3_rcr6a"]
+[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://game/Sprites.ase" id="5_pr8nj"]
 
 [node name="AerialView" type="Node2D"]
 
@@ -19,6 +19,6 @@ script = ExtResource("2_b8yce")
 script = ExtResource("3_rcr6a")
 
 [node name="Sprite2D" type="Sprite2D" parent="Colony"]
-texture = ExtResource("2_yt18j")
+texture = ExtResource("5_pr8nj")
 region_enabled = true
 region_rect = Rect2(668, 19, 167, 119)

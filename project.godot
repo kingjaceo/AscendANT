@@ -17,7 +17,7 @@ config/icon="res://ui/icons/icon.svg"
 
 [aseprite_importers]
 
-aseprite_executable_path="C:/Program Files/LibreSprite/libresprite.exe"
+aseprite_executable_path="C:/Projects/LibreSprite/libresprite.exe"
 
 [autoload]
 
