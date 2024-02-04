@@ -33,6 +33,8 @@ func get_bounds():
 func choose_random_cell():
 	var allowed_cells = get_used_cells(1)
 	var choice = allowed_cells[randi() % len(allowed_cells)]
+	while astar_grid.is_point_solid(choice):
+		choice = allowed_cells[randi() % len(allowed_cells)]
 	return choice
 	
 	

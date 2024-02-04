@@ -61,6 +61,7 @@ autostart = true
 
 [node name="UntilStart" type="Timer" parent="."]
 wait_time = 0.2
+one_shot = true
 autostart = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -154,6 +154,14 @@ func get_bounds():
 	
 	return bounds
 
-func _choose_random_neighbor(cell):
+func choose_random_cell():
+	var cells = get_used_cells(TERRAIN_LAYER)
+	return cells[randi() % len(cells)]
+	
+func choose_random_neighbor(cell):
 	var neighbors = get_surrounding_pheromone_cells(cell)
-	return neighbors[randi() % len(neighbors)]
+	return neighbors[randi() % len(neighbors)].coordinates
+
+func get_entrance():
+	#return Vector2i(0, 0)
+	pass

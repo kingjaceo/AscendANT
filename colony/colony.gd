@@ -1,6 +1,5 @@
 class_name Colony extends Node2D
 
-@export var ant = preload("res://ants/baseANT.tscn")
 #@export var _messenger: Messenger
 var food: float
 var eggs: float
@@ -11,26 +10,27 @@ var _food_decay_rate: float # food lost per second
 var _egg_hatch_time: float
 var _egg_timer: float
 
+var pheromone_map: PheromoneMap
+var colony_map: ColonyMap
+var _overworld_cell: Vector2i
+
+var _baseANT = preload("res://ants/baseANT.tscn")
+var _debugger = preload("res://ants/baseANTdebugger.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Messenger._colony = self
+	pheromone_map = Messenger.get_pheromone_map()
+	colony_map = Messenger.get_colony_map()
 	
-	food = 10
-	eggs = 0
-	egg_capacity = 20
-	_food_decay_rate = 0.2
-	_egg_hatch_time = 5
+	_overworld_cell = pheromone_map.choose_random_cell()
+	var colony_sprite = get_node("Sprite2D")
+	remove_child(colony_sprite)
+	pheromone_map.add_child(colony_sprite)
+	colony_sprite.position = pheromone_map.map_to_local(_overworld_cell)
 	
-	current_population = 0
-	target_population = 0
-	
-	for i in range(target_population):
-		var instance = ant.instantiate()
-		#instance._messenger = _messenger
-		instance.position = position
-		add_child(instance)
-		current_population += 1
+	_set_attributes()
+	_create_ants()
 		
 	Messenger.update_current_population()
 	Messenger.update_target_population()
@@ -49,6 +49,46 @@ func _process(delta):
 		_egg_timer = 0
 
 
+func _create_ants():
+	for i in range(0):
+		var instance = _baseANT.instantiate()
+		add_child(instance)
+		instance._world = BaseANT.World.COLONY
+		instance.position = Vector2(264, 264)
+		instance._colony_map = colony_map
+		instance._pheromone_map = pheromone_map
+		
+		#var debugger = _debugger.instantiate()
+		Messenger.move_ant_to_world(instance, instance.World.COLONY)
+		#instance.add_child(debugger)
+		#instance._pheremone_map = pheromone_map
+		instance._current_cell = colony_map.local_to_map(instance.position)
+		
+	for i in range(1):
+		var instance = _baseANT.instantiate()
+		var debugger = _debugger.instantiate()
+		add_child(instance)
+		Messenger.move_ant_to_world(instance, instance.World.OVERWORLD)
+		instance.add_child(debugger)
+
+		instance._colony_map = colony_map
+		instance._pheromone_map = pheromone_map
+		instance.position = Vector2(100, 100)
+		instance._current_cell = pheromone_map.local_to_map(instance.position)
+		
+	current_population += 1
+
+
+func _set_attributes():
+	food = 10
+	eggs = 0
+	egg_capacity = 20
+	_food_decay_rate = 0.2
+	_egg_hatch_time = 5
+	current_population = 0
+	target_population = 0
+	
+
 func add_egg():
 	eggs += 1
 	Messenger.update_eggs()
@@ -58,12 +98,7 @@ func hatch_egg():
 	Messenger.update_eggs()
 	Messenger.update_current_population()
 	
-	var instance = ant.instantiate()
-	#instance._messenger = _messenger
-	instance.position = position
-	add_child(instance)
-	current_population += 1
-	Messenger.update_current_population()
+	_create_ant(_baseANT)
 
 
 func take_food(amount: float):
@@ -90,3 +125,14 @@ func decrease_target_population():
 func ant_died():
 	current_population -= 1
 	Messenger.update_current_population()
+
+
+func _create_ant(ant):
+	var instance = ant.instantiate()
+	add_child(instance)
+	instance._world = BaseANT.World.COLONY
+	Messenger.move_ant_to_world(instance, instance.World.COLONY)
+	instance._colony_map = colony_map
+	instance._pheromone_map = pheromone_map
+	instance.position = Vector2(264, 264)
+	instance._current_cell = colony_map.local_to_map(instance.position)

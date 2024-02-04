@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://6gs7tr6x0fmd"]
+
+[ext_resource type="Script" path="res://ants/baseANTdebugger.gd" id="1_yu27j"]
+
+[node name="Node2D" type="Node2D"]
+top_level = true
+script = ExtResource("1_yu27j")
+
+[node name="TextDisplay" type="RichTextLabel" parent="."]
+top_level = true
+offset_right = 362.0
+offset_bottom = 377.0
+text = "ANT DEBUGJEER"

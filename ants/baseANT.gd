@@ -1,4 +1,4 @@
-extends Node2D
+class_name BaseANT extends Node2D
 
 '''
 All ANTs have the following behaviors:
@@ -32,6 +32,7 @@ To facilitate this, all ANTs must track:
 	- lifetime / hunger timers 
 '''
 @onready var _animation_player = $AnimationPlayer
+var _current_map: TileMap
 var _colony_map: ColonyMap
 var _pheromone_map: PheromoneMap
 
@@ -49,13 +50,14 @@ var _current_path_index: int
 var _next_cell_position: Vector2
 
 const EPSILON = 0.1
+const TOLERANCE = 1
 
 enum MovementState {IDLE, WALK}
 enum World {COLONY, OVERWORLD}
 
 func _ready():
 	_movement_state = MovementState.IDLE
-	_walk_speed = 20
+	_walk_speed = 40
 	_turn_speed = 10
 	
 
@@ -80,8 +82,8 @@ func _change_movement_state(new_state):
 func _turn_and_move(delta):
 	# check if arrived at next cell position
 	var direction = _next_cell_position - position
-	var distance_to_next_cell = direction.length_squared()
-	if distance_to_next_cell <= EPSILON:
+	var distance_to_next_cell = direction.length()
+	if distance_to_next_cell <= TOLERANCE:
 		_arrive_at_next_cell()
 	else:
 		_rotate_to_next_cell(delta, direction)
@@ -100,22 +102,24 @@ func _move_forward(delta, direction):
 
 func _arrive_at_next_cell():
 	_previous_cell = _current_cell
-	_current_cell = _next_cell
+	
 	
 	if _world == World.COLONY and _current_cell == _colony_map.get_entrance():
 		# change worlds (ant leaves colony)
 		_change_worlds()
 	elif _world == World.OVERWORLD and _current_cell == _pheromone_map.get_entrance():
 		# change worlds (ant enters colony)
-		_change_worlds()
+		pass
+		#_change_worlds()
 	
 	if _current_cell == _target_cell:
 		_choose_next_target()
 	else:	
-		_current_path_index += 1
 		_next_cell = _get_next_cell()
 		_next_cell_position = _get_next_cell_position()
-	
+		_current_path_index += 1
+		
+	_current_cell = _next_cell
 
 func _get_next_cell():
 	if _world == World.COLONY:
@@ -132,19 +136,16 @@ func _get_next_cell_position():
 		else:
 			pass
 	if _world == World.OVERWORLD:
-		return _pheromone_map.local_to_map(_target_cell)
+		return _pheromone_map.map_to_local(_target_cell)
 	
 
-func _choose_next_target(): # should be overridden by all ANT types
+func _choose_next_target():
 	if _world == World.COLONY:
-		_target_cell = _colony_map.choose_random_cell()
-		_point_path =  _colony_map.astar_grid.get_point_path(_current_cell, _target_cell)
-		_current_path_index = min(len(_point_path) - 1, 1)
-		_next_cell = _get_next_cell()
-		_next_cell_position = _get_next_cell_position()
+		_choose_colony_target()
 	if _world == World.OVERWORLD:
-		_target_cell = _pheromone_map.choose_random_neighbor(_current_cell)
-	
+		_choose_overworld_target()
+	_next_cell = _get_next_cell()
+	_next_cell_position = _get_next_cell_position()
 
 func _change_worlds():
 	if _world == World.COLONY:
@@ -152,7 +153,7 @@ func _change_worlds():
 	if _world == World.OVERWORLD:
 		_world = World.COLONY
 		
-	Messenger.change_worlds(self, _world)
+	Messenger.move_ant_to_world(self, _world)
 	
 
 func _eat_food():
@@ -166,3 +167,16 @@ func die():
 func _on_until_start_timeout():
 	_choose_next_target()
 	_change_movement_state(MovementState.WALK)
+
+
+func _choose_colony_target(): # should be overwridden
+	_target_cell = _colony_map.choose_random_cell()
+	_point_path =  _colony_map.astar_grid.get_point_path(_current_cell, _target_cell)
+	if len(_point_path) == 0:
+		pass
+	_current_path_index = min(len(_point_path) - 1, 1)
+
+
+func _choose_overworld_target(): # should be overwridden
+	_target_cell = _pheromone_map.choose_random_neighbor(_current_cell)
+	

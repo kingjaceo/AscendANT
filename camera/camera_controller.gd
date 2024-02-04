@@ -17,6 +17,7 @@ var _position_limit_top: float
 var _position_limit_bottom: float
 @export var _tile_map: TileMap
 @export var _subviewport: SubViewport
+@export var _start_zoom: Vector2
 
 var _camera_speed = 5
 
@@ -47,17 +48,7 @@ func _process(delta):
 	
 	_set_limits()
 	_set_position(position_change)
-	
-	#position = clamp(new_position, Vector2(limit_left, limit_top), Vector2(limit_right, limit_bottom))
-	#if new_position.x < _position_limit_left:
-		#position.x = _position_limit_left
-	#if new_position.x > _position_limit_right:
-		#position.x = _position_limit_right
-	#if new_position.y < _position_limit_top:
-		#position.y = _position_limit_top
-	#if new_position.y > _position_limit_bottom:
-		#position.y = _position_limit_bottom
-#
+
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -109,14 +100,13 @@ func set_attributes():
 	#min_zoom = 0.846
 	_min_zoom = Vector2(_zoom_ratio, _zoom_ratio)
 	print(_min_zoom, _max_zoom)
-	zoom = _min_zoom
 	
 	limit_left = _bounds[0] # + viewport_halfwidth
 	limit_right = _bounds[1] # - viewport_halfwidth
 	limit_top = _bounds[2] - 800
 	limit_bottom = _bounds[3] + 1000
 	position = Vector2((_bounds[1] - _bounds[0]) / 2, (_bounds[1] - _bounds[0]) / 2)
-	
+	zoom = _start_zoom
 	#_upper_bound = var()
 	#position = Vector2(0, 0)
 	#position = Vector2(viewport_width / 2, 0)

@@ -1,24 +1,22 @@
-[gd_scene load_steps=9 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=13 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
 [ext_resource type="PackedScene" uid="uid://dyyhmnfv5rr5n" path="res://game/aerial_view.tscn" id="3_c0sg6"]
+[ext_resource type="Script" path="res://game/colony_world.gd" id="3_kujr7"]
+[ext_resource type="Script" path="res://colony/colony.gd" id="3_rb7dp"]
+[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://game/Sprites.ase" id="4_0p1y6"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
 [ext_resource type="Script" path="res://camera/camera_debugger.gd" id="6_ue7qe"]
 [ext_resource type="Script" path="res://game/camera_debugger.gd" id="7_qsiuh"]
+[ext_resource type="Script" path="res://game/overworld.gd" id="8_55i07"]
 [ext_resource type="PackedScene" uid="uid://qr20wmxddfv2" path="res://game/colony_view.tscn" id="10_1v0gr"]
 [ext_resource type="Script" path="res://ants/queen.gd" id="11_w21dl"]
 
 [node name="Game" type="Node2D"]
 metadata/_edit_horizontal_guides_ = []
 
-[node name="Messenger" type="Node2D" parent="."]
-script = ExtResource("1_njwge")
-
 [node name="UI" parent="." instance=ExtResource("2_yvpsu")]
-
-[node name="Queen" type="Node2D" parent="."]
-script = ExtResource("11_w21dl")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -53,14 +51,13 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer"]
 unique_name_in_owner = true
 handle_input_locally = false
-size = Vector2i(462, 1048)
+size = Vector2i(446, 1032)
 render_target_update_mode = 4
 
-[node name="GameContainer" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport"]
+[node name="ColonyWorld" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" instance=ExtResource("10_1v0gr")]
+script = ExtResource("3_kujr7")
 
-[node name="VerticalGame" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer" instance=ExtResource("10_1v0gr")]
-
-[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer" node_paths=PackedStringArray("_tile_map", "_subviewport")]
+[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
 unique_name_in_owner = true
 zoom = Vector2(0.88, 0.88)
 limit_left = 463
@@ -69,14 +66,15 @@ limit_right = 0
 limit_bottom = 2000
 editor_draw_limits = true
 script = ExtResource("5_fy3uy")
-_tile_map = NodePath("../VerticalGame/ColonyMap")
-_subviewport = NodePath("../..")
+_tile_map = NodePath("../ColonyWorld/ColonyMap")
+_subviewport = NodePath("..")
+_start_zoom = Vector2(4, 4)
 
-[node name="Node2D" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera"]
+[node name="Node2D" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera"]
 visible = false
 script = ExtResource("7_qsiuh")
 
-[node name="Label" type="Label" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera/Node2D"]
+[node name="Label" type="Label" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera/Node2D"]
 z_index = 4
 offset_left = 181.0
 offset_top = 276.0
@@ -108,17 +106,33 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/AerialView/MarginContainer2/AerialView"]
 handle_input_locally = false
-size = Vector2i(1450, 1048)
+size = Vector2i(1434, 1032)
 render_target_update_mode = 4
 
-[node name="AerialView" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" instance=ExtResource("3_c0sg6")]
+[node name="Overworld" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" instance=ExtResource("3_c0sg6")]
+script = ExtResource("8_55i07")
 
 [node name="AerialCamera" type="Camera2D" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
+zoom = Vector2(0.1, 0.1)
 script = ExtResource("5_fy3uy")
-_tile_map = NodePath("../AerialView/PheromoneMap")
+_tile_map = NodePath("../Overworld/PheromoneMap")
 _subviewport = NodePath("..")
 
-[connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera" method="_on_vertical_view_mouse_entered"]
-[connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/GameContainer/VerticalCamera" method="_on_vertical_view_mouse_exited"]
+[node name="Messenger" type="Node2D" parent="."]
+script = ExtResource("1_njwge")
+
+[node name="Colony" type="Node2D" parent="."]
+script = ExtResource("3_rb7dp")
+
+[node name="Sprite2D" type="Sprite2D" parent="Colony"]
+texture = ExtResource("4_0p1y6")
+region_enabled = true
+region_rect = Rect2(668, 19, 167, 119)
+
+[node name="Queen" type="Node2D" parent="Colony"]
+script = ExtResource("11_w21dl")
+
+[connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_entered"]
+[connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_exited"]
 [connection signal="mouse_entered" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_entered"]
 [connection signal="mouse_exited" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_exited"]

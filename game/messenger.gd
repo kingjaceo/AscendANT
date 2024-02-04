@@ -1,6 +1,8 @@
 extends Node2D
 
+var _overworld: Node2D
 var _pheromone_map: PheromoneMap
+var _colony_world: Node2D
 var _colony_map: ColonyMap
 var _colony: Colony
 
@@ -98,7 +100,28 @@ func update_target_population():
 func ant_died():
 	_colony.ant_died()
 	
-
 func get_colony_map_bounds():
 	return _colony_map.get_bounds()
 
+func get_pheromone_map():
+	return _pheromone_map
+	
+func get_colony_map():
+	return _colony_map
+	
+func move_ant_to_world(ant: BaseANT, world: BaseANT.World):
+	if world == BaseANT.World.COLONY:
+		ant.get_parent().remove_child(ant)
+		_colony_world.add_child(ant)
+		ant._current_map = ant._colony_map
+		ant._current_cell = _colony_map.get_entrance()
+		ant.position = _colony_map.map_to_local(_colony_map.get_entrance())
+	if world == BaseANT.World.OVERWORLD:
+		ant.get_parent().remove_child(ant)
+		_overworld.add_child(ant)
+		ant._current_map = ant._pheromone_map
+		ant._current_cell = _pheromone_map.get_entrance()
+		ant.position = _pheromone_map.map_to_local(_pheromone_map.get_entrance())
+
+func _ready():
+	print(_overworld)
