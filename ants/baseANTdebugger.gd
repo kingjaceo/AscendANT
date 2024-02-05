@@ -31,7 +31,7 @@ func _process(delta):
 func _draw():
 	if _parent._point_path:
 		for point in _parent._point_path:
-			point += Vector2(8, 8)
+			point += _parent._current_map.adjustment
 			draw_circle(point, 1, Color.WHITE)
 			
 	if _parent._current_map:

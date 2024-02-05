@@ -5,10 +5,16 @@ This script manages:
 	- outlines
 	- pheromones
 '''
+var entrance: Vector2i:
+	set(cell):
+		entrance = cell
+	get:
+		return entrance
+
 var _pheromones_by_cell = {}
 var _tiles_with_pheromones = []
 var _food_by_cell = {}
-
+var adjustment: Vector2 = Vector2(0, 0)
 var PheromoneCell = preload("pheromone_cell.gd")
 
 const TILE_SOURCE = 0
@@ -162,6 +168,8 @@ func choose_random_neighbor(cell):
 	var neighbors = get_surrounding_pheromone_cells(cell)
 	return neighbors[randi() % len(neighbors)].coordinates
 
-func get_entrance():
-	#return Vector2i(0, 0)
-	pass
+func get_food_cell():
+	return entrance
+	
+func get_point_path(start: Vector2i, end: Vector2i):
+	return [map_to_local(start), map_to_local(end)]

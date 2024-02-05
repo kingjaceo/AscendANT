@@ -1,8 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dribsdx1ilqee"]
-
-[ext_resource type="Script" path="res://ants/baseANT.gd" id="1_pigu2"]
-[ext_resource type="Texture2D" uid="uid://1tvhk4xwx1nu" path="res://ui/ants/ants.ase" id="2_5uvfv"]
-[ext_resource type="PackedScene" uid="uid://c78mtfso8qfl5" path="res://ants/ant_timer.tscn" id="3_hniyr"]
+[gd_scene load_steps=5 format=3 uid="uid://gvr57v2ywtag"]
 
 [sub_resource type="Animation" id="Animation_28n1m"]
 length = 0.001
@@ -33,7 +29,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [Rect2(0, 0, 64, 64), Rect2(64, 64, 64, 64), Rect2(0, 0, 64, 64), Rect2(64, 64, 64, 64)]
+"values": [Rect2(0, 0, 64, 64), Rect2(16, 0, 16, 16), Rect2(0, 0, 64, 64), Rect2(64, 64, 64, 64)]
 }
 
 [sub_resource type="Animation" id="Animation_754dl"]
@@ -50,7 +46,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [Rect2(0, 0, 64, 64), Rect2(64, 0, 64, 64), Rect2(128, 0, 64, 64)]
+"values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(128, 0, 64, 64)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f6qvg"]
@@ -60,29 +56,8 @@ _data = {
 "walk": SubResource("Animation_754dl")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hjybq"]
-
-[node name="baseANT" type="Node2D"]
-script = ExtResource("1_pigu2")
-
-[node name="AntSprite" type="Sprite2D" parent="."]
-z_index = 4
-texture_filter = 1
-rotation = 1.5708
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_5uvfv")
-region_enabled = true
-region_rect = Rect2(0, 0, 64, 64)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer"]
 libraries = {
 "": SubResource("AnimationLibrary_f6qvg")
 }
 speed_scale = 2.0
-
-[node name="AntTimer" parent="." instance=ExtResource("3_hniyr")]
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_hjybq")

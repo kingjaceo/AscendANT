@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c78mtfso8qfl5"]
+
+[node name="AntTimer" type="Node2D"]
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
+autostart = true
+
+[node name="UntilHunger" type="Timer" parent="."]
+wait_time = 40.0
+one_shot = true
+autostart = true
+
+[node name="UntilStarvation" type="Timer" parent="."]
+wait_time = 40.0
+one_shot = true
+
+[node name="UntilRest" type="Timer" parent="."]
+wait_time = 30.0
+one_shot = true
+autostart = true
+
+[node name="UntilActive" type="Timer" parent="."]
+one_shot = true
+
+[node name="UntilStart" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+autostart = true

@@ -4,6 +4,7 @@ var astar_grid = AStarGrid2D.new()
 var cell_size = Vector2(16, 16)
 var adjustment = cell_size / 2
 var entrance = Vector2i(16, 0)
+var spawn_location = Vector2i(24, 16)
 const DIRT_LAYER = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -40,3 +41,10 @@ func choose_random_cell():
 	
 func get_entrance():
 	return entrance
+
+
+func get_food_cell():
+	return Vector2i(10, 17)
+
+func get_point_path(start: Vector2i, end: Vector2i):
+	return astar_grid.get_point_path(start, end)

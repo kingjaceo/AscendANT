@@ -15,6 +15,7 @@ var colony_map: ColonyMap
 var _overworld_cell: Vector2i
 
 var _baseANT = preload("res://ants/baseANT.tscn")
+var _descendANT = preload("res://ants/descendANT.tscn")
 var _debugger = preload("res://ants/baseANTdebugger.tscn")
 
 # Called when the node enters the scene tree for the first time.
@@ -22,12 +23,15 @@ func _ready():
 	Messenger._colony = self
 	pheromone_map = Messenger.get_pheromone_map()
 	colony_map = Messenger.get_colony_map()
+	Messenger.set_vertical_camera_position(colony_map.map_to_local(colony_map.spawn_location))
 	
 	_overworld_cell = pheromone_map.choose_random_cell()
+	pheromone_map.entrance = _overworld_cell
 	var colony_sprite = get_node("Sprite2D")
 	remove_child(colony_sprite)
 	pheromone_map.add_child(colony_sprite)
 	colony_sprite.position = pheromone_map.map_to_local(_overworld_cell)
+	Messenger.set_aerial_camera_position(colony_sprite.position)
 	
 	_set_attributes()
 	_create_ants()
@@ -50,31 +54,29 @@ func _process(delta):
 
 
 func _create_ants():
-	for i in range(0):
-		var instance = _baseANT.instantiate()
+	for i in range(30):
+		var instance = _descendANT.instantiate()
 		add_child(instance)
 		instance._world = BaseANT.World.COLONY
-		instance.position = Vector2(264, 264)
 		instance._colony_map = colony_map
 		instance._pheromone_map = pheromone_map
-		
-		#var debugger = _debugger.instantiate()
 		Messenger.move_ant_to_world(instance, instance.World.COLONY)
+		instance.position = Vector2(264, 264)
+		#var debugger = _debugger.instantiate()
 		#instance.add_child(debugger)
-		#instance._pheremone_map = pheromone_map
 		instance._current_cell = colony_map.local_to_map(instance.position)
 		
-	for i in range(1):
+	for i in range(100):
 		var instance = _baseANT.instantiate()
-		var debugger = _debugger.instantiate()
 		add_child(instance)
-		Messenger.move_ant_to_world(instance, instance.World.OVERWORLD)
-		instance.add_child(debugger)
-
+		instance._world = BaseANT.World.OVERWORLD
+		instance._current_cell = pheromone_map.choose_random_neighbor(_overworld_cell)
+		#var debugger = _debugger.instantiate()
+		#instance.add_child(debugger)
 		instance._colony_map = colony_map
 		instance._pheromone_map = pheromone_map
-		instance.position = Vector2(100, 100)
-		instance._current_cell = pheromone_map.local_to_map(instance.position)
+		Messenger.move_ant_to_world(instance, instance.World.OVERWORLD)
+		instance.position = pheromone_map.map_to_local(instance._current_cell)
 		
 	current_population += 1
 

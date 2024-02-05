@@ -19,6 +19,7 @@ metadata/_edit_horizontal_guides_ = []
 [node name="UI" parent="." instance=ExtResource("2_yvpsu")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+visible = false
 anchor_mode = 0
 
 [node name="MainDisplays" type="HBoxContainer" parent="."]
@@ -34,6 +35,7 @@ size_flags_vertical = 3
 [node name="VerticalView" type="PanelContainer" parent="MainDisplays"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 mouse_force_pass_scroll_events = false
 
 [node name="MarginContainer" type="MarginContainer" parent="MainDisplays/VerticalView"]
@@ -68,7 +70,7 @@ editor_draw_limits = true
 script = ExtResource("5_fy3uy")
 _tile_map = NodePath("../ColonyWorld/ColonyMap")
 _subviewport = NodePath("..")
-_start_zoom = Vector2(4, 4)
+_start_zoom = Vector2(1.5, 1.5)
 
 [node name="Node2D" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera"]
 visible = false
@@ -88,6 +90,7 @@ custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+mouse_filter = 1
 mouse_force_pass_scroll_events = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="MainDisplays/AerialView"]
@@ -117,6 +120,8 @@ zoom = Vector2(0.1, 0.1)
 script = ExtResource("5_fy3uy")
 _tile_map = NodePath("../Overworld/PheromoneMap")
 _subviewport = NodePath("..")
+_start_zoom = Vector2(0.5, 0.5)
+_world = 1
 
 [node name="Messenger" type="Node2D" parent="."]
 script = ExtResource("1_njwge")

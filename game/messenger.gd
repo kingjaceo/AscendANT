@@ -1,16 +1,30 @@
 extends Node2D
 
+var _ant_id: int = 0
 var _overworld: Node2D
 var _pheromone_map: PheromoneMap
 var _colony_world: Node2D
 var _colony_map: ColonyMap
 var _colony: Colony
 
+var _vertical_camera: Camera2D
+var _aerial_camera: Camera2D
 
 signal food_updated
 signal eggs_updated
 signal current_population_updated
 signal target_population_updated
+
+
+func get_next_ant_ID():
+	_ant_id += 1
+	return _ant_id
+
+func set_camera(world: BaseANT.World, camera: Camera2D):
+	if world == BaseANT.World.COLONY:
+		_vertical_camera = camera
+	if world == BaseANT.World.OVERWORLD:
+		_aerial_camera = camera
 
 func mark_cell(coordinate: Vector2i, pheromone: Pheromone, from: Vector2i):
 	_pheromone_map.mark_cell(coordinate, pheromone, from)
@@ -115,13 +129,28 @@ func move_ant_to_world(ant: BaseANT, world: BaseANT.World):
 		_colony_world.add_child(ant)
 		ant._current_map = ant._colony_map
 		ant._current_cell = _colony_map.get_entrance()
-		ant.position = _colony_map.map_to_local(_colony_map.get_entrance())
+		ant.position = _colony_map.map_to_local(_colony_map.entrance)
 	if world == BaseANT.World.OVERWORLD:
 		ant.get_parent().remove_child(ant)
 		_overworld.add_child(ant)
 		ant._current_map = ant._pheromone_map
-		ant._current_cell = _pheromone_map.get_entrance()
-		ant.position = _pheromone_map.map_to_local(_pheromone_map.get_entrance())
+		ant._current_cell = _pheromone_map.choose_random_neighbor(_pheromone_map.entrance)
+		ant.position = _pheromone_map.map_to_local(_pheromone_map.entrance)
 
-func _ready():
-	print(_overworld)
+func set_vertical_camera_position(pos: Vector2):
+	_vertical_camera.position = pos
+
+func set_aerial_camera_position(pos: Vector2):
+	_aerial_camera.position = pos
+
+func get_ui_adjustment(world: BaseANT.World):
+	if world == BaseANT.World.OVERWORLD:
+		return Vector2(-200, 0)
+	else:
+		return Vector2(0, 0)
+
+func _camera_follow(world: BaseANT.World, node: Node2D):
+	if world == BaseANT.World.COLONY:
+		_vertical_camera.follow(node)
+	if world == BaseANT.World.OVERWORLD:
+		_aerial_camera.follow(node)
