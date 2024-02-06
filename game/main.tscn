@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=14 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://colony/colony.gd" id="3_rb7dp"]
 [ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://game/Sprites.ase" id="4_0p1y6"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
+[ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://ui/ants/queen.ase" id="5_pev4r"]
 [ext_resource type="Script" path="res://camera/camera_debugger.gd" id="6_ue7qe"]
 [ext_resource type="Script" path="res://game/camera_debugger.gd" id="7_qsiuh"]
 [ext_resource type="Script" path="res://game/overworld.gd" id="8_55i07"]
@@ -22,7 +23,7 @@ metadata/_edit_horizontal_guides_ = []
 visible = false
 anchor_mode = 0
 
-[node name="MainDisplays" type="HBoxContainer" parent="."]
+[node name="MainDisplays" type="HSplitContainer" parent="."]
 top_level = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,11 +54,22 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer"]
 unique_name_in_owner = true
 handle_input_locally = false
-size = Vector2i(446, 1032)
+size = Vector2i(92, 600)
 render_target_update_mode = 4
 
 [node name="ColonyWorld" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" instance=ExtResource("10_1v0gr")]
 script = ExtResource("3_kujr7")
+
+[node name="Queen" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/ColonyWorld"]
+texture_filter = 1
+position = Vector2(380, 254)
+script = ExtResource("11_w21dl")
+
+[node name="Sprite2D" type="Sprite2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/ColonyWorld/Queen"]
+texture_filter = 1
+texture = ExtResource("5_pev4r")
+region_enabled = true
+region_rect = Rect2(0, 0, 128, 64)
 
 [node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
 unique_name_in_owner = true
@@ -109,7 +121,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/AerialView/MarginContainer2/AerialView"]
 handle_input_locally = false
-size = Vector2i(1434, 1032)
+size = Vector2i(952, 600)
 render_target_update_mode = 4
 
 [node name="Overworld" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" instance=ExtResource("3_c0sg6")]
@@ -133,9 +145,6 @@ script = ExtResource("3_rb7dp")
 texture = ExtResource("4_0p1y6")
 region_enabled = true
 region_rect = Rect2(668, 19, 167, 119)
-
-[node name="Queen" type="Node2D" parent="Colony"]
-script = ExtResource("11_w21dl")
 
 [connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_entered"]
 [connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_exited"]

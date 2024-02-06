@@ -42,11 +42,11 @@ func mark_cell(coordinate: Vector2i, pheromone: Pheromone, from: Vector2i):
 		set_cell(PHEROMONE_LAYER, coordinate, TILE_SOURCE, atlas_coord, alt_id)
 	
 
-func get_pheromone_cell(coordinate):
+func get_pheromone_cell(coordinate: Vector2i):
 	return _pheromones_by_cell[coordinate]
 	
 
-func get_surrounding_pheromone_cells(coordinate):
+func get_surrounding_pheromone_cells(coordinate: Vector2i):
 	var neighbors = get_surrounding_cells(coordinate)
 	var valid_neighbors = []
 	
@@ -88,7 +88,7 @@ func _ready():
 	set_layer_enabled(OUTLINE_LAYER, false)
 	set_layer_enabled(PHEROMONE_LAYER, true)
 	
-	Messenger._pheromone_map = self
+	Messenger.pheromone_map = self
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -97,6 +97,8 @@ func _process(delta):
 
 func _update_pheromone_cells(delta):
 	for tile in get_used_cells(PHEROMONE_LAYER):
+		if tile == Vector2i(9, -5):
+			pass
 		var pheromone_cell = _pheromones_by_cell[tile]
 		pheromone_cell.decay_pheromones(delta)
 		
@@ -164,7 +166,7 @@ func choose_random_cell():
 	var cells = get_used_cells(TERRAIN_LAYER)
 	return cells[randi() % len(cells)]
 	
-func choose_random_neighbor(cell):
+func choose_random_neighbor(cell: Vector2i):
 	var neighbors = get_surrounding_pheromone_cells(cell)
 	return neighbors[randi() % len(neighbors)].coordinates
 

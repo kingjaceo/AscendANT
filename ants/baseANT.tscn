@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://dribsdx1ilqee"]
+[gd_scene load_steps=10 format=3 uid="uid://dribsdx1ilqee"]
 
 [ext_resource type="Script" path="res://ants/baseANT.gd" id="1_pigu2"]
 [ext_resource type="Texture2D" uid="uid://1tvhk4xwx1nu" path="res://ui/ants/ants.ase" id="2_5uvfv"]
 [ext_resource type="PackedScene" uid="uid://c78mtfso8qfl5" path="res://ants/ant_timer.tscn" id="3_hniyr"]
+[ext_resource type="Script" path="res://ants/behavior.gd" id="4_3pm13"]
 
 [sub_resource type="Animation" id="Animation_28n1m"]
 length = 0.001
@@ -62,8 +63,9 @@ _data = {
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hjybq"]
 
-[node name="baseANT" type="Node2D"]
+[node name="baseANT" type="Node2D" node_paths=PackedStringArray("_behavior")]
 script = ExtResource("1_pigu2")
+_behavior = NodePath("baseANTbehavior")
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 z_index = 4
@@ -86,3 +88,6 @@ speed_scale = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_hjybq")
+
+[node name="baseANTbehavior" type="Node2D" parent="."]
+script = ExtResource("4_3pm13")

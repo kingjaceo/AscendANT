@@ -1,12 +1,12 @@
 class_name PheromoneCell extends Resource
 
-var coordinates
+var coordinates: Vector2i
 var pheromone_strengths = {}
 var pheromone_directions = {}
 var strongest_pheromone: Pheromone
 var strongest_pheromone_percentage: float
 
-func _init(coordinates):
+func _init(coordinates: Vector2i):
 	self.coordinates = coordinates
 	
 

@@ -9,7 +9,7 @@ const DIRT_LAYER = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Messenger._colony_map = self
+	Messenger.colony_map = self
 	astar_grid.region = Rect2i(0, 0, 33, 65)
 	astar_grid.cell_size = cell_size
 	var solid_tiles = get_used_cells(DIRT_LAYER)

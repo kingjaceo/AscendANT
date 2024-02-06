@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cavji350dfjf4"]
+[gd_scene load_steps=9 format=3 uid="uid://cavji350dfjf4"]
 
 [ext_resource type="PackedScene" uid="uid://c78mtfso8qfl5" path="res://ants/ant_timer.tscn" id="1_00qmo"]
 [ext_resource type="Script" path="res://ants/descendANT.gd" id="1_4bjrb"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://ants/descendANTs.ase" id="3_2rt8f"]
+[ext_resource type="Script" path="res://ants/behavior.gd" id="4_rckgv"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
 length = 0.001
@@ -77,3 +78,6 @@ libraries = {
 speed_scale = 2.0
 
 [node name="AntTimer" parent="." instance=ExtResource("1_00qmo")]
+
+[node name="descendANTbehavior" type="Node2D" parent="."]
+script = ExtResource("4_rckgv")

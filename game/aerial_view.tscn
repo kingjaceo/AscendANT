@@ -8,6 +8,7 @@
 
 [node name="PheromoneMap" parent="." instance=ExtResource("1_axu0g")]
 layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array(-655355, 65536, 1)
 script = ExtResource("2_5bixm")
 
 [node name="Node2D" type="Node2D" parent="PheromoneMap"]

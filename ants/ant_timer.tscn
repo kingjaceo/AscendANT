@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://c78mtfso8qfl5"]
+[gd_scene load_steps=2 format=3 uid="uid://c78mtfso8qfl5"]
+
+[ext_resource type="Script" path="res://ants/timer_debugger.gd" id="1_kp5mt"]
 
 [node name="AntTimer" type="Node2D"]
 
@@ -8,9 +10,14 @@ one_shot = true
 autostart = true
 
 [node name="UntilHunger" type="Timer" parent="."]
-wait_time = 40.0
+wait_time = 15.0
 one_shot = true
 autostart = true
+
+[node name="Label" type="Label" parent="UntilHunger"]
+offset_right = 40.0
+offset_bottom = 26.0
+script = ExtResource("1_kp5mt")
 
 [node name="UntilStarvation" type="Timer" parent="."]
 wait_time = 40.0
@@ -25,6 +32,5 @@ autostart = true
 one_shot = true
 
 [node name="UntilStart" type="Timer" parent="."]
-wait_time = 0.2
 one_shot = true
 autostart = true

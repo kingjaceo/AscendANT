@@ -23,9 +23,19 @@ To facilitate this, all ANTs track:
 var ID: int
 
 @onready var _animation_player = $AnimationPlayer
+@export var _behavior: Behavior
+
 var _current_map: TileMap
-var _colony_map: ColonyMap
-var _pheromone_map: PheromoneMap
+var colony_map: ColonyMap:
+	get:
+		return colony_map
+	set(map):
+		colony_map = map
+var pheromone_map: PheromoneMap:
+	get:
+		return pheromone_map
+	set(map):
+		pheromone_map = map
 var _world_just_changed: bool
 
 var _world: World
@@ -51,12 +61,14 @@ enum MovementState {IDLE, WALK}
 enum World {COLONY, OVERWORLD}
 
 func _ready():
+	pheromone_map = Messenger.pheromone_map
+	colony_map = Messenger.colony_map
 	ID = Messenger.get_next_ant_ID()
 	_connect_timers()
 	_connect_area2D()
 	_movement_state = MovementState.IDLE
-	_walk_speed = 40
-	_turn_speed = 10
+	_walk_speed = 120
+	_turn_speed = 80
 	
 
 func _physics_process(delta):
@@ -99,20 +111,21 @@ func _move_forward(delta, direction):
 func _arrive_at_next_cell():
 	_previous_cell = _current_cell
 	
+	_behavior.move_to_new_cell(_world, _current_cell)
 	_check_world_change()
 	_check_target()
 	_update_next_cell()
-		
+	
 	_current_cell = _next_cell
 
 
 func _check_world_change():
 	if _world_just_changed:
 		_world_just_changed = false
-	elif _world == World.COLONY and _current_cell == _colony_map.entrance:
+	elif _world == World.COLONY and _current_cell == colony_map.entrance:
 		_change_worlds()
 		_world_just_changed = true
-	elif _world == World.OVERWORLD and _current_cell == _pheromone_map.entrance:
+	elif _world == World.OVERWORLD and _current_cell == pheromone_map.entrance:
 		_change_worlds()
 		_world_just_changed = true
 		
@@ -131,11 +144,13 @@ func _update_next_cell():
 
 func _choose_next_target():
 	if _hungry:
-		_choose_food_target()
-	elif _world == World.COLONY:
-		_choose_colony_target()
-	elif _world == World.OVERWORLD:
-		_choose_overworld_target()
+		_target_cell = _behavior.get_food_target_cell(_current_map)
+		_point_path = _behavior.get_world_point_path(_world, _current_cell, _target_cell)
+	else:
+		_target_cell = _behavior.get_world_target_cell(_world, _current_cell)
+		_point_path = _behavior.get_world_point_path(_world, _current_cell, _target_cell)
+	
+	_current_path_index = 0
 
 
 func _change_worlds():
@@ -147,7 +162,7 @@ func _change_worlds():
 	_choose_next_target()
 	
 
-func _eat_food():
+func eat_food():
 	_stop_timer("UntilStarvation")
 	_start_timer("UntilHunger")
 	_hungry = false
@@ -164,36 +179,14 @@ func _on_until_start_timeout():
 	_change_movement_state(MovementState.WALK)
 
 		
-func _choose_colony_target(): # should be overwridden
-	_target_cell = _colony_map.choose_random_cell()
-	_point_path =  _colony_map.get_point_path(_current_cell, _target_cell)
-	_current_path_index = 0
 
-
-func _choose_overworld_target(): # should be overwridden
-	_target_cell = _pheromone_map.choose_random_neighbor(_current_cell)
-	_point_path = _pheromone_map.get_point_path(_current_cell, _target_cell)
-	_current_path_index = 0
-
-func _choose_food_target():
-	_target_cell = _current_map.get_food_cell()
-	_point_path =  _current_map.get_point_path(_current_cell, _target_cell)
-	_current_path_index = 0
 	
 func _on_until_rest_timeout():
 	_change_movement_state(MovementState.IDLE)
 
 func _on_until_active_timeout():
 	_change_movement_state(MovementState.WALK)
-
-#func _on_until_hunger_timeout():
-	##_target_cels
-	##if _world == World.OVERWORLD:
-		##_point_path = path_to_home()
-	##if _world == World.COLONY:
-		##_point_path = path_to_target_cell()
-	#$UntilStarvation.start()
-
+	
 
 func _connect_timers():
 	if has_node("AntTimer"):
@@ -237,12 +230,41 @@ func _stop_timer(name: String):
 func _connect_area2D():
 	if has_node("Area2D"):
 		get_node("Area2D").mouse_entered.connect(camera_follow)
-#func _input(event):
-	#if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		##print("it happened!")
-		#var mouse_local =  to_local(event.position)
+
+func _input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		#print("it happened!")
+		
+		#var viewport_size = get_viewport_rect().size
+		##viewport_size.x = 
+		#var mouse_local = get_viewport().get_mouse_position() - viewport_size / 2 * Messenger.get_camera_zoom()
+		#var pos = position
 		#var glob_pos = global_position
+		
+		# Get the mouse position in global coordinates
+		var mouse_global = get_global_mouse_position()
+
+		# Convert the mouse position to local coordinates, considering zoom and object position
+		#var mouse_local = (mouse_global - global_position) / Messenger.get_camera_zoom()
+		
+		position = mouse_global
+		var distance = (mouse_global - position).length()
+		if distance < 6:
+			print("it happened!")
+			Messenger.camera_follow(_world, self)
+
+#func _input(event):
+	#if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		## Get the mouse position in global coordinates
+		#var mouse_global = get_global_mouse_position()
+#
+		## Convert the mouse position to local coordinates, considering zoom and object position
+		#var mouse_local = to_local(mouse_global) / Messenger.get_camera_zoom()
+#
+		## Move the object to the mouse position
+		#position = mouse_local
+#
+		## Check for a small distance (epsilon) to consider the event
 		#var distance = (mouse_local - position).length()
-		#if distance < 6:
-			#print("it happened!")
-			#Messenger.camera_follow(_world, self)
+		#if distance < EPSILON:
+			#print("Mouse clicked at object position!")
