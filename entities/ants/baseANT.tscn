@@ -1,0 +1,93 @@
+[gd_scene load_steps=10 format=3 uid="uid://dribsdx1ilqee"]
+
+[ext_resource type="Script" path="res://entities/ants/baseANT.gd" id="1_pigu2"]
+[ext_resource type="Texture2D" uid="uid://1tvhk4xwx1nu" path="res://entities/ants/ants.ase" id="2_5uvfv"]
+[ext_resource type="PackedScene" uid="uid://c78mtfso8qfl5" path="res://entities/ants/ant_timer.tscn" id="3_hniyr"]
+[ext_resource type="Script" path="res://entities/ants/behavior.gd" id="4_3pm13"]
+
+[sub_resource type="Animation" id="Animation_28n1m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 64, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_xi62t"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 64, 64), Rect2(64, 64, 64, 64), Rect2(0, 0, 64, 64), Rect2(64, 64, 64, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_754dl"]
+resource_name = "walk"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 64, 64), Rect2(64, 0, 64, 64), Rect2(128, 0, 64, 64)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f6qvg"]
+_data = {
+"RESET": SubResource("Animation_28n1m"),
+"idle": SubResource("Animation_xi62t"),
+"walk": SubResource("Animation_754dl")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjybq"]
+
+[node name="baseANT" type="Node2D" node_paths=PackedStringArray("_behavior")]
+script = ExtResource("1_pigu2")
+_behavior = NodePath("baseANTbehavior")
+
+[node name="AntSprite" type="Sprite2D" parent="."]
+z_index = 4
+texture_filter = 1
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_5uvfv")
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 64)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_f6qvg")
+}
+speed_scale = 2.0
+
+[node name="AntTimer" parent="." instance=ExtResource("3_hniyr")]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_hjybq")
+
+[node name="baseANTbehavior" type="Node2D" parent="."]
+script = ExtResource("4_3pm13")

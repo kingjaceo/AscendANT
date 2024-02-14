@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="EntityController" load_steps=2 format=3 uid="uid://fylda8b3rc1r"]
+
+[ext_resource type="Script" path="res://entities/entity_controller.gd" id="1_0t1jc"]
+
+[resource]
+script = ExtResource("1_0t1jc")

@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmtp8js1ng80"]
+
+[ext_resource type="Script" path="res://spider.gd" id="1_gwo3j"]
+[ext_resource type="Script" path="res://entities/brain.gd" id="3_limm1"]
+[ext_resource type="Script" path="res://entities/entity_body.gd" id="4_jlw0w"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="5_k34rp"]
+[ext_resource type="Script" path="res://entities/mover.gd" id="6_ccrc3"]
+
+[sub_resource type="Animation" id="Animation_ogkkb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../EntityBody/AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_7a50e"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../EntityBody/AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_26fly"]
+resource_name = "walk"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../EntityBody/AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(16, 16, 16, 16)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a1315"]
+_data = {
+"RESET": SubResource("Animation_ogkkb"),
+"idle": SubResource("Animation_7a50e"),
+"walk": SubResource("Animation_26fly")
+}
+
+[node name="Spider" type="Node2D"]
+script = ExtResource("1_gwo3j")
+
+[node name="EntityBrain" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_limm1")
+
+[node name="EntityBody" type="Node" parent="." node_paths=PackedStringArray("_mover")]
+unique_name_in_owner = true
+script = ExtResource("4_jlw0w")
+_mover = NodePath("../EntityMover")
+
+[node name="AntSprite" type="Sprite2D" parent="EntityBody"]
+texture_filter = 1
+texture = ExtResource("5_k34rp")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EntityBody"]
+root_node = NodePath("")
+libraries = {
+"": SubResource("AnimationLibrary_a1315")
+}
+speed_scale = 2.0
+
+[node name="EntityMover" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_ccrc3")

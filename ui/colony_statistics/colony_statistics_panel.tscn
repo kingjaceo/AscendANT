@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfbw6cl2jsotv"]
+
+[ext_resource type="Script" path="res://ui/colony_statistics/food_amount.gd" id="1_ucti8"]
+[ext_resource type="Script" path="res://ui/colony_statistics/egg_amount.gd" id="2_rlvog"]
+
+[node name="PanelContainer" type="PanelContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -47.0
+offset_right = 64.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="FoodContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Statistic" type="Label" parent="MarginContainer/VBoxContainer/FoodContainer"]
+layout_mode = 2
+text = "Food:"
+
+[node name="FoodAmount" type="Label" parent="MarginContainer/VBoxContainer/FoodContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0"
+script = ExtResource("1_ucti8")
+
+[node name="EggsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Statistic" type="Label" parent="MarginContainer/VBoxContainer/EggsContainer"]
+layout_mode = 2
+text = "Eggs:"
+
+[node name="EggAmount" type="Label" parent="MarginContainer/VBoxContainer/EggsContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0
+"
+script = ExtResource("2_rlvog")
+
+[node name="DirtContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Statistic" type="Label" parent="MarginContainer/VBoxContainer/DirtContainer"]
+layout_mode = 2
+text = "Dirt:"
+
+[node name="DirtAmount" type="Label" parent="MarginContainer/VBoxContainer/DirtContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "1000"

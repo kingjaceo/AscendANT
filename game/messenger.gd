@@ -5,7 +5,7 @@ var _overworld: Node2D
 var pheromone_map: PheromoneMap
 var _colony_world: Node2D
 var colony_map: ColonyMap
-var _colony: Colony
+var colony: Colony
 
 var _vertical_camera: Camera2D
 var _aerial_camera: Camera2D
@@ -44,7 +44,7 @@ func get_tile_coordinate(position):
 	
 
 func get_home_tile():
-	return pheromone_map.local_to_map(_colony.position)
+	return pheromone_map.local_to_map(colony.position)
 
 
 func toggle_terrain():
@@ -58,7 +58,7 @@ func toggle_outline():
 
 
 func add_food_to_colony(amount: float):
-	_colony.add_food(amount)
+	colony.add_food(amount)
 	
 	
 func take_food_from_cell(cell: Vector2i, amount: float):
@@ -67,40 +67,40 @@ func take_food_from_cell(cell: Vector2i, amount: float):
 
 
 func take_food_from_colony(amount: float):
-	amount = _colony.take_food(amount)
+	amount = colony.take_food(amount)
 	return amount
 	
 
 func colony_has_egg_capacity():
-	return _colony.eggs < _colony.egg_capacity
+	return colony.eggs < colony.egg_capacity
 
 
 func lay_egg():
-	_colony.add_egg()
+	colony.add_egg()
 
 func update_food():
 	food_updated.emit()
 
 func get_food_amount():
-	return _colony.food
+	return colony.food
 	
 func update_eggs():
 	eggs_updated.emit()
 	
 func get_egg_amount():
-	return _colony.eggs
+	return colony.eggs
 
 func increase_ant_limit():
-	_colony.increase_target_population()
+	colony.increase_target_population()
 	
 func decrease_ant_limit():
-	_colony.decrease_target_population()
+	colony.decrease_target_population()
 	
 func get_current_population():
-	return _colony.current_population
+	return colony.current_population
 	
 func get_target_population():
-	return _colony.target_population
+	return colony.target_population
 	
 func update_current_population():
 	current_population_updated.emit()
@@ -109,7 +109,7 @@ func update_target_population():
 	target_population_updated.emit()
 
 func ant_died():
-	_colony.ant_died()
+	colony.ant_died()
 	
 func get_colony_map_bounds():
 	return colony_map.get_bounds()
@@ -124,15 +124,15 @@ func move_ant_to_world(ant: BaseANT, world: BaseANT.World):
 	if world == BaseANT.World.COLONY:
 		ant.get_parent().remove_child(ant)
 		_colony_world.add_child(ant)
-		ant._current_map = ant.colony_map
-		ant._current_cell = colony_map.get_entrance()
-		ant.position = colony_map.map_to_local(colony_map.entrance)
+		ant.set_map(ant.colony_map)
+		ant.set_current_cell(colony_map.entrance)
+		#ant.position = colony_map.map_to_local(colony_map.entrance)
 	if world == BaseANT.World.OVERWORLD:
 		ant.get_parent().remove_child(ant)
 		_overworld.add_child(ant)
-		ant._current_map = ant.pheromone_map
-		ant._current_cell = pheromone_map.choose_random_neighbor(pheromone_map.entrance)
-		ant.position = pheromone_map.map_to_local(pheromone_map.entrance)
+		ant.set_map(ant.pheromone_map)
+		ant.set_current_cell(pheromone_map.choose_random_neighbor(pheromone_map.entrance))
+		#ant.position = pheromone_map.map_to_local(ant._current_cell)
 
 func set_vertical_camera_position(pos: Vector2):
 	_vertical_camera.position = pos
