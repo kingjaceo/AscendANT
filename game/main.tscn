@@ -1,35 +1,15 @@
-[gd_scene load_steps=15 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=11 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/time_controller.gd" id="1_j11p5"]
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
-[ext_resource type="PackedScene" uid="uid://dyyhmnfv5rr5n" path="res://overworld/aerial_view.tscn" id="3_c0sg6"]
 [ext_resource type="Script" path="res://colony/colony.gd" id="3_rb7dp"]
 [ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://overworld/Sprites.ase" id="4_0p1y6"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
-[ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://entities/ants/queen.ase" id="5_pev4r"]
+[ext_resource type="PackedScene" uid="uid://cjvp0580bg7u7" path="res://colony/colony.tscn" id="5_oppt1"]
+[ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://overworld/pheromone_map.tscn" id="6_oj50q"]
 [ext_resource type="Script" path="res://camera/camera_debugger.gd" id="6_ue7qe"]
 [ext_resource type="Script" path="res://game/camera_debugger.gd" id="7_qsiuh"]
-[ext_resource type="PackedScene" uid="uid://qr20wmxddfv2" path="res://colony/colony_view.tscn" id="10_1v0gr"]
-[ext_resource type="Script" path="res://entities/ants/queen.gd" id="11_w21dl"]
-
-[sub_resource type="GDScript" id="GDScript_fj7ro"]
-script/source = "extends Node2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	Messenger._colony_world = self
-"
-
-[sub_resource type="GDScript" id="GDScript_vak6o"]
-script/source = "extends Node2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	Messenger._overworld = self
-"
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_j11p5")
@@ -69,21 +49,7 @@ handle_input_locally = false
 size = Vector2i(522, 600)
 render_target_update_mode = 4
 
-[node name="ColonyWorld" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" instance=ExtResource("10_1v0gr")]
-script = SubResource("GDScript_fj7ro")
-
-[node name="Queen" type="Node2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/ColonyWorld"]
-texture_filter = 1
-position = Vector2(380, 254)
-script = ExtResource("11_w21dl")
-
-[node name="Sprite2D" type="Sprite2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/ColonyWorld/Queen"]
-texture_filter = 1
-texture = ExtResource("5_pev4r")
-region_enabled = true
-region_rect = Rect2(0, 0, 128, 64)
-
-[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
+[node name="VerticalCamera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_game_map", "_subviewport")]
 unique_name_in_owner = true
 zoom = Vector2(0.88, 0.88)
 limit_left = 463
@@ -92,7 +58,7 @@ limit_right = 0
 limit_bottom = 2000
 editor_draw_limits = true
 script = ExtResource("5_fy3uy")
-_tile_map = NodePath("../ColonyWorld/ColonyMap64")
+_game_map = NodePath("../Colony")
 _subviewport = NodePath("..")
 _start_zoom = Vector2(1.5, 1.5)
 
@@ -108,6 +74,9 @@ offset_right = 675.0
 offset_bottom = 302.0
 text = "Camera Coordinates:"
 script = ExtResource("6_ue7qe")
+
+[node name="Colony" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("pheromone_map") instance=ExtResource("5_oppt1")]
+pheromone_map = NodePath("../../../../../AerialView/MarginContainer2/AerialView/SubViewport/PheromoneMap")
 
 [node name="AerialView" type="PanelContainer" parent="MainDisplays"]
 custom_minimum_size = Vector2(400, 0)
@@ -135,24 +104,25 @@ handle_input_locally = false
 size = Vector2i(522, 600)
 render_target_update_mode = 4
 
-[node name="Overworld" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" instance=ExtResource("3_c0sg6")]
-script = SubResource("GDScript_vak6o")
-
-[node name="AerialCamera" type="Camera2D" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("_tile_map", "_subviewport")]
+[node name="AerialCamera" type="Camera2D" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("_game_map", "_subviewport")]
 zoom = Vector2(0.1, 0.1)
 script = ExtResource("5_fy3uy")
-_tile_map = NodePath("../Overworld/PheromoneMap")
+_game_map = NodePath("../PheromoneMap")
 _subviewport = NodePath("..")
 _start_zoom = Vector2(0.5, 0.5)
 _world = 1
+
+[node name="PheromoneMap" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("colony_map") instance=ExtResource("6_oj50q")]
+colony_map = NodePath("../../../../../VerticalView/MarginContainer/SubViewportContainer/SubViewport/Colony")
 
 [node name="UI" parent="." instance=ExtResource("2_yvpsu")]
 
 [node name="Messenger" type="Node2D" parent="."]
 script = ExtResource("1_njwge")
 
-[node name="Colony" type="Node2D" parent="."]
+[node name="Colony" type="Node2D" parent="." node_paths=PackedStringArray("colony_map")]
 script = ExtResource("3_rb7dp")
+colony_map = NodePath("../MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/PheromoneMap")
 
 [node name="Sprite2D" type="Sprite2D" parent="Colony"]
 texture = ExtResource("4_0p1y6")
@@ -163,5 +133,3 @@ region_rect = Rect2(668, 19, 167, 119)
 [connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_exited"]
 [connection signal="mouse_entered" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_entered"]
 [connection signal="mouse_exited" from="MainDisplays/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_vertical_view_mouse_exited"]
-
-[editable path="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/ColonyWorld"]

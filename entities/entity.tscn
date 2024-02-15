@@ -1,10 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=15 format=3 uid="uid://c6roeqeju6rrh"]
 
 [ext_resource type="Script" path="res://entities/entity_controller.gd" id="1_nqskv"]
 [ext_resource type="Script" path="res://entities/entity_body.gd" id="2_6l6tj"]
-[ext_resource type="Script" path="res://entities/brain.gd" id="3_wd827"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="3_811sa"]
 [ext_resource type="Script" path="res://entities/mover.gd" id="4_uy6hw"]
-[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="6_1l4ah"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_debugger.tscn" id="7_82oy3"]
 [ext_resource type="Script" path="res://game/states/state_machine.gd" id="7_mc2vr"]
 [ext_resource type="Script" path="res://game/states/entity_normal.gd" id="8_wpxrq"]
@@ -12,20 +11,68 @@
 [ext_resource type="Script" path="res://entities/entity_eating.gd" id="10_5tc74"]
 [ext_resource type="Script" path="res://entities/entity_idle.gd" id="11_tuuc5"]
 
-[node name="Entity" type="Node2D" node_paths=PackedStringArray("state_machine")]
+[sub_resource type="Animation" id="Animation_ogkkb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_7a50e"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_26fly"]
+resource_name = "walk"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(16, 16, 16, 16)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a1315"]
+_data = {
+"RESET": SubResource("Animation_ogkkb"),
+"idle": SubResource("Animation_7a50e"),
+"walk": SubResource("Animation_26fly")
+}
+
+[node name="Entity" type="Node2D" node_paths=PackedStringArray("body", "mover", "animator", "state_machine")]
 script = ExtResource("1_nqskv")
-state_machine = NodePath("StateMachine")
-
-[node name="EntityBrain" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("3_wd827")
-
-[node name="AntSprite" type="Sprite2D" parent="."]
-texture_filter = 1
-rotation = 1.5708
-texture = ExtResource("6_1l4ah")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
+body = NodePath("EntityBody")
+mover = NodePath("EntityMover")
+animator = NodePath("AnimationPlayer")
+state_machine = NodePath("ANTiStateMachine")
 
 [node name="EntityDebugger" parent="." instance=ExtResource("7_82oy3")]
 top_level = false
@@ -54,32 +101,48 @@ offset_right = 63.0
 offset_bottom = 32.0
 text = "DEBUG LARGE"
 
+[node name="AntSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5708
+texture = ExtResource("3_811sa")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_a1315")
+}
+speed_scale = 2.0
+
 [node name="EntityBody" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_6l6tj")
 speed = 5.0
 capacity = 5.0
 lifetime_seconds = 120.0
-time_until_hungry_seconds = 3.0
-time_until_starvation_seconds = 2.0
-time_to_eat = 5.0
+time_until_hungry_seconds = 5.0
+time_until_starvation_seconds = 20.0
+time_to_eat = 3.0
+time_until_rest = 20.0
+time_until_recovered = 3.0
+time_until_exhausted = 20.0
 
 [node name="EntityMover" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_uy6hw")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="ANTiStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("7_mc2vr")
-initial_state = NodePath("IdleState")
+initial_state = NodePath("RestingState")
 
-[node name="NormalState" type="Node" parent="StateMachine"]
+[node name="NormalState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("8_wpxrq")
 
-[node name="HungryState" type="Node" parent="StateMachine"]
+[node name="SeekFoodState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("9_sw2ms")
 
-[node name="EatingState" type="Node" parent="StateMachine"]
+[node name="EatingState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("10_5tc74")
 
-[node name="IdleState" type="Node" parent="StateMachine"]
+[node name="RestingState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("11_tuuc5")

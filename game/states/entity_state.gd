@@ -10,7 +10,7 @@ func _ready() -> void:
 	assert(entity != null)
 
 
-func enter(data: Dictionary = {}):
+func enter(_data: Dictionary = {}):
 	pass
 
 

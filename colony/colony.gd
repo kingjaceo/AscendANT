@@ -11,9 +11,7 @@ var _egg_hatch_time: float
 var _egg_timer: float
 
 var pheromone_map: PheromoneMap
-var colony_map: ColonyMap
-var _colony_world: Node2D
-var _overworld_cell: Vector2i
+@export var colony_map: GameMap
 
 var _baseANT = preload("res://entities/ants/baseANT.tscn")
 var _ANT = preload("res://entities/ants/ANT.tscn")
@@ -24,17 +22,14 @@ var _entity = preload("res://entities/entity.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Messenger.colony = self
-	_colony_world = Messenger._colony_world
 	pheromone_map = Messenger.pheromone_map
-	colony_map = Messenger.get_colony_map()
-	Messenger.set_vertical_camera_position(colony_map.map_to_local(colony_map.spawn_location))
 	
-	_overworld_cell = Vector2i(4, -6)
-	pheromone_map.entrance = _overworld_cell
+	Messenger.set_vertical_camera_position(colony_map.map_to_local(colony_map.spawn_locations[0]))
+	
 	var colony_sprite = get_node("Sprite2D")
 	remove_child(colony_sprite)
 	pheromone_map.add_child(colony_sprite)
-	colony_sprite.position = pheromone_map.map_to_local(_overworld_cell)
+	colony_sprite.position = pheromone_map.map_to_local(pheromone_map.spawn_locations[0])
 	Messenger.set_aerial_camera_position(colony_sprite.position)
 	
 	_set_attributes()
@@ -58,7 +53,6 @@ func _process(delta):
 
 
 func _create_ants():
-	var spawn_cell = colony_map.spawn_location
 	# produce the first ANTs
 	for i in range(1):
 		# create instance
@@ -118,13 +112,10 @@ func ant_died():
 
 
 func _create_ant(ant):
-	var spawn_cell = colony_map.spawn_location
+	var spawn_cell = colony_map.spawn_locations[0]
 	var instance = ant.instantiate()
 	instance.current_map = colony_map
 	instance.current_cell = spawn_cell
-	_colony_world.add_child(instance)
-
-	#Messenger.move_ant_to_world(instance, BaseANT.World.COLONY)
-	#instance._current_cell = spawn_cell
+	colony_map.add_child(instance)
 	instance.position = colony_map.map_to_local(spawn_cell)
 	current_population += 1

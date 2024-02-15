@@ -1,9 +1,6 @@
 extends Node2D
 
-var _ant_id: int = 0
-var _overworld: Node2D
 var pheromone_map: PheromoneMap
-var _colony_world: Node2D
 var colony_map: ColonyMap
 var colony: Colony
 
@@ -16,9 +13,9 @@ signal current_population_updated
 signal target_population_updated
 
 
-func get_next_ant_ID():
-	_ant_id += 1
-	return _ant_id
+#func get_next_ant_ID():
+	#_ant_id += 1
+	#return _ant_id
 
 func set_camera(world: BaseANT.World, camera: Camera2D):
 	if world == BaseANT.World.COLONY:
@@ -120,19 +117,19 @@ func get_pheromone_map():
 func get_colony_map():
 	return colony_map
 	
-func move_ant_to_world(ant: BaseANT, world: BaseANT.World):
-	if world == BaseANT.World.COLONY:
-		ant.get_parent().remove_child(ant)
-		_colony_world.add_child(ant)
-		ant.set_map(ant.colony_map)
-		ant.set_current_cell(colony_map.entrance)
-		#ant.position = colony_map.map_to_local(colony_map.entrance)
-	if world == BaseANT.World.OVERWORLD:
-		ant.get_parent().remove_child(ant)
-		_overworld.add_child(ant)
-		ant.set_map(ant.pheromone_map)
-		ant.set_current_cell(pheromone_map.choose_random_neighbor(pheromone_map.entrance))
-		#ant.position = pheromone_map.map_to_local(ant._current_cell)
+#func move_ant_to_world(ant: BaseANT, world: BaseANT.World):
+	#if world == BaseANT.World.COLONY:
+		#ant.get_parent().remove_child(ant)
+		#_colony_world.add_child(ant)
+		#ant.set_map(ant.colony_map)
+		#ant.set_current_cell(colony_map.entrance)
+		##ant.position = colony_map.map_to_local(colony_map.entrance)
+	#if world == BaseANT.World.OVERWORLD:
+		#ant.get_parent().remove_child(ant)
+		#_overworld.add_child(ant)
+		#ant.set_map(ant.pheromone_map)
+		#ant.set_current_cell(pheromone_map.choose_random_neighbor(pheromone_map.entrance))
+		##ant.position = pheromone_map.map_to_local(ant._current_cell)
 
 func set_vertical_camera_position(pos: Vector2):
 	_vertical_camera.position = pos

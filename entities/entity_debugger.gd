@@ -15,7 +15,7 @@ func _process(_delta):
 
 
 func _draw():
-	draw_line(Vector2.ZERO, Vector2(2000, 2000), Color.BLACK, 5)
+	#draw_line(Vector2.ZERO, Vector2(2000, 2000), Color.BLACK, 5)
 	if entity.mover._point_path_to_target:
 		#draw_line(_parent.position, _parent._target_position, Color.BLUE, 1)
 		#draw_line(_parent._next_cell_position, _parent._prev_position, Color.BLACK, 1)
@@ -23,7 +23,7 @@ func _draw():
 		for point in entity.mover._point_path_to_target:
 			var pos = entity.current_map.to_global(point)
 			pos = to_local(pos)
-			draw_circle(pos, 10, Color.WHITE)
+			draw_circle(pos, 2, Color.WHITE)
 
 
 func _write_message():

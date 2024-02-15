@@ -1,19 +1,6 @@
 class_name EntityMover 
 extends Node
-'''
-The mover is concerned with tracking:
-	1. previous/current/next cell
-	2. target cell and point path to target cell
-The mover is concerned with controlling:
-	1. turning
-	2. moving
-The mover signals:
-	1. arrival at a new cell
-The mover listens for:
-	1. choosing a new target
-'''	
 
-var _parent: Node2D
 var moving = true
 var entity: Entity
 
@@ -55,10 +42,9 @@ func _physics_process(delta) -> void:
 
 
 func _turn_and_move(delta) -> void:
-	# check if arrived at next cell position
 	var direction = _target - entity.position
 	_rotate_toward(delta, direction)
-	_move_forward(delta, direction)
+	_move_forward(delta)
 
 
 func _rotate_toward(delta, direction) -> void:
@@ -67,17 +53,17 @@ func _rotate_toward(delta, direction) -> void:
 		entity.rotate(sign(angle_to) * min(delta * _turn_speed, abs(angle_to)))
 
 
-func _move_forward(delta: float, direction: Vector2) -> void:
+func _move_forward(delta: float) -> void:
 	entity.position += entity.transform.x * delta * _walk_speed
 
 
 func _check_distance() -> void:
 	var distance = (_target - entity.position).length()
-	#_current_cell = current_map.local_to_map(_parent.position)
 	if distance < TOLERANCE:
 		arrived_at_next_cell.emit()
 		_current_index += 1
-		if _current_index >= len(_point_path_to_target):
+		var arrived_at_last_cell_in_point_path = _current_index >= len(_point_path_to_target)
+		if arrived_at_last_cell_in_point_path:
 			moving = false
 			arrived_at_target.emit()
 		else:

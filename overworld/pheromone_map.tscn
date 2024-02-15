@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwl31u7x6k44h"]
+[gd_scene load_steps=5 format=3 uid="uid://cwl31u7x6k44h"]
 
 [ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://overworld/Sprites.ase" id="1_eesmo"]
+[ext_resource type="Script" path="res://overworld/pheromone_map.gd" id="2_d7qwi"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cd5rb"]
 texture = ExtResource("1_eesmo")
@@ -50,3 +51,4 @@ layer_2/name = "Outline"
 layer_2/tile_data = PackedInt32Array()
 layer_3/name = "Pheromone"
 layer_3/tile_data = PackedInt32Array()
+script = ExtResource("2_d7qwi")

@@ -10,11 +10,7 @@ var _min_zoom: Vector2
 var _zoom_step = Vector2(0.05, 0.05)
 var _zoom_ratio: float
 var _attributes_set: bool
-var _position_limit_left: float
-var _position_limit_right: float
-var _position_limit_top: float
-var _position_limit_bottom: float
-@export var _tile_map: TileMap
+@export var _game_map: GameMap
 @export var _subviewport: SubViewport
 @export var _start_zoom: Vector2
 @export var _world: BaseANT.World
@@ -97,7 +93,7 @@ func _on_vertical_view_mouse_exited():
 
 func _set_attributes():
 	set_process(false)
-	_bounds = _tile_map.get_bounds()
+	_bounds = _game_map.get_bounds()
 	var viewport_width = _subviewport.size.x
 
 	var max_zoom = 8

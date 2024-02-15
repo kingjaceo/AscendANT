@@ -9,9 +9,8 @@ extends EntityState
 
 
 func enter(data: Dictionary = {}) -> void:
+	entity.animator.play("idle")
 	entity.mover.idle()
-	entity.body.starvation.stop()
-	#entity.body.eat_timer.start()
 	entity.body.eat(data["food_cell"])
 	
 	entered.emit()

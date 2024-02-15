@@ -1,20 +1,14 @@
-class_name PheromoneMap extends TileMap
-'''
-This script manages:
-	- terrain
-	- outlines
-	- pheromones
-'''
-var entrance: Vector2i:
-	set(cell):
-		entrance = cell
-	get:
-		return entrance
+class_name PheromoneMap 
+extends GameMap
+
+@export var colony_map: ColonyMap
+@export var spawn_location: Vector2i = Vector2i(5, -6)
+@export var entrance: Vector2i = Vector2i(4, -6)
 
 var _pheromones_by_cell = {}
 var _food_by_cell = {}
 var adjustment: Vector2 = Vector2(0, 0)
-var PheromoneCell = preload("pheromone_cell.gd")
+var pheromone_cell = preload("pheromone_cell.gd")
 
 const TILE_SOURCE = 0
 const TERRAIN_LAYER = 0
@@ -24,51 +18,13 @@ const PHEROMONE_LAYER = 3
 const OUTLINE_COORDS = Vector2i(0,0)
 const FOOD_PHEROMONE_TILE_COORD = Vector2i(4,1)
 
-func get_tile_position(coordinate):
-	return map_to_local(coordinate)
-	
 
-func get_tile_coordinate(position):
-	return local_to_map(position)
-	
-
-func mark_cell(coordinate: Vector2i, pheromone: Pheromone, from: Vector2i):
-	if pheromone:
-		var pheromone_cell = _pheromones_by_cell[coordinate]
-		pheromone_cell.add_pheromone(pheromone, from)
-		var atlas_coord = pheromone.atlas_coord
-		var alt_id = 0
-		set_cell(PHEROMONE_LAYER, coordinate, TILE_SOURCE, atlas_coord, alt_id)
-	
-
-func get_pheromone_cell(coordinate: Vector2i):
-	return _pheromones_by_cell[coordinate]
-	
-
-func get_surrounding_pheromone_cells(coordinate: Vector2i):
-	var neighbors = get_surrounding_cells(coordinate)
-	var valid_neighbors = []
-	
-	for neighbor_tile in neighbors:
-		# check if the neighboring tile is a valid terrain tile
-		var atlas_coords = get_cell_atlas_coords(TERRAIN_LAYER, neighbor_tile)
-		if atlas_coords != Vector2i(-1, -1) and neighbor_tile != entrance:
-			valid_neighbors.append(_pheromones_by_cell[neighbor_tile])
-			
-	return valid_neighbors
-	
-
-func take_food_from(tile: Vector2i, amount: float):
-	var amount_left = _food_by_cell[tile]
-	var amount_taken = min(amount_left, amount)
-	_food_by_cell[tile] -= amount_taken
-	if _food_by_cell[tile] == 0:
-		_remove_food(tile)
-	return amount_taken
-	
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	spawn_locations = [spawn_location]
+	_exits_at = {entrance: colony_map}
+	_entrances_from = {colony_map: entrance}
+	
+	
 	var tile_locations = get_used_cells(TERRAIN_LAYER)
 	
 	# create the pheromone layer
@@ -89,25 +45,76 @@ func _ready():
 	
 	Messenger.pheromone_map = self
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(delta):
 	_update_pheromone_cells(delta)
+
+
+#func get_tile_position(coordinate):
+	#return map_to_local(coordinate)
+	#
+
+#func get_tile_coordinate(position):
+	#return local_to_map(position)
+	#
+
+func mark_cell(coordinate: Vector2i, pheromone: Pheromone, from: Vector2i):
+	if pheromone:
+		var pher_cell = _pheromones_by_cell[coordinate]
+		pher_cell.add_pheromone(pheromone, from)
+		var atlas_coord = pheromone.atlas_coord
+		var alt_id = 0
+		set_cell(PHEROMONE_LAYER, coordinate, TILE_SOURCE, atlas_coord, alt_id)
+
+
+func get_pheromone_cell(coordinate: Vector2i):
+	return _pheromones_by_cell[coordinate]
+
+
+func get_surrounding_pheromone_cells(coordinate: Vector2i):
+	var neighbors = get_surrounding_cells(coordinate)
+	var valid_neighbors = []
 	
+	for neighbor_tile in neighbors:
+		# check if the neighboring tile is a valid terrain tile
+		var atlas_coords = get_cell_atlas_coords(TERRAIN_LAYER, neighbor_tile)
+		if atlas_coords != Vector2i(-1, -1) and neighbor_tile != entrance:
+			valid_neighbors.append(_pheromones_by_cell[neighbor_tile])
+			
+	return valid_neighbors
+
+
+func take_food_from(tile: Vector2i, amount: float):
+	var amount_left = _food_by_cell[tile]
+	var amount_taken = min(amount_left, amount)
+	_food_by_cell[tile] -= amount_taken
+	if _food_by_cell[tile] == 0:
+		_remove_food(tile)
+	return amount_taken	
+
+
+func get_nearest_food_cell(_cell: Vector2i):
+	return entrance
+
+
+func has_food(cell: Vector2i):
+	return cell in _food_by_cell
+
 
 func _update_pheromone_cells(delta):
 	for tile in get_used_cells(PHEROMONE_LAYER):
 		if tile == Vector2i(9, -5):
 			pass
-		var pheromone_cell = _pheromones_by_cell[tile]
-		pheromone_cell.decay_pheromones(delta)
+		var pher_cell = _pheromones_by_cell[tile]
+		pher_cell.decay_pheromones(delta)
 		
 		var alt_id = -1 # default value
 		var atlas_coord = Vector2i(-1, -1) # default value
 		var strength = 0 # default value
 		
-		if pheromone_cell.strongest_pheromone:
-			strength = pheromone_cell.strongest_pheromone_percentage
-			atlas_coord = pheromone_cell.strongest_pheromone.atlas_coord
+		if pher_cell.strongest_pheromone:
+			strength = pher_cell.strongest_pheromone_percentage
+			atlas_coord = pher_cell.strongest_pheromone.atlas_coord
 		
 		# determine alt tile to draw based on strength
 		if strength <= 0:

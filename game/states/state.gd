@@ -6,7 +6,7 @@ signal exited
 
 var state_machine = null
 
-func enter(data: Dictionary = {}):
+func enter(_data: Dictionary = {}):
 	entered.emit()
 
 

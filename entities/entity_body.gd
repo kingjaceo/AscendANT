@@ -1,37 +1,29 @@
 class_name EntityBody 
 extends Node
-'''
-The body is concerned with tracking:
-	1. lifetime
-	2. hunger
-	3. starvation
-	4. idling/resting
-	5. recovering
-The body is concerned with controlling:
-	1. special physical activity (eg, harvesting/dumping food, digging, building)
-The body signals:
-	1. for a new target on hungry
-	2. to cease movement on resting
-	3. to resume movement on recovering
-	4. the success of a special activity
-'''
 
 @export var speed: float
 @export var capacity: float
-@export var _eat_amount: float
+@export var eat_amount: float
 
 @export var lifetime_seconds: float
 @export var time_until_hungry_seconds: float
 @export var time_until_starvation_seconds: float
 @export var time_to_eat: float
+@export var time_until_rest: float
+@export var time_until_recovered: float
+@export var time_until_exhausted: float
 
 var entity: Entity
 var hungry: bool
+var tired: bool
 
 var lifetime: Timer
 var hunger: Timer
 var starvation: Timer
 var eat_timer: Timer
+var rest_timer: Timer
+var recovery_timer: Timer
+var exhaustion_timer: Timer
 
 
 func _ready():
@@ -57,18 +49,39 @@ func setup_timers():
 	starvation.wait_time = time_until_starvation_seconds
 	
 	eat_timer = Timer.new()
+	eat_timer.one_shot = true
 	add_child(eat_timer)
 	eat_timer.wait_time = time_to_eat
+	
+	rest_timer = Timer.new()
+	rest_timer.one_shot = true
+	add_child(rest_timer)
+	rest_timer.wait_time = time_until_rest
+	rest_timer.start()
+	
+	recovery_timer = Timer.new()
+	recovery_timer.one_shot = true
+	add_child(recovery_timer)
+	recovery_timer.wait_time = time_until_recovered
+	
+	exhaustion_timer = Timer.new()
+	add_child(exhaustion_timer)
+	exhaustion_timer.wait_time = time_until_exhausted
 
 
 func eat(cell: Vector2i):
 	# calculate new hunger level, based on available food
-	var amount_eaten = entity.current_map.take_food_from(cell, _eat_amount)
-	var percentage = amount_eaten / _eat_amount
+	var amount_eaten = entity.current_map.take_food_from(cell, eat_amount)
+	var percentage = amount_eaten / eat_amount
 	var actual_hunger_time = time_until_hungry_seconds * percentage
 	
 	# update timers
 	eat_timer.start()
 	starvation.stop()
 	hunger.wait_time = actual_hunger_time
-	
+
+
+func rest():
+	rest_timer.stop()
+	recovery_timer.start()
+	exhaustion_timer.stop()
