@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=16 format=3 uid="uid://c6roeqeju6rrh"]
 
 [ext_resource type="Script" path="res://entities/entity_controller.gd" id="1_nqskv"]
 [ext_resource type="Script" path="res://entities/entity_body.gd" id="2_6l6tj"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://game/states/entity_normal.gd" id="8_wpxrq"]
 [ext_resource type="Script" path="res://entities/entity_hungry.gd" id="9_sw2ms"]
 [ext_resource type="Script" path="res://entities/entity_eating.gd" id="10_5tc74"]
+[ext_resource type="Script" path="res://entities/camera_followable.gd" id="11_obuqa"]
 [ext_resource type="Script" path="res://entities/entity_idle.gd" id="11_tuuc5"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
@@ -147,3 +148,6 @@ script = ExtResource("10_5tc74")
 
 [node name="RestingState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("11_tuuc5")
+
+[node name="CameraFollowable" type="Node2D" parent="."]
+script = ExtResource("11_obuqa")

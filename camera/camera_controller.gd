@@ -9,29 +9,20 @@ var _max_zoom: Vector2
 var _min_zoom: Vector2
 var _zoom_step = Vector2(0.05, 0.05)
 var _zoom_ratio: float
-var _attributes_set: bool
 @export var _game_map: GameMap
 @export var _subviewport: SubViewport
 @export var _start_zoom: Vector2
-@export var _world: BaseANT.World
 
-var _ui_adjustment: Vector2
 var _camera_speed = 5
 
 var _follow: Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_attributes_set = false
-	Messenger.set_camera(_world, self)
-	Messenger.get_ui_adjustment(_world)
-#
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if not _attributes_set:
-		_set_attributes()
-		_attributes_set = true
-		
+	_set_attributes()
+
+
+func _process(_delta):
 	var fast_zoom = 1
 	var position_change = Vector2.ZERO
 	

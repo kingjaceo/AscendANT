@@ -1,6 +1,8 @@
 class_name GameMap
 extends TileMap
 
+@export var camera: Camera2D
+
 var spawn_locations: Array[Vector2i]
 var astar_grid: AStarGrid2D
 

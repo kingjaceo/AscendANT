@@ -24,8 +24,6 @@ func _ready():
 	Messenger.colony = self
 	pheromone_map = Messenger.pheromone_map
 	
-	Messenger.set_vertical_camera_position(colony_map.map_to_local(colony_map.spawn_locations[0]))
-	
 	_set_attributes()
 	_create_ants()
 		
@@ -48,7 +46,7 @@ func _process(delta):
 
 func _create_ants():
 	# produce the first ANTs
-	for i in range(1):
+	for i in range(10):
 		# create instance
 		_create_ant(_entity)
 		

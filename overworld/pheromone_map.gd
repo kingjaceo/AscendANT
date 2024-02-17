@@ -204,6 +204,5 @@ func _set_food_pheromone_tiles():
 
 func _place_sprite():
 	var colony_sprite = get_node("Sprite2D")
-	add_child(colony_sprite)
 	colony_sprite.position = map_to_local(entrance)
-	Messenger.set_aerial_camera_position(colony_sprite.position)
+	camera.position = map_to_local(spawn_location)

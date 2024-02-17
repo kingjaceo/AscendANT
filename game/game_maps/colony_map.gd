@@ -28,7 +28,9 @@ func _ready() -> void:
 	_entrances_from = {pheromone_map: entrance}
 	
 	_setup_astar_grid()
-	_place_sprite()
+	_place_sprites()
+	
+	camera.position = map_to_local(spawn_location)
 		
 	_food_by_cell[temp_food_cell] = 100
 	_create_colony_cells()
@@ -108,8 +110,11 @@ func _setup_astar_grid():
 			_valid_cells.append(cell)
 
 
-func _place_sprite():
-	var queen_sprite = get_node("Sprite2D")
-	add_child(queen_sprite)
-	queen_sprite.position = map_to_local(spawn_location)
-	Messenger.set_vertical_camera_position(queen_sprite.position)
+func _place_sprites():
+	_place_sprite("Colony", spawn_location)
+	_place_sprite("Food", temp_food_cell)
+
+
+func _place_sprite(node_name: String, cell: Vector2i):
+	var sprite = get_node(node_name)
+	sprite.position = map_to_local(cell) + Vector2(0, -6)

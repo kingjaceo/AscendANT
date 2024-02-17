@@ -4,8 +4,8 @@ var pheromone_map: PheromoneMap
 var colony_map: ColonyMap
 var colony: Colony
 
-var _vertical_camera: Camera2D
-var _aerial_camera: Camera2D
+@export var _vertical_camera: Camera2D
+@export var _aerial_camera: Camera2D
 
 signal food_updated
 signal eggs_updated
@@ -13,9 +13,8 @@ signal current_population_updated
 signal target_population_updated
 
 
-#func get_next_ant_ID():
-	#_ant_id += 1
-	#return _ant_id
+func _ready():
+	pass
 
 func set_camera(world: BaseANT.World, camera: Camera2D):
 	if world == BaseANT.World.COLONY:
@@ -131,11 +130,11 @@ func get_colony_map():
 		#ant.set_current_cell(pheromone_map.choose_random_neighbor(pheromone_map.entrance))
 		##ant.position = pheromone_map.map_to_local(ant._current_cell)
 
-func set_vertical_camera_position(pos: Vector2):
-	_vertical_camera.position = pos
+#func set_vertical_camera_position(pos: Vector2):
+	#_vertical_camera.position = pos
 
-func set_aerial_camera_position(pos: Vector2):
-	_aerial_camera.position = pos
+#func set_aerial_camera_position(pos: Vector2):
+	#_aerial_camera.position = pos
 
 func get_ui_adjustment(world: BaseANT.World):
 	if world == BaseANT.World.OVERWORLD:
@@ -143,11 +142,12 @@ func get_ui_adjustment(world: BaseANT.World):
 	else:
 		return Vector2(0, 0)
 
-func camera_follow(world: BaseANT.World, node: Node2D):
-	if world == BaseANT.World.COLONY:
-		_vertical_camera.follow(node)
-	if world == BaseANT.World.OVERWORLD:
-		_aerial_camera.follow(node)
+#func camera_follow(game_map: GameMap, node: Node2D):
+	#game_map.camera.follow(node)
+	#if world == BaseANT.World.COLONY:
+		#_vertical_camera.follow(node)
+	#if world == BaseANT.World.OVERWORLD:
+		#_aerial_camera.follow(node)
 
 
 func get_camera_zoom():
