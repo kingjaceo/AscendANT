@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=10 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/time_controller.gd" id="1_j11p5"]
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
 [ext_resource type="Script" path="res://colony/colony.gd" id="3_rb7dp"]
-[ext_resource type="Texture2D" uid="uid://d1o22lmwt7k0l" path="res://overworld/Sprites.ase" id="4_0p1y6"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="5_fy3uy"]
 [ext_resource type="PackedScene" uid="uid://cjvp0580bg7u7" path="res://colony/colony.tscn" id="5_oppt1"]
 [ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://overworld/pheromone_map.tscn" id="6_oj50q"]
@@ -116,6 +115,7 @@ _world = 1
 colony_map = NodePath("../../../../../VerticalView/MarginContainer/SubViewportContainer/SubViewport/Colony")
 
 [node name="UI" parent="." instance=ExtResource("2_yvpsu")]
+visible = false
 
 [node name="Messenger" type="Node2D" parent="."]
 script = ExtResource("1_njwge")
@@ -123,11 +123,6 @@ script = ExtResource("1_njwge")
 [node name="Colony" type="Node2D" parent="." node_paths=PackedStringArray("colony_map")]
 script = ExtResource("3_rb7dp")
 colony_map = NodePath("../MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/PheromoneMap")
-
-[node name="Sprite2D" type="Sprite2D" parent="Colony"]
-texture = ExtResource("4_0p1y6")
-region_enabled = true
-region_rect = Rect2(668, 19, 167, 119)
 
 [connection signal="mouse_entered" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_entered"]
 [connection signal="mouse_exited" from="MainDisplays/VerticalView" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/VerticalCamera" method="_on_vertical_view_mouse_exited"]

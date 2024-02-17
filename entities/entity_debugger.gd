@@ -23,7 +23,7 @@ func _draw():
 		for point in entity.mover._point_path_to_target:
 			var pos = entity.current_map.to_global(point)
 			pos = to_local(pos)
-			draw_circle(pos, 2, Color.WHITE)
+			draw_circle(pos, 10, Color.BLUE)
 
 
 func _write_message():

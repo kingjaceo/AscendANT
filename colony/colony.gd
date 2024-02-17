@@ -26,12 +26,6 @@ func _ready():
 	
 	Messenger.set_vertical_camera_position(colony_map.map_to_local(colony_map.spawn_locations[0]))
 	
-	var colony_sprite = get_node("Sprite2D")
-	remove_child(colony_sprite)
-	pheromone_map.add_child(colony_sprite)
-	colony_sprite.position = pheromone_map.map_to_local(pheromone_map.spawn_locations[0])
-	Messenger.set_aerial_camera_position(colony_sprite.position)
-	
 	_set_attributes()
 	_create_ants()
 		

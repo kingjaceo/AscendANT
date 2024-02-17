@@ -75,6 +75,7 @@ animator = NodePath("AnimationPlayer")
 state_machine = NodePath("ANTiStateMachine")
 
 [node name="EntityDebugger" parent="." instance=ExtResource("7_82oy3")]
+visible = false
 top_level = false
 
 [node name="State" type="Label" parent="EntityDebugger"]

@@ -9,8 +9,6 @@ extends GameMap
 @export var adjustment: Vector2 = cell_size / 2
 @export var temp_food_cell = Vector2i(7, 11)
 
-var astar_grid = AStarGrid2D.new()
-
 var expand_choices: Array[Vector2i]
 var expand_choice: Vector2i
 var colony: Colony
@@ -23,41 +21,17 @@ const DIRT_LAYER = 0
 const NAV_TERRAIN_SET = 0
 const IMPASSABLE_ATLAS_COORDS = Vector2i(10, 1)
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	spawn_locations = [spawn_location]
 	_exits_at = {exit: pheromone_map}
 	_entrances_from = {pheromone_map: entrance}
 	
-	
-	Messenger.colony_map = self
-	astar_grid.region = Rect2i(0, -6, 33, 65)
-	astar_grid.cell_size = cell_size
-	astar_grid.diagonal_mode = 3
-	astar_grid.update()
-	
-	for cell in get_used_cells(0):
-		if get_cell_atlas_coords(DIRT_LAYER, cell) == IMPASSABLE_ATLAS_COORDS:
-			astar_grid.set_point_solid(cell)
-		else:
-			_valid_cells.append(cell)
+	_setup_astar_grid()
+	_place_sprite()
 		
-	colony = Messenger.colony
 	_food_by_cell[temp_food_cell] = 100
 	_create_colony_cells()
-
-
-func get_bounds() -> Array[float]:
-	var map_limits = get_used_rect()
-	var map_cellsize = tile_set.tile_size
-	var bounds: Array[float] = [0.0, 0.0, 0.0, 0.0]
-	
-	bounds[0] = map_limits.position.x * map_cellsize.x
-	bounds[1] = map_limits.end.x * map_cellsize.x
-	bounds[2] = map_limits.position.y * map_cellsize.y
-	bounds[3] = map_limits.end.y * map_cellsize.y
-	
-	return bounds
 
 
 func get_random_cell() -> Vector2i:
@@ -103,16 +77,13 @@ func _create_colony_cells():
 		_colony_cells[current] = colony_cell
 		prev = current
 		current = next
-		
-
-func food_around(cell: Vector2i):
-	return cell in _food_by_cell
 
 
 func take_food_from(cell: Vector2i, amount: float) -> float:
 	var amount_taken = min(_food_by_cell[cell], amount)
 	_food_by_cell[cell] -= amount_taken
 	return amount_taken
+
 
 func excavate_cell(cell: Vector2i, dirt_moved: float):
 	var actual_dirt_moved = min(dirt_moved, _colony_cells[cell].dirt_left)
@@ -121,3 +92,24 @@ func excavate_cell(cell: Vector2i, dirt_moved: float):
 		expand_choice = cell
 		set_cells_terrain_connect(0, [cell], 0, 0)
 	return actual_dirt_moved
+
+
+func _setup_astar_grid():
+	astar_grid = AStarGrid2D.new()
+	astar_grid.region = Rect2i(0, -6, 33, 65)
+	astar_grid.cell_size = cell_size
+	astar_grid.diagonal_mode = 3
+	astar_grid.update()
+	
+	for cell in get_used_cells(0):
+		if get_cell_atlas_coords(DIRT_LAYER, cell) == IMPASSABLE_ATLAS_COORDS:
+			astar_grid.set_point_solid(cell)
+		else:
+			_valid_cells.append(cell)
+
+
+func _place_sprite():
+	var queen_sprite = get_node("Sprite2D")
+	add_child(queen_sprite)
+	queen_sprite.position = map_to_local(spawn_location)
+	Messenger.set_vertical_camera_position(queen_sprite.position)

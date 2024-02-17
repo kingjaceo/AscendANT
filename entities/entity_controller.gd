@@ -25,6 +25,10 @@ func _ready() -> void:
 	state_machine.change_state("NormalState")
 
 
+func update_current_cell():
+	current_cell = current_map.local_to_map(position)
+
+
 func _on_becoming_hungry() -> void:
 	body.starvation.start()
 	body.hungry = true

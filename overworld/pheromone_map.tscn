@@ -10,6 +10,7 @@ separation = Vector2i(4, 4)
 texture_region_size = Vector2i(60, 60)
 0:0/0 = 0
 1:0/0 = 0
+1:0/0/terrain_set = 0
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -37,9 +38,13 @@ texture_region_size = Vector2i(60, 60)
 tile_shape = 3
 tile_offset_axis = 1
 tile_size = Vector2i(60, 60)
+terrain_set_0/mode = 2
+terrain_set_0/terrain_0/name = "Terrain 0"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_cd5rb")
 
 [node name="PheromoneMap" type="TileMap"]
+z_index = -2
 tile_set = SubResource("TileSet_nuhc2")
 format = 2
 layer_0/name = "Terrain"
@@ -52,3 +57,8 @@ layer_2/tile_data = PackedInt32Array()
 layer_3/name = "Pheromone"
 layer_3/tile_data = PackedInt32Array()
 script = ExtResource("2_d7qwi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_eesmo")
+region_enabled = true
+region_rect = Rect2(668, 19, 167, 119)

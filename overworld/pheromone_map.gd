@@ -7,7 +7,7 @@ extends GameMap
 
 var _pheromones_by_cell = {}
 var _food_by_cell = {}
-var adjustment: Vector2 = Vector2(0, 0)
+var adjustment: Vector2 = Vector2.ZERO
 var pheromone_cell = preload("pheromone_cell.gd")
 
 const TILE_SOURCE = 0
@@ -17,6 +17,7 @@ const OUTLINE_LAYER = 2
 const PHEROMONE_LAYER = 3
 const OUTLINE_COORDS = Vector2i(0,0)
 const FOOD_PHEROMONE_TILE_COORD = Vector2i(4,1)
+const IMPASSABLE_ATLAS_COORDS = Vector2i(-1, -1)
 
 
 func _ready():
@@ -24,6 +25,8 @@ func _ready():
 	_exits_at = {entrance: colony_map}
 	_entrances_from = {colony_map: entrance}
 	
+	_place_sprite()
+	#_setup_astar_grid()
 	
 	var tile_locations = get_used_cells(TERRAIN_LAYER)
 	
@@ -50,13 +53,11 @@ func _process(delta):
 	_update_pheromone_cells(delta)
 
 
-#func get_tile_position(coordinate):
-	#return map_to_local(coordinate)
-	#
+func get_random_cell():
+	var cells = get_used_cells(TERRAIN_LAYER)
+	var choice = cells[randi() % len(cells)]
+	return choice
 
-#func get_tile_coordinate(position):
-	#return local_to_map(position)
-	#
 
 func mark_cell(coordinate: Vector2i, pheromone: Pheromone, from: Vector2i):
 	if pheromone:
@@ -94,7 +95,7 @@ func take_food_from(tile: Vector2i, amount: float):
 
 
 func get_nearest_food_cell(_cell: Vector2i):
-	return entrance
+	return Vector2i.ZERO
 
 
 func has_food(cell: Vector2i):
@@ -129,22 +130,7 @@ func _update_pheromone_cells(delta):
 			alt_id = 0
 			
 		set_cell(PHEROMONE_LAYER, tile, TILE_SOURCE, atlas_coord, alt_id)
-		
 
-func _remove_food(tile: Vector2i):
-	var food_pheromone = Pheromones.FOOD
-	_pheromones_by_cell[tile].delete_pheromone(food_pheromone)
-	_food_by_cell.erase(tile)
-	set_cell(FOOD_LAYER, tile, TILE_SOURCE, Vector2i(-1, -1))
-	
-func _set_food_pheromone_tiles():
-	var tile_positions = get_used_cells(FOOD_LAYER)
-	var from = Vector2i(0, 0)
-	for tile in tile_positions:
-		_pheromones_by_cell[tile].add_pheromone(Pheromones.FOOD, from)
-		_food_by_cell[tile] = 100
-		set_cell(PHEROMONE_LAYER, tile, TILE_SOURCE, FOOD_PHEROMONE_TILE_COORD, 0)
-		
 
 # toggle functions
 func toggle_pheromones():
@@ -156,52 +142,68 @@ func toggle_outline():
 func toggle_terrain():
 	set_layer_enabled(TERRAIN_LAYER, not is_layer_enabled(TERRAIN_LAYER))
 
-func get_bounds():
-	var map_limits = get_used_rect()
-	var map_cellsize = tile_set.tile_size
-	var bounds = [0, 0, 0, 0]
-	
-	bounds[0] = map_limits.position.x * map_cellsize.x
-	bounds[1] = map_limits.end.x * map_cellsize.x
-	bounds[2] = map_limits.position.y * map_cellsize.y
-	bounds[3] = map_limits.end.y * map_cellsize.y
-	
-	return bounds
 
-func choose_random_cell():
-	var cells = get_used_cells(TERRAIN_LAYER)
-	return cells[randi() % len(cells)]
-	
 func choose_random_neighbor(cell: Vector2i):
 	var neighbors = get_surrounding_pheromone_cells(cell)
 	return neighbors[randi() % len(neighbors)].coordinates
 
+
 func get_food_cell():
 	return entrance
-	
+
+
 func get_point_path(start: Vector2i, end: Vector2i):
-	return [map_to_local(start), map_to_local(end)]
+	#var point_path = astar_grid.get_point_path(start, end)
+	#for i in range(len(point_path)):
+		#point_path[i] += adjustment
+	var point_path = [map_to_local(start), map_to_local(end)]
+	return PackedVector2Array(point_path)
 
 
-func get_next_home_cell(cell: Vector2i) -> Vector2i:
-	if _hex_distance(entrance, cell) == 1:
-		return entrance
-		
-	var closest_cell
-	var distance = INF
-	for neighbor_cell in get_surrounding_pheromone_cells(cell):
-		var new_distance = _hex_distance(entrance, neighbor_cell.coordinates)
-		if new_distance < distance:
-			distance = new_distance
-			closest_cell = neighbor_cell.coordinates
-	return closest_cell
+#func get_next_home_cell(cell: Vector2i) -> Vector2i:
+	#if _hex_distance(entrance, cell) == 1:
+		#return entrance
+		#
+	#var closest_cell
+	#var distance = INF
+	#for neighbor_cell in get_surrounding_pheromone_cells(cell):
+		#var new_distance = _hex_distance(entrance, neighbor_cell.coordinates)
+		#if new_distance < distance:
+			#distance = new_distance
+			#closest_cell = neighbor_cell.coordinates
+	#return closest_cell
+
+
+func _setup_astar_grid():
+	astar_grid = AStarGrid2D.new()
+	astar_grid.region = Rect2i(-40, -20, 80, 40)
+	astar_grid.cell_size = tile_set.tile_size
+	astar_grid.diagonal_mode = 3
+	astar_grid.update()
 	
-func _hex_distance(coord1, coord2):
-	var q1 = coord1[0]
-	var q2 = coord2[0]
-	var r1 = coord1[1] - (coord1[0] - (coord1[0]&1)) / 2
-	var r2 = coord2[1] - (coord2[0] - (coord2[0]&1)) / 2
-	
-	var distance = (abs(q1 - q2) + abs(q1 + r1 - q2 - r2) + abs(r1 - r2)) / 2
-	
-	return distance
+	for cell in get_used_cells(TERRAIN_LAYER):
+		if get_cell_atlas_coords(TERRAIN_LAYER, cell) == IMPASSABLE_ATLAS_COORDS:
+			astar_grid.set_point_solid(cell)
+
+
+func _remove_food(tile: Vector2i):
+	var food_pheromone = Pheromones.FOOD
+	_pheromones_by_cell[tile].delete_pheromone(food_pheromone)
+	_food_by_cell.erase(tile)
+	set_cell(FOOD_LAYER, tile, TILE_SOURCE, Vector2i(-1, -1))
+
+
+func _set_food_pheromone_tiles():
+	var tile_positions = get_used_cells(FOOD_LAYER)
+	var from = Vector2i(0, 0)
+	for tile in tile_positions:
+		_pheromones_by_cell[tile].add_pheromone(Pheromones.FOOD, from)
+		_food_by_cell[tile] = 100
+		set_cell(PHEROMONE_LAYER, tile, TILE_SOURCE, FOOD_PHEROMONE_TILE_COORD, 0)
+
+
+func _place_sprite():
+	var colony_sprite = get_node("Sprite2D")
+	add_child(colony_sprite)
+	colony_sprite.position = map_to_local(entrance)
+	Messenger.set_aerial_camera_position(colony_sprite.position)
