@@ -15,7 +15,7 @@ var pheromone_map: PheromoneMap
 
 var _baseANT = preload("res://entities/ants/baseANT.tscn")
 var _ANT = preload("res://entities/ants/ANT.tscn")
-var _descendANT = preload("res://entities/ants/descendANT/descendANT.gd")
+var _descendANT = preload("res://entities/ants/descendANT/descendANT.tscn")
 var _debugger = preload("res://entities/ants/baseANTdebugger.tscn")
 var _entity = preload("res://entities/entity.tscn")
 
@@ -46,12 +46,12 @@ func _process(delta):
 
 func _create_ants():
 	# produce the first ANTs
-	for i in range(10):
+	for i in range(0):
 		# create instance
 		_create_ant(_entity)
 		
 	# TEST: produce the first descendANTs
-	for i in range(0):
+	for i in range(1):
 		_create_ant(_descendANT)
 
 

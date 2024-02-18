@@ -16,11 +16,11 @@ signal target_population_updated
 func _ready():
 	pass
 
-func set_camera(world: BaseANT.World, camera: Camera2D):
-	if world == BaseANT.World.COLONY:
-		_vertical_camera = camera
-	if world == BaseANT.World.OVERWORLD:
-		_aerial_camera = camera
+#func set_camera(world: BaseANT.World, camera: Camera2D):
+	#if world == BaseANT.World.COLONY:
+		#_vertical_camera = camera
+	#if world == BaseANT.World.OVERWORLD:
+		#_aerial_camera = camera
 	
 
 func get_pheromone_cell(coordinate: Vector2i):
@@ -136,11 +136,11 @@ func get_colony_map():
 #func set_aerial_camera_position(pos: Vector2):
 	#_aerial_camera.position = pos
 
-func get_ui_adjustment(world: BaseANT.World):
-	if world == BaseANT.World.OVERWORLD:
-		return Vector2(-200, 0)
-	else:
-		return Vector2(0, 0)
+#func get_ui_adjustment(world: BaseANT.World):
+	#if world == BaseANT.World.OVERWORLD:
+		#return Vector2(-200, 0)
+	#else:
+		#return Vector2(0, 0)
 
 #func camera_follow(game_map: GameMap, node: Node2D):
 	#game_map.camera.follow(node)

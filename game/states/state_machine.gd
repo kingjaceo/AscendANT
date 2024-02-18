@@ -1,4 +1,4 @@
-class_name StateMachine
+class_name ANTiStateMachine
 extends Node
 
 @export var initial_state: State
@@ -11,14 +11,10 @@ signal transitioned(state_name)
 
 
 func _ready() -> void:
-	#await owner.ready
-	
 	for child in get_children():
 		if child is State:
-			#await child.ready
 			child.state_machine = self
 			_states[child.name] = child
-			#child.transitioned.connect(change_state)
 		
 	if initial_state:
 		_current_state = initial_state

@@ -1,10 +1,10 @@
 [gd_scene load_steps=16 format=3 uid="uid://c6roeqeju6rrh"]
 
-[ext_resource type="Script" path="res://entities/entity_controller.gd" id="1_nqskv"]
+[ext_resource type="Script" path="res://entities/entity.gd" id="1_utrar"]
+[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="2_4qg3q"]
 [ext_resource type="Script" path="res://entities/entity_body.gd" id="2_6l6tj"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="3_811sa"]
 [ext_resource type="Script" path="res://entities/mover.gd" id="4_uy6hw"]
-[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_debugger.tscn" id="7_82oy3"]
 [ext_resource type="Script" path="res://game/states/state_machine.gd" id="7_mc2vr"]
 [ext_resource type="Script" path="res://game/states/entity_normal.gd" id="8_wpxrq"]
 [ext_resource type="Script" path="res://entities/entity_hungry.gd" id="9_sw2ms"]
@@ -69,17 +69,16 @@ _data = {
 }
 
 [node name="Entity" type="Node2D" node_paths=PackedStringArray("body", "mover", "animator", "state_machine")]
-script = ExtResource("1_nqskv")
+script = ExtResource("1_utrar")
 body = NodePath("EntityBody")
 mover = NodePath("EntityMover")
 animator = NodePath("AnimationPlayer")
 state_machine = NodePath("ANTiStateMachine")
 
-[node name="EntityDebugger" parent="." instance=ExtResource("7_82oy3")]
-visible = false
+[node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
 top_level = false
 
-[node name="State" type="Label" parent="EntityDebugger"]
+[node name="State" type="Label" parent="EntityBugger"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -94,9 +93,7 @@ grow_vertical = 0
 size_flags_horizontal = 4
 text = "DEBUG"
 
-[node name="Label2" type="Label" parent="EntityDebugger"]
-visible = false
-top_level = true
+[node name="Timers" type="Label" parent="EntityBugger"]
 offset_left = -60.0
 offset_top = 6.0
 offset_right = 63.0
@@ -121,13 +118,14 @@ unique_name_in_owner = true
 script = ExtResource("2_6l6tj")
 speed = 5.0
 capacity = 5.0
+eat_amount = 5.0
 lifetime_seconds = 120.0
-time_until_hungry_seconds = 5.0
+time_until_hungry_seconds = 100.0
 time_until_starvation_seconds = 20.0
 time_to_eat = 3.0
-time_until_rest = 20.0
-time_until_recovered = 3.0
-time_until_exhausted = 20.0
+time_until_rest = 2.0
+time_until_recovered = 10.0
+time_until_exhausted = 2.0
 
 [node name="EntityMover" type="Node" parent="."]
 unique_name_in_owner = true

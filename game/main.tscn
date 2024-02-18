@@ -110,3 +110,10 @@ _aerial_camera = NodePath("../MainDisplays/AerialView/MarginContainer2/AerialVie
 [node name="Colony" type="Node2D" parent="." node_paths=PackedStringArray("colony_map")]
 script = ExtResource("3_rb7dp")
 colony_map = NodePath("../MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Colony")
+
+[connection signal="mouse_entered" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_on_mouse_exited"]
+[connection signal="size_changed" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_set_attributes"]
+[connection signal="mouse_entered" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_mouse_exited"]
+[connection signal="size_changed" from="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_set_attributes"]

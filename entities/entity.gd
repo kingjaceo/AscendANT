@@ -1,92 +1,121 @@
 class_name Entity
 extends Node2D
-'''
-Entities expect:
-	1. An entity controller resource, containing:
-		1. Brain - makes decisions for the entity; signals mover with a new target
-		2. Body - tracks lifetime, health, and physical attributes; grabs food / digs; signals completion of timers
-		3. Mover - turns and moves; signals arrival at a new cell
+
+@export var body: EntityBody
+@export var mover: EntityMover
+@export var animator: AnimationPlayer
+var default_state_name: String = "NormalState"
+
+var home_map: GameMap
+var current_map: GameMap
+var current_cell: Vector2i
+
+@export var state_machine: ANTiStateMachine
+var ID: int
+var entity_name: String
+
+
+func _ready() -> void:
+	home_map = current_map
 	
-Entities should all:
-	1. Handle movement between worlds
-	2. Track their current map
-	3. Load a resource pointing to all the appropriate components
-'''
-
-var entity_count: int = 0
-var entity_id: int
-
-@export var _current_map: TileMap
-
-@onready var _body = %EntityBody
-@onready var _mover = %EntityMover
-
-var _hungry: bool = false
-var _target_cell: Vector2i
-var _target: Vector2
-var _current_cell: Vector2i
-var _point_path: Array[Vector2i]
-
-signal new_target
-
-func _ready():
-	entity_count += 1
-	entity_id = entity_count
-	
-	_connect_body()
-	_connect_brain()
 	_connect_mover()
+	_connect_body()
 	
-	#_brain.update_target()
+	state_machine.change_state(default_state_name)
 
 
-func die(cause: String):
-	print("Entity", entity_id, " died: ", cause)
-	queue_free()
+func update_current_cell():
+	current_cell = current_map.local_to_map(position)
+
+
+func _on_becoming_hungry() -> void:
+	body.starvation.start()
+	body.hungry = true
+	state_machine.change_state("SeekFoodState")
+
+
+func _on_tired() -> void:
+	body.exhaustion_timer.start()
+	body.tired = true
+
+
+func _on_recovered() -> void:
+	state_machine.change_state(default_state_name)
+
+
+func _on_eaten() -> void:
+	body.hungry = false
+	state_machine.change_state(default_state_name)
+
+
+func food_found(food_cell: Vector2i) -> void:
+	if body.hungry:
+		state_machine.change_state("EatingState", {"food_cell": food_cell})
+
+
+func _on_arrived_at_next_cell(): # on arrival, just ask the state machine to update itself
+	current_cell = current_map.local_to_map(position)
+	
+	# TODO: this sort of behavior should depend on additional modules, like "FoodSenser" and "WaterSenser" etc
+	_check_food()
+	_check_change_map()
+
+
+func _on_arrived_at_target() -> void:
+	_make_a_choice()
+
+
+func _check_food():
+	for cell in current_map.get_surrounding_cells(current_cell):
+		if cell == current_map.get_nearest_food_cell(cell):
+			food_found(cell)
+			return
+	
+	if current_map.has_food(current_cell):
+		food_found(current_cell)
+
+
+func _connect_mover():
+	mover.arrived_at_next_cell.connect(_on_arrived_at_next_cell) # ???
+	mover.arrived_at_target.connect(_on_arrived_at_target)
 
 
 func _connect_body():
-	_body.lifetime.timeout.connect(die.bind("old age"))
-	_body.starvation.timeout.connect(die.bind("starvation"))
-	#_body.hunger.timeout.connect(_brain.seek_food)
-
-func _connect_brain():
-	#_brain.new_target.connect(_mover.update_target)
-	#_brain.current_map = _current_map
-
-func _connect_mover():
-	#_mover.arrived_at_target.connect(_brain.on_arrival_at_target)
+	body.hunger.timeout.connect(_on_becoming_hungry)
+	body.eat_timer.timeout.connect(_on_eaten)
+	body.rest_timer.timeout.connect(_on_tired)
+	body.recovery_timer.timeout.connect(_on_recovered)
+	
+	body.lifetime.timeout.connect(die.bind("old age"))
+	body.starvation.timeout.connect(die.bind("starvation"))
+	body.exhaustion_timer.timeout.connect(die.bind("exhaustion"))
 
 
-func _update_target():
-	if _hungry:
-		_target_cell = _current_map.get_food_cell()
+func change_map(new_map: GameMap):
+	current_cell = new_map.get_entrance(current_map)
+	current_map = new_map
+	get_parent().remove_child(self)
+	current_map.add_child(self)
+
+	position = current_map.map_to_local(current_cell)
+
+
+func _check_change_map() -> void:
+	if current_cell in current_map.get_exits():
+		var new_map = current_map.get_exit(current_cell)
+		change_map(new_map)
+
+
+func _make_a_choice() -> void:
+	# the entity should assess its choices:
+	if body.hungry: 
+		state_machine.change_state("SeekFoodState")
+	elif body.tired:
+		state_machine.change_state("RestingState")
 	else:
-		_target_cell = _current_map.get_random_cell()
-	
-	_point_path = _current_map.get_point_path(_current_cell, _target_cell)
-	_target = _current_map.map_to_local(_target_cell)
-	emit_signal("new_target", _target)
+		state_machine.change_state(default_state_name)
 
 
-func _seek_food():
-	pass
-	
-func _on_arrival_at_target():
-	_current_cell = _target_cell
-	# check if there is food around
-	
-	# perform the current task, if any
-	
-	# change world, if necessary
-	
-	# update target
-	_update_target()
-	
-	
-# this simple brain should choose a random valid cell from the current world,
-# tell the mover to walk toward it, wait a few seconds, then tell the mover to
-# find a new target
-
-# this simple brain should listen for a hungry signal and change its behavior
-# upon becoming hungry: no longer should it give the mover new targets
+func die(cause: String) -> void:
+	print(entity_name, ID, " died: ", cause, "!")
+	queue_free()

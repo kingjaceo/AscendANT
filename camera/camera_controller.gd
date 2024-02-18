@@ -19,7 +19,8 @@ var _follow: Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_set_attributes()
+	zoom = _start_zoom
+	set_process(false)
 
 
 func _process(_delta):
@@ -74,16 +75,15 @@ func _zoom_at_point(zoom_change, point):
 		#global_position = c1
 
 
-func _on_vertical_view_mouse_entered():
+func _on_mouse_entered():
 	set_process(true)
 
 
-func _on_vertical_view_mouse_exited():
+func _on_mouse_exited():
 	set_process(false)
 
 
 func _set_attributes():
-	set_process(false)
 	_bounds = _game_map.get_bounds()
 	var viewport_width = _subviewport.size.x
 
@@ -91,27 +91,28 @@ func _set_attributes():
 	_max_zoom = Vector2(max_zoom, max_zoom)
 	_zoom_ratio =  float(viewport_width) / float(_bounds[1] - _bounds[0])
 	_min_zoom = Vector2(_zoom_ratio, _zoom_ratio)
+	zoom = clamp(zoom, _min_zoom, _max_zoom)
 	
 	limit_left = _bounds[0]
 	limit_right = _bounds[1]
 	limit_top = _bounds[2] - 800
 	limit_bottom = _bounds[3] + 1000
 	#position = Vector2((_bounds[1] - _bounds[0]) / 2, (_bounds[1] - _bounds[0]) / 2)
-	zoom = _start_zoom
-	
-	
+
+
 func _set_position(position_change: Vector2):
 	var new_position = position + position_change
 	var visible_half_width = _subviewport.size.x / (2 * zoom.x)
 	var min_x = _bounds[0] + visible_half_width
 	var max_x = _bounds[1] - visible_half_width
-
+	
 	var visible_half_height = _subviewport.size.y / (2 * zoom.y)
 	var min_y = _bounds[2] + visible_half_height - 800
 	var max_y = _bounds[3] - visible_half_height + 1000
 	var y = zoom.y*_subviewport.size.y/2
 	position.x = clamp(new_position.x, min_x, max_x)
 	position.y = clamp(new_position.y, min_y, max_y)
+
 
 func follow(node: Node2D):
 	_follow = node

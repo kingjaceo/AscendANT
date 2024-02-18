@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://qr20wmxddfv2"]
+[gd_scene load_steps=7 format=3 uid="uid://qr20wmxddfv2"]
 
 [ext_resource type="Texture2D" uid="uid://bn6xvnh025umv" path="res://colony/colony_tilesheet.ase" id="1_0apls"]
 [ext_resource type="PackedScene" uid="uid://cjvp0580bg7u7" path="res://colony/colony.tscn" id="1_g7rh7"]
-[ext_resource type="Texture2D" uid="uid://di1epdcpg7jpu" path="res://entities/ants/descendANT/descendANTs_blur.ase" id="4_p5fiu"]
 [ext_resource type="Texture2D" uid="uid://ejx4qsicobmr" path="res://colony/food_pile.ase" id="6_8ss8f"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_li7mm"]
@@ -72,52 +71,6 @@ layer_2/name = "Decoration"
 layer_2/tile_data = PackedInt32Array()
 
 [node name="ColonyMapDebugger" type="Node2D" parent="ColonyMap32"]
-
-[node name="MeasuringStick" type="Node2D" parent="."]
-position = Vector2(239, 1917)
-rotation = 1.5708
-scale = Vector2(0.519995, 0.519995)
-
-[node name="Sprite2D2" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-position = Vector2(-3980.81, 28.8609)
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D3" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-position = Vector2(-4384.66, 9.63138)
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D4" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-position = Vector2(-3771.19, 21.1677)
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D5" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-position = Vector2(-4794.28, 55.7871)
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D6" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-position = Vector2(-5209.67, 73.0965)
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D7" type="Sprite2D" parent="MeasuringStick"]
-texture_filter = 1
-texture = ExtResource("4_p5fiu")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

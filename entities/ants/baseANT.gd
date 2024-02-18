@@ -1,5 +1,5 @@
-#class_name BaseANT extends Node2D
-#
+class_name BaseANT extends Node2D
+
 #'''
 #All ANTs have the following behaviors:
 	#- wait / idle / rest
@@ -59,7 +59,7 @@
 #
 #enum MovementState {IDLE, WALK}
 #enum World {COLONY, OVERWORLD}
-#
+
 #func _ready():
 	#pheromone_map = Messenger.pheromone_map
 	#colony_map = Messenger.colony_map

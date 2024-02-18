@@ -38,7 +38,7 @@ func setup_timers():
 	lifetime.start()
 	
 	hunger = Timer.new()
-	hunger.one_shot = true
+
 	add_child(hunger)
 	hunger.wait_time = time_until_hungry_seconds
 	#hunger.timeout.connect(hungry.emit)
@@ -77,6 +77,7 @@ func eat(cell: Vector2i):
 	
 	# update timers
 	eat_timer.start()
+	hunger.stop()
 	starvation.stop()
 	hunger.wait_time = actual_hunger_time
 
