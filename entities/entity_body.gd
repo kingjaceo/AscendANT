@@ -2,7 +2,6 @@ class_name EntityBody
 extends Node
 
 @export var speed: float
-@export var capacity: float
 @export var eat_amount: float
 
 @export var lifetime_seconds: float

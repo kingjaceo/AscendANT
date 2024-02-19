@@ -9,4 +9,4 @@ func _init(cell: Vector2i, to: Array, from: Array) -> void:
 	coordinates = cell
 	accesses = to
 	accessed_by = from
-	dirt_left = 20
+	dirt_left = 50

@@ -117,15 +117,14 @@ speed_scale = 2.0
 unique_name_in_owner = true
 script = ExtResource("2_6l6tj")
 speed = 5.0
-capacity = 5.0
 eat_amount = 5.0
 lifetime_seconds = 120.0
-time_until_hungry_seconds = 100.0
+time_until_hungry_seconds = 10.0
 time_until_starvation_seconds = 20.0
 time_to_eat = 3.0
 time_until_rest = 2.0
-time_until_recovered = 10.0
-time_until_exhausted = 2.0
+time_until_recovered = 5.0
+time_until_exhausted = 20.0
 
 [node name="EntityMover" type="Node" parent="."]
 unique_name_in_owner = true

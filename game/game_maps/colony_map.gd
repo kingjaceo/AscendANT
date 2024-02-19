@@ -94,8 +94,8 @@ func take_food_from(cell: Vector2i, amount: float) -> float:
 	return amount_taken
 
 
-func excavate_from(cell: Vector2i, dirt_moved: float) -> float:
-	var excavated_cell = _colony_cells[cell].accesses[0]
+func excavate_from(from_cell: Vector2i, excavated_cell: Vector2i, dirt_moved: float) -> float:
+	excavated_cell = _colony_cells[from_cell].accesses[0]
 	var actual_dirt_moved = min(dirt_moved, _colony_cells[excavated_cell].dirt_left)
 	_colony_cells[excavated_cell].dirt_left -= actual_dirt_moved
 	if _colony_cells[excavated_cell].dirt_left <= 0:
@@ -104,6 +104,10 @@ func excavate_from(cell: Vector2i, dirt_moved: float) -> float:
 		set_cells_terrain_connect(WALKABLE_LAYER, [excavated_cell], 0, 0)
 		set_cell(DIGGABLE_LAYER, excavated_cell)
 	return actual_dirt_moved
+
+
+func dirt_left(at_cell: Vector2i) -> float:
+	return _colony_cells[at_cell].dirt_left
 
 
 func _setup_astar_grid() -> void:

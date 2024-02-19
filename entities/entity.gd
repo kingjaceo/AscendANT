@@ -10,6 +10,9 @@ var home_map: GameMap
 var current_map: GameMap
 var current_cell: Vector2i
 
+var _can_eat: bool = false
+var _target_food_cell: Vector2i
+
 @export var state_machine: ANTiStateMachine
 var ID: int
 var entity_name: String
@@ -31,48 +34,45 @@ func update_current_cell():
 func _on_becoming_hungry() -> void:
 	body.starvation.start()
 	body.hungry = true
-	state_machine.change_state("SeekFoodState")
+	_make_a_choice()
 
 
 func _on_tired() -> void:
 	body.exhaustion_timer.start()
 	body.tired = true
+	_make_a_choice()
 
 
 func _on_recovered() -> void:
-	state_machine.change_state(default_state_name)
+	body.tired = false
+	_make_a_choice()
+	
 
 
 func _on_eaten() -> void:
 	body.hungry = false
-	state_machine.change_state(default_state_name)
-
-
-func food_found(food_cell: Vector2i) -> void:
-	if body.hungry:
-		state_machine.change_state("EatingState", {"food_cell": food_cell})
+	_can_eat = false
+	_make_a_choice()
 
 
 func _on_arrived_at_next_cell(): # on arrival, just ask the state machine to update itself
 	current_cell = current_map.local_to_map(position)
-	
 	# TODO: this sort of behavior should depend on additional modules, like "FoodSenser" and "WaterSenser" etc
-	_check_food()
-	_check_change_map()
+	if (body.hungry and _check_food()) or _check_change_map():
+		_make_a_choice()
 
 
 func _on_arrived_at_target() -> void:
-	_make_a_choice()
+	#_make_a_choice()
+	pass
 
 
-func _check_food():
-	for cell in current_map.get_surrounding_cells(current_cell):
-		if cell == current_map.get_nearest_food_cell(cell):
-			food_found(cell)
-			return
-	
+func _check_food() -> bool:
 	if current_map.has_food(current_cell):
-		food_found(current_cell)
+		_target_food_cell = current_cell
+		_can_eat = body.hungry
+		return true
+	return false
 
 
 func _connect_mover():
@@ -100,15 +100,19 @@ func change_map(new_map: GameMap):
 	position = current_map.map_to_local(current_cell)
 
 
-func _check_change_map() -> void:
+func _check_change_map() -> bool:
 	if current_cell in current_map.get_exits():
 		var new_map = current_map.get_exit(current_cell)
 		change_map(new_map)
+		return true
+	return false
 
 
 func _make_a_choice() -> void:
 	# the entity should assess its choices:
-	if body.hungry: 
+	if _can_eat:
+		state_machine.change_state("EatingState", {"food_cell": _target_food_cell})
+	elif body.hungry: 
 		state_machine.change_state("SeekFoodState")
 	elif body.tired:
 		state_machine.change_state("RestingState")
