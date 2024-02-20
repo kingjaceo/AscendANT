@@ -30,6 +30,23 @@ tracks/0/keys = {
 "values": [Rect2(0, 0, 16, 16)]
 }
 
+[sub_resource type="Animation" id="Animation_c3n6i"]
+resource_name = "dig"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
+}
+
 [sub_resource type="Animation" id="Animation_7a50e"]
 resource_name = "idle"
 length = 2.0
@@ -62,23 +79,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(16, 16, 16, 16)]
-}
-
-[sub_resource type="Animation" id="Animation_c3n6i"]
-resource_name = "dig"
-length = 2.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AntSprite:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a1315"]
@@ -151,13 +151,15 @@ time_until_exhausted = 20.0
 [node name="EntityMover" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_tg0uc")
+_walk_speed = 200.0
+_turn_speed = 20.0
 
 [node name="Carrier" type="Node" parent="."]
 script = ExtResource("6_s28ob")
 
 [node name="Digger" type="Node" parent="."]
 script = ExtResource("6_231cp")
-dig_rate = 10.0
+dig_rate = 50.0
 dirt_capacity = 10.0
 
 [node name="ANTiStateMachine" type="Node" parent="."]
@@ -177,6 +179,8 @@ script = ExtResource("9_qjuw5")
 
 [node name="DiggingState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("11_waqhi")
+
+[node name="DumpState" type="Node" parent="ANTiStateMachine"]
 
 [node name="CameraFollowable" type="Node2D" parent="."]
 script = ExtResource("11_q4ndr")

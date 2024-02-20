@@ -17,6 +17,7 @@ func _ready():
 	
 	default_state_name = "SeekDiggableState"
 	current_map.cell_excavated.connect(_on_cell_excavated)
+	digger.dig_timer.timeout.connect(_on_finished_digging)
 	
 	super._ready()
 
@@ -28,6 +29,8 @@ func _on_arrived_at_next_cell():
 
 
 func _on_finished_digging():
+	var time_left = digger.dig_timer.time_left
+	_can_dig = false
 	_make_a_choice()
 
 

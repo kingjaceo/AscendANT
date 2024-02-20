@@ -38,4 +38,6 @@ func _update_timers():
 	text += "Til Exhaustion: " + str(snappedf(entity.body.exhaustion_timer.time_left, 0.1)) + "\n"
 	text += "Til Recovered: " + str(snappedf(entity.body.recovery_timer.time_left, 0.1)) + "\n"
 	text += "Til Done Eating: " + str(snappedf(entity.body.eat_timer.time_left, 0.1)) + "\n"
+	if entity.has_node("Digger"):
+		text += "Til Done Digging: " + str(snappedf(entity.digger.dig_timer.time_left, 0.1)) + "\n"
 	timers.text = text

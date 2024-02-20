@@ -9,4 +9,4 @@ func carry(resource_name: String, amount: float):
 		resources[resource_name] += min(capacity, amount)
 	else:
 		resources[resource_name] = min(capacity, amount)
-	capacity = min(capacity - amount, 0)
+	capacity = max(capacity - amount, 0)
