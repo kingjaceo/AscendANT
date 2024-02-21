@@ -51,7 +51,7 @@ func _create_ants():
 		_create_ant(_entity)
 		
 	# TEST: produce the first descendANTs
-	for i in range(10):
+	for i in range(1):
 		_create_ant(_descendANT)
 
 

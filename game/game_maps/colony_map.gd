@@ -69,25 +69,25 @@ func get_diggable_from_cell(cell: Vector2i) -> Vector2i:
 	return diggable_from_choices[randi() % len(diggable_from_choices)]
 
 
-func __create_colony_cells():
-	#var seeds = [Vector2i(10, 11), Vector2i(6, 11)]
-	var top = Vector2i(10, 11)
-	var depth = 34
-	var bottom = top + Vector2i(0, depth)
-	
-	var next = top + Vector2i(0, 1)
-	var current = top
-	var prev = null
-	
-	#expand_choices = [next]
-	#expand_choice = top
-	
-	for i in range(1, depth - 1):
-		next = top + Vector2i(0, 1)
-		var colony_cell = ColonyCell.new(current, [next], [prev])
-		_colony_cells[current] = colony_cell
-		prev = current
-		current = next
+#func __create_colony_cells():
+	##var seeds = [Vector2i(10, 11), Vector2i(6, 11)]
+	#var top = Vector2i(10, 11)
+	#var depth = 34
+	#var bottom = top + Vector2i(0, depth)
+	#
+	#var next = top + Vector2i(0, 1)
+	#var current = top
+	#var prev = null
+	#
+	##expand_choices = [next]
+	##expand_choice = top
+	#
+	#for i in range(1, depth - 1):
+		#next = top + Vector2i(0, 1)
+		#var colony_cell = ColonyCell.new(current, [next], [prev])
+		#_colony_cells[current] = colony_cell
+		#prev = current
+		#current = next
 
 
 func take_food_from(cell: Vector2i, amount: float) -> float:
@@ -97,14 +97,14 @@ func take_food_from(cell: Vector2i, amount: float) -> float:
 
 
 func excavate_from(from_cell: Vector2i, excavated_cell: Vector2i, dirt_moved: float) -> float:
-	excavated_cell = _colony_cells[from_cell].accesses[0]
+	#excavated_cell = _colony_cells[from_cell].accesses[0]
 	var actual_dirt_moved = min(dirt_moved, _colony_cells[excavated_cell].dirt_left)
 	_colony_cells[excavated_cell].dirt_left -= actual_dirt_moved
 	if _colony_cells[excavated_cell].dirt_left <= 0:
-		#expand_choice = cell
-		#cell_excavated.emit(excavated_cell)
+		_update_colony_cells(from_cell, excavated_cell)
 		set_cells_terrain_connect(WALKABLE_LAYER, [excavated_cell], 0, 0)
 		set_cell(DIGGABLE_LAYER, excavated_cell)
+		astar_grid.set_point_solid(excavated_cell, false)
 	return actual_dirt_moved
 
 
@@ -173,3 +173,11 @@ func _create_colony_cells() -> void:
 
 func get_colony_cell(cell: Vector2i) -> ColonyCell:
 	return _colony_cells[cell]
+
+
+func _update_colony_cells(from_cell: Vector2i, excavated_cell: Vector2i) -> void:
+	_colony_cells[from_cell].accesses.erase(excavated_cell)
+	if len(_colony_cells[from_cell].accesses) == 0:
+		diggable_from_choices.erase(from_cell)
+	_colony_cells[excavated_cell].accesses = _colony_cells[excavated_cell].accessed_by
+	diggable_from_choices.append(excavated_cell)
