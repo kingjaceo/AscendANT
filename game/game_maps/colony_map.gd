@@ -3,14 +3,16 @@ extends GameMap
 
 @export var pheromone_map: PheromoneMap
 @export var spawn_location: Vector2i = Vector2i(15, 11)
-@export var exit: Vector2i = Vector2i(10, -1)
-@export var entrance: Vector2i = Vector2i(10, 0)
+@export var exit: Vector2i = Vector2i(10, -7)
+@export var entrance: Vector2i = Vector2i(10, -6)
 @export var cell_size: Vector2 = Vector2(64, 64)
 @export var adjustment: Vector2 = cell_size / 2
 @export var temp_food_cell = Vector2i(7, 11)
 
 var diggable_from_choices: Array[Vector2i] = []
 var colony: Colony
+var dump_sites: Dictionary = {"dirt": Vector2i(10, -6)}
+var dump_amounts: Dictionary = {"dirt": 1000}
 
 var _valid_cells: Array[Vector2i]
 var _colony_cells = {}
@@ -108,6 +110,14 @@ func excavate_from(from_cell: Vector2i, excavated_cell: Vector2i, dirt_moved: fl
 
 func dirt_left(at_cell: Vector2i) -> float:
 	return _colony_cells[at_cell].dirt_left
+
+
+func get_dump_site(resource: String) -> Vector2i:
+	return dump_sites[resource]
+
+
+func dump(resource: String, amount: float) -> void:
+	dump_amounts[resource] += amount
 
 
 func _setup_astar_grid() -> void:

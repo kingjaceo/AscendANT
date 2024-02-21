@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cavji350dfjf4"]
+[gd_scene load_steps=22 format=3 uid="uid://cavji350dfjf4"]
 
 [ext_resource type="Script" path="res://entities/ants/descendANT/descendANT.gd" id="1_4bjrb"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="1_24okm"]
@@ -14,6 +14,8 @@
 [ext_resource type="Script" path="res://entities/entity_idle.gd" id="9_qjuw5"]
 [ext_resource type="Script" path="res://entities/camera_followable.gd" id="11_q4ndr"]
 [ext_resource type="Script" path="res://entities/ants/descendANT/digging.gd" id="11_waqhi"]
+[ext_resource type="Script" path="res://entities/ants/descendANT/dump.gd" id="14_m56kx"]
+[ext_resource type="Script" path="res://entities/ants/descendANT/seek_dump_site.gd" id="14_ys7sp"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
 length = 0.001
@@ -99,6 +101,7 @@ animator = NodePath("AnimationPlayer")
 state_machine = NodePath("ANTiStateMachine")
 
 [node name="EntityBugger" parent="." instance=ExtResource("1_24okm")]
+visible = false
 top_level = false
 
 [node name="State" type="Label" parent="EntityBugger"]
@@ -180,7 +183,11 @@ script = ExtResource("9_qjuw5")
 [node name="DiggingState" type="Node" parent="ANTiStateMachine"]
 script = ExtResource("11_waqhi")
 
+[node name="SeekDumpSiteState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("14_ys7sp")
+
 [node name="DumpState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("14_m56kx")
 
 [node name="CameraFollowable" type="Node2D" parent="."]
 script = ExtResource("11_q4ndr")

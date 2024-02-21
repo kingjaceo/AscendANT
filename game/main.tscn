@@ -43,7 +43,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer"]
 unique_name_in_owner = true
 handle_input_locally = false
-size = Vector2i(2, 2)
+size = Vector2i(522, 600)
 render_target_update_mode = 4
 
 [node name="Colony" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("pheromone_map", "camera") instance=ExtResource("5_oppt1")]
@@ -85,7 +85,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/AerialView/MarginContainer2/AerialView"]
 handle_input_locally = false
-size = Vector2i(2, 2)
+size = Vector2i(522, 600)
 render_target_update_mode = 4
 
 [node name="PheromoneMap" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("colony_map", "camera") instance=ExtResource("6_oj50q")]
