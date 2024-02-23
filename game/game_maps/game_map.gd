@@ -2,13 +2,13 @@ class_name GameMap
 extends TileMap
 
 @export var camera: Camera2D
-
-var spawn_locations: Array[Vector2i]
-var astar_grid: AStarGrid2D
+@export var other_maps: Array[GameMap]
 
 var _entrances_from: Dictionary # {GameMap: Vector2i}
 var _exits_at: Dictionary # {Vector2i: GameMap}
 
+const BACKGROUND_LAYER = 0
+const WALKABLE_LAYER = 1
 
 func set_entrance(map: GameMap, cell: Vector2i) -> void:
 	_entrances_from[map] = cell
@@ -47,32 +47,12 @@ func get_bounds() -> Array[float]:
 	return bounds
 
 
-func get_point_path(_start: Vector2i, _end: Vector2i) -> PackedVector2Array:
-	return PackedVector2Array()
-
-
-func get_nearest_food_cell(_cell: Vector2i) -> Vector2i:
-	return Vector2i()
-
-
 func get_entrance_cell() -> Vector2i:
 	return Vector2i()
 
 
 func get_random_cell() -> Vector2i:
 	return Vector2i()
-
-
-func food_at(_cell: Vector2i) -> bool:
-	return false
-
-
-func take_food_from(_cell: Vector2i, _amount: float) -> float:
-	return 0
-
-
-func _create_map_cells() -> void:
-	return
 
 
 func _hex_distance(coord1, coord2):
