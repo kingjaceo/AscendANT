@@ -1,3 +1,4 @@
+class_name CameraController
 extends Camera2D
 
 var fast_zoom_multiplier = 4
@@ -19,6 +20,7 @@ var _follow: Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_set_attributes()
 	zoom = _start_zoom
 	set_process(false)
 

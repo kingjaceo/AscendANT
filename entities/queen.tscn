@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=3 uid="uid://blyjcm0ud4k81"]
+
+[ext_resource type="Script" path="res://entities/entity.gd" id="1_uqna2"]
+[ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://entities/ants/queen.ase" id="2_3igfy"]
+[ext_resource type="Script" path="res://entities/egg_hatcher.gd" id="2_6csja"]
+[ext_resource type="Script" path="res://game/states/state_machine.gd" id="2_vni38"]
+[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="3_y64mc"]
+[ext_resource type="Script" path="res://entities/ANTiStateModule.gd" id="4_iinho"]
+[ext_resource type="Script" path="res://entities/egg_layer.gd" id="4_lhuif"]
+[ext_resource type="Script" path="res://entities/mover.gd" id="8_ljb2v"]
+
+[node name="Queen" type="Node2D"]
+script = ExtResource("1_uqna2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_3igfy")
+region_enabled = true
+region_rect = Rect2(0, 0, 128, 64)
+
+[node name="EntityDebugger" parent="." instance=ExtResource("3_y64mc")]
+
+[node name="ANTiStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_vni38")
+
+[node name="ANTiStateModules" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="EggHatcher" type="Node" parent="ANTiStateModules"]
+script = ExtResource("2_6csja")
+
+[node name="EggLayer" type="Node" parent="ANTiStateModules"]
+script = ExtResource("4_lhuif")
+
+[node name="ANTiStateModule" type="Node" parent="ANTiStateModules"]
+script = ExtResource("4_iinho")
+
+[node name="Modules" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Mover" type="Node" parent="Modules"]
+script = ExtResource("8_ljb2v")

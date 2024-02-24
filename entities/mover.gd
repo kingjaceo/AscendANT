@@ -1,7 +1,7 @@
 class_name EntityMover 
 extends Node
 
-var moving = true
+var moving = false
 var entity: Entity
 
 @export var _walk_speed: float = 100
@@ -18,7 +18,7 @@ signal arrived_at_next_cell
 signal arrived_at_target
 
 func _ready():
-	entity = get_parent()
+	entity = owner
 
 
 func path_to(target_cell: Vector2i) -> void:
@@ -31,6 +31,11 @@ func path_to(target_cell: Vector2i) -> void:
 	# TODO: start the animation
 
 
+func move_to(target: Vector2) -> void:
+	moving = true
+	_target = target
+
+
 func idle() -> void:
 	moving = false
 
@@ -38,7 +43,7 @@ func idle() -> void:
 func _physics_process(delta) -> void:
 	if moving:
 		_turn_and_move(delta)
-		_check_distance()
+		#_check_distance()
 
 
 func _turn_and_move(delta) -> void:

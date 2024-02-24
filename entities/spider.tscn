@@ -69,10 +69,9 @@ script = ExtResource("1_gwo3j")
 unique_name_in_owner = true
 script = ExtResource("3_limm1")
 
-[node name="EntityBody" type="Node" parent="." node_paths=PackedStringArray("_mover")]
+[node name="EntityBody" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_jlw0w")
-_mover = NodePath("../EntityMover")
 
 [node name="AntSprite" type="Sprite2D" parent="EntityBody"]
 texture_filter = 1

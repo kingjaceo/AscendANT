@@ -91,39 +91,13 @@ _data = {
 "walk": SubResource("Animation_26fly")
 }
 
-[node name="descendANT" type="Node2D" node_paths=PackedStringArray("digger", "carrier", "body", "mover", "animator", "state_machine")]
+[node name="descendANT" type="Node2D" node_paths=PackedStringArray("digger", "carrier")]
 script = ExtResource("1_4bjrb")
 digger = NodePath("Digger")
 carrier = NodePath("Carrier")
-body = NodePath("EntityBody")
-mover = NodePath("EntityMover")
-animator = NodePath("AnimationPlayer")
-state_machine = NodePath("ANTiStateMachine")
 
 [node name="EntityBugger" parent="." instance=ExtResource("1_24okm")]
 top_level = false
-
-[node name="State" type="Label" parent="EntityBugger"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -31.0
-offset_top = -32.0
-offset_right = 31.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-text = "DEBUG"
-
-[node name="Timers" type="Label" parent="EntityBugger"]
-offset_left = -144.0
-offset_top = 6.0
-offset_right = 147.0
-offset_bottom = 353.0
-text = "DEBUG LARGE"
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1

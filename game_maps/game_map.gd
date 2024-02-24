@@ -1,14 +1,23 @@
 class_name GameMap
 extends TileMap
 
-@export var camera: Camera2D
 @export var other_maps: Array[GameMap]
+
+@onready var modules = %Modules
+@onready var entities = %Entities
 
 var _entrances_from: Dictionary # {GameMap: Vector2i}
 var _exits_at: Dictionary # {Vector2i: GameMap}
 
 const BACKGROUND_LAYER = 0
 const WALKABLE_LAYER = 1
+
+func _ready():
+	for entity in entities.get_children():
+		var map_modules: Array[MapModule]
+		map_modules.assign(modules.get_children())
+		entity.connect_map_modules(map_modules)
+
 
 func set_entrance(map: GameMap, cell: Vector2i) -> void:
 	_entrances_from[map] = cell

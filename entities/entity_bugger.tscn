@@ -5,3 +5,14 @@
 [node name="EntityDebugger" type="Node2D"]
 top_level = true
 script = ExtResource("1_c60ll")
+
+[node name="State" type="Label" parent="."]
+offset_top = -82.0
+offset_right = 45.0
+offset_bottom = -56.0
+text = "State"
+
+[node name="DebugInfo" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 26.0
+text = "Debug"

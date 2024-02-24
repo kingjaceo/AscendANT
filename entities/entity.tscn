@@ -1,16 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=11 format=3 uid="uid://c6roeqeju6rrh"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_utrar"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="2_4qg3q"]
-[ext_resource type="Script" path="res://entities/entity_body.gd" id="2_6l6tj"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="3_811sa"]
-[ext_resource type="Script" path="res://entities/mover.gd" id="4_uy6hw"]
+[ext_resource type="Script" path="res://entities/wander.gd" id="5_6bdh4"]
+[ext_resource type="Script" path="res://entities/mover.gd" id="6_age8p"]
 [ext_resource type="Script" path="res://game/states/state_machine.gd" id="7_mc2vr"]
-[ext_resource type="Script" path="res://game/states/entity_normal.gd" id="8_wpxrq"]
-[ext_resource type="Script" path="res://entities/entity_hungry.gd" id="9_sw2ms"]
-[ext_resource type="Script" path="res://entities/entity_eating.gd" id="10_5tc74"]
-[ext_resource type="Script" path="res://entities/camera_followable.gd" id="11_obuqa"]
-[ext_resource type="Script" path="res://entities/entity_idle.gd" id="11_tuuc5"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
 length = 0.001
@@ -68,37 +63,8 @@ _data = {
 "walk": SubResource("Animation_26fly")
 }
 
-[node name="Entity" type="Node2D" node_paths=PackedStringArray("body", "mover", "animator", "state_machine")]
+[node name="Entity" type="Node2D"]
 script = ExtResource("1_utrar")
-body = NodePath("EntityBody")
-mover = NodePath("EntityMover")
-animator = NodePath("AnimationPlayer")
-state_machine = NodePath("ANTiStateMachine")
-
-[node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
-top_level = false
-
-[node name="State" type="Label" parent="EntityBugger"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -31.0
-offset_top = -32.0
-offset_right = 31.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-text = "DEBUG"
-
-[node name="Timers" type="Label" parent="EntityBugger"]
-offset_left = -60.0
-offset_top = 6.0
-offset_right = 63.0
-offset_bottom = 32.0
-text = "DEBUG LARGE"
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -113,38 +79,21 @@ libraries = {
 }
 speed_scale = 2.0
 
-[node name="EntityBody" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("2_6l6tj")
-speed = 5.0
-eat_amount = 5.0
-lifetime_seconds = 120.0
-time_until_hungry_seconds = 10.0
-time_until_starvation_seconds = 20.0
-time_to_eat = 3.0
-time_until_rest = 2.0
-time_until_recovered = 5.0
-time_until_exhausted = 20.0
+[node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
+top_level = false
 
-[node name="EntityMover" type="Node" parent="."]
+[node name="ANTiStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("4_uy6hw")
-
-[node name="ANTiStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("7_mc2vr")
-initial_state = NodePath("RestingState")
 
-[node name="NormalState" type="Node" parent="ANTiStateMachine"]
-script = ExtResource("8_wpxrq")
+[node name="ANTiStateModules" type="Node" parent="."]
+unique_name_in_owner = true
 
-[node name="SeekFoodState" type="Node" parent="ANTiStateMachine"]
-script = ExtResource("9_sw2ms")
+[node name="Wander" type="Node" parent="ANTiStateModules"]
+script = ExtResource("5_6bdh4")
 
-[node name="EatingState" type="Node" parent="ANTiStateMachine"]
-script = ExtResource("10_5tc74")
+[node name="Modules" type="Node" parent="."]
+unique_name_in_owner = true
 
-[node name="RestingState" type="Node" parent="ANTiStateMachine"]
-script = ExtResource("11_tuuc5")
-
-[node name="CameraFollowable" type="Node2D" parent="."]
-script = ExtResource("11_obuqa")
+[node name="Mover" type="Node" parent="Modules"]
+script = ExtResource("6_age8p")

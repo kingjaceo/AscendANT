@@ -1,12 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://da66apdekq5y0"]
+[gd_scene load_steps=7 format=3 uid="uid://da66apdekq5y0"]
 
 [ext_resource type="Script" path="res://game/time_controller.gd" id="1_j11p5"]
 [ext_resource type="Script" path="res://game/messenger.gd" id="1_njwge"]
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
+[ext_resource type="PackedScene" uid="uid://bb1v0xld5hp6g" path="res://game_maps/overworld_map.tscn" id="3_2mdjj"]
 [ext_resource type="Script" path="res://camera/camera_controller.gd" id="3_cfq81"]
 [ext_resource type="Script" path="res://colony/colony.gd" id="3_rb7dp"]
-[ext_resource type="PackedScene" uid="uid://cjvp0580bg7u7" path="res://colony/colony.tscn" id="5_oppt1"]
-[ext_resource type="PackedScene" uid="uid://cwl31u7x6k44h" path="res://overworld/pheromone_map.tscn" id="6_oj50q"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_j11p5")
@@ -43,24 +42,8 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer"]
 unique_name_in_owner = true
 handle_input_locally = false
-size = Vector2i(522, 600)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
-
-[node name="Colony" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("pheromone_map", "camera") instance=ExtResource("5_oppt1")]
-pheromone_map = NodePath("../../../../../AerialView/MarginContainer2/AerialView/SubViewport/PheromoneMap")
-camera = NodePath("../Camera")
-
-[node name="Camera" type="Camera2D" parent="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_game_map", "_subviewport")]
-zoom = Vector2(0.88, 0.88)
-limit_left = 463
-limit_top = -1000
-limit_right = 0
-limit_bottom = 2000
-editor_draw_limits = true
-script = ExtResource("3_cfq81")
-_game_map = NodePath("../Colony")
-_subviewport = NodePath("..")
-_start_zoom = Vector2(1.5, 1.5)
 
 [node name="AerialView" type="PanelContainer" parent="MainDisplays"]
 custom_minimum_size = Vector2(400, 0)
@@ -85,35 +68,25 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainDisplays/AerialView/MarginContainer2/AerialView"]
 handle_input_locally = false
-size = Vector2i(522, 600)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
-[node name="PheromoneMap" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("colony_map", "camera") instance=ExtResource("6_oj50q")]
-colony_map = NodePath("../../../../../VerticalView/MarginContainer/SubViewportContainer/SubViewport/Colony")
-camera = NodePath("../AerialCamera")
+[node name="OverworldMap" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" instance=ExtResource("3_2mdjj")]
 
-[node name="AerialCamera" type="Camera2D" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("_game_map", "_subviewport")]
-zoom = Vector2(0.1, 0.1)
+[node name="Camera2D" type="Camera2D" parent="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" node_paths=PackedStringArray("_game_map", "_subviewport")]
 script = ExtResource("3_cfq81")
-_game_map = NodePath("../PheromoneMap")
+_game_map = NodePath("../OverworldMap")
 _subviewport = NodePath("..")
-_start_zoom = Vector2(0.5, 0.5)
+_start_zoom = Vector2(1, 1)
 
 [node name="UI" parent="." instance=ExtResource("2_yvpsu")]
 visible = false
 
-[node name="Messenger" type="Node2D" parent="." node_paths=PackedStringArray("_vertical_camera", "_aerial_camera")]
+[node name="Messenger" type="Node2D" parent="."]
 script = ExtResource("1_njwge")
-_vertical_camera = NodePath("../MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera")
-_aerial_camera = NodePath("../MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera")
 
-[node name="Colony" type="Node2D" parent="." node_paths=PackedStringArray("colony_map")]
+[node name="Colony" type="Node2D" parent="."]
 script = ExtResource("3_rb7dp")
-colony_map = NodePath("../MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Colony")
 
-[connection signal="mouse_entered" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_on_mouse_exited"]
-[connection signal="size_changed" from="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport" to="MainDisplays/VerticalView/MarginContainer/SubViewportContainer/SubViewport/Camera" method="_set_attributes"]
-[connection signal="mouse_entered" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_on_mouse_exited"]
-[connection signal="size_changed" from="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/AerialCamera" method="_set_attributes"]
+[connection signal="mouse_entered" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/Camera2D" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="MainDisplays/AerialView/MarginContainer2/AerialView" to="MainDisplays/AerialView/MarginContainer2/AerialView/SubViewport/Camera2D" method="_on_mouse_exited"]
