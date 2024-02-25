@@ -19,9 +19,7 @@ func _setup():
 	exhaustion_timer = _setup_timer(exhaustion_timer, time_until_exhausted, false)
 	
 	choice_making_signals = [rest_timer.timeout, recovery_timer.timeout]
-	#for choice_signal in choice_making_signals:
-		#choice_signal.connect(_update_priority)
-		
+	
 	death_signals = {exhaustion_timer.timeout: "exhaustion",}
 	
 	rest_timer.timeout.connect(exhaustion_timer.start)

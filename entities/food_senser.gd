@@ -17,6 +17,6 @@ func _setup():
 	mover.arrived_at_target.connect(_sense_food)
 
 
-func _sense_food(cell: Vector2i):
-	if _food_module.food_at(cell):
-		food_detected.emit(cell)
+func _sense_food():
+	if _food_module.food_at(entity.current_cell):
+		food_detected.emit(entity.current_cell)

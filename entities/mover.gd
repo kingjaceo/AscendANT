@@ -74,7 +74,8 @@ func _move_forward(delta: float) -> void:
 func _check_distance() -> void:
 	var distance = (_target - entity.position).length()
 	if distance < TOLERANCE:
-		arrived_at_target.emit(_target)
+		entity.current_cell = _target
+		arrived_at_target.emit()
 		#arrived_at_next_cell.emit()
 		#_current_index += 1
 		#var arrived_at_last_cell_in_point_path = _current_index >= len(_point_path_to_target)

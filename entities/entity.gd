@@ -3,6 +3,7 @@ extends Node2D
 
 @export var entity_name: String
 var ID
+
 @onready var state_machine = %ANTiStateMachine
 @onready var state_modules = %ANTiStateModules
 @onready var entity_modules = %Modules

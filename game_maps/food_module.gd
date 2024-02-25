@@ -9,3 +9,7 @@ func get_food_source() -> Vector2i:
 
 func food_at(cell: Vector2i) -> bool:
 	return true
+
+
+func take_food_from(cell: Vector2i, amount: float) -> float:
+	return 10

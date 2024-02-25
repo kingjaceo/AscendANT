@@ -5,6 +5,7 @@ extends ANTiStateModule
 
 var lifetime: Timer
 
+
 func _setup():
 	lifetime = _setup_timer(lifetime, lifetime_seconds, true)
 	

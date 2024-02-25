@@ -87,6 +87,7 @@ libraries = {
 speed_scale = 2.0
 
 [node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
+visible = false
 top_level = false
 
 [node name="CameraFollowable" type="Node2D" parent="."]
@@ -106,7 +107,8 @@ script = ExtResource("7_gg2iy")
 script = ExtResource("9_ha6ve")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
-time_until_hungry_seconds = 3.0
+eat_amount = 10.0
+time_until_hungry_seconds = 20.0
 
 [node name="Rester" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("8_l3i4m")
