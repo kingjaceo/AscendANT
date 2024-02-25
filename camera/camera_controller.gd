@@ -22,7 +22,7 @@ var _follow: Node2D
 func _ready():
 	_set_attributes()
 	zoom = _start_zoom
-	set_process(false)
+	set_process_input(false)
 
 
 func _process(_delta):
@@ -78,11 +78,11 @@ func _zoom_at_point(zoom_change, point):
 
 
 func _on_mouse_entered():
-	set_process(true)
+	set_process_input(true)
 
 
 func _on_mouse_exited():
-	set_process(false)
+	set_process_input(false)
 
 
 func _set_attributes():
@@ -117,4 +117,9 @@ func _set_position(position_change: Vector2):
 
 
 func follow(node: Node2D):
+	node.died.connect(unfollow)
 	_follow = node
+
+
+func unfollow() -> void:
+	_follow = null

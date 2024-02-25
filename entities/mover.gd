@@ -1,8 +1,7 @@
-class_name EntityMover 
-extends Node
+class_name Mover 
+extends EntityModule
 
 var moving = false
-var entity: Entity
 
 @export var _walk_speed: float = 100
 @export var _turn_speed: float = 10
@@ -17,9 +16,6 @@ const EPSILON = 0.001
 signal arrived_at_next_cell
 signal arrived_at_target
 
-func _ready():
-	entity = owner
-
 
 func path_to(target_cell: Vector2i) -> void:
 	_point_path_to_target = entity.current_map.get_point_path(entity.current_cell, target_cell)
@@ -27,8 +23,6 @@ func path_to(target_cell: Vector2i) -> void:
 	_target = _point_path_to_target[_current_index]
 
 	moving = true
-	
-	# TODO: start the animation
 
 
 func move_to(target: Vector2) -> void:
@@ -40,10 +34,25 @@ func idle() -> void:
 	moving = false
 
 
+func get_debug_text() -> String:
+	return "Mover Target: " + str(_target)
+
+
+func get_debug_draw() -> Dictionary:
+	#var pos = owner.current_map.to_global(_target)
+	var pos = _target - owner.position
+	return {"position": pos, "color": Color.BLUE, "size": 10}
+
+
+func _setup() -> void:
+	choice_making_signals = [arrived_at_target]
+	death_signals = {}
+
+
 func _physics_process(delta) -> void:
 	if moving:
 		_turn_and_move(delta)
-		#_check_distance()
+		_check_distance()
 
 
 func _turn_and_move(delta) -> void:
@@ -65,11 +74,12 @@ func _move_forward(delta: float) -> void:
 func _check_distance() -> void:
 	var distance = (_target - entity.position).length()
 	if distance < TOLERANCE:
-		arrived_at_next_cell.emit()
-		_current_index += 1
-		var arrived_at_last_cell_in_point_path = _current_index >= len(_point_path_to_target)
-		if arrived_at_last_cell_in_point_path:
-			moving = false
-			arrived_at_target.emit()
-		else:
-			_target = _point_path_to_target[_current_index]
+		arrived_at_target.emit(_target)
+		#arrived_at_next_cell.emit()
+		#_current_index += 1
+		#var arrived_at_last_cell_in_point_path = _current_index >= len(_point_path_to_target)
+		#if arrived_at_last_cell_in_point_path:
+			#moving = false
+			#arrived_at_target.emit()
+		#else:
+			#_target = _point_path_to_target[_current_index]

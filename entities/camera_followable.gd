@@ -12,5 +12,5 @@ func _input(event):
 		# Get the mouse position in global coordinates
 		var mouse_global = get_global_mouse_position()
 		var distance = (mouse_global - entity.position).length()
-		if distance < 6:
+		if distance < 20:
 			entity.current_map.camera.follow(entity)

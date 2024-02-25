@@ -22,7 +22,7 @@ func clear_connections():
 	_egg_module = null
 
 
-func connect_map_modules(map_modules: Array[MapModule]) -> void:
+func connect_map_modules(map_modules: Array[Node]) -> void:
 	for map_module in map_modules:
 		if map_module.name == "Eggs":
 			_egg_module = map_module

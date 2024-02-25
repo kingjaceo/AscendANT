@@ -1,76 +1,65 @@
-class_name EntityBody 
-extends Node
+class_name Body 
+extends ANTiStateModule
 
-@export var speed: float
+@export var mover: Mover
+@export var food_senser: FoodSenser
+
 @export var eat_amount: float
 
-@export var lifetime_seconds: float
-@export var time_until_hungry_seconds: float
-@export var time_until_starvation_seconds: float
-@export var time_to_eat: float
-@export var time_until_rest: float
-@export var time_until_recovered: float
-@export var time_until_exhausted: float
+@export var time_until_hungry_seconds: float = 40
+@export var time_until_starvation_seconds: float = 40
+@export var time_to_eat: float = 3
 
-var entity: Entity
+var _food_module: MapModule
+var _last_food_cell: Vector2i
+
 var hungry: bool
 var tired: bool
 
-var lifetime: Timer
 var hunger: Timer
 var starvation: Timer
 var eat_timer: Timer
-var rest_timer: Timer
-var recovery_timer: Timer
-var exhaustion_timer: Timer
 
 
-func _ready():
-	entity = get_parent()
-	setup_timers()
+func clear_connections():
+	_food_module = null
 
 
-func setup_timers():
-	lifetime = Timer.new()
-	add_child(lifetime)
-	lifetime.wait_time = lifetime_seconds 
-	lifetime.start()
+func connect_map_modules(map_modules: Array[Node]) -> void:
+	for module in map_modules:
+		if module.name == "Food":
+			_food_module = module
+
+
+func _setup():
+	hunger = _setup_timer(hunger, time_until_hungry_seconds, true)
+	starvation = _setup_timer(starvation, time_until_starvation_seconds, false)
+	eat_timer = _setup_timer(eat_timer, time_to_eat, false)
 	
-	hunger = Timer.new()
-
-	add_child(hunger)
-	hunger.wait_time = time_until_hungry_seconds
-	#hunger.timeout.connect(hungry.emit)
-	hunger.start()
+	choice_making_signals = [hunger.timeout, eat_timer.timeout]
+	death_signals = {starvation.timeout: "starvation"}
 	
-	starvation = Timer.new()
-	add_child(starvation)
-	starvation.wait_time = time_until_starvation_seconds
-	
-	eat_timer = Timer.new()
-	eat_timer.one_shot = true
-	add_child(eat_timer)
-	eat_timer.wait_time = time_to_eat
-	
-	rest_timer = Timer.new()
-	rest_timer.one_shot = true
-	add_child(rest_timer)
-	rest_timer.wait_time = time_until_rest
-	rest_timer.start()
-	
-	recovery_timer = Timer.new()
-	recovery_timer.one_shot = true
-	add_child(recovery_timer)
-	recovery_timer.wait_time = time_until_recovered
-	
-	exhaustion_timer = Timer.new()
-	add_child(exhaustion_timer)
-	exhaustion_timer.wait_time = time_until_exhausted
+	food_senser.food_detected.connect(_on_food_detected)
+	hunger.timeout.connect(hunger.stop)
+	hunger.timeout.connect(starvation.start)
 
 
-func eat(cell: Vector2i):
+func update_priority() -> void:
+	if not starvation.is_stopped() and priority < 3:
+		priority = 3
+		behavior = _seek_food
+
+
+func _seek_food() -> void:
+	if entity.home_map == entity.current_map:
+		mover.move_to(_food_module.get_food_source())
+	else:
+		mover.move_to(Vector2.ZERO)
+
+
+func _eat():
 	# calculate new hunger level, based on available food
-	var amount_eaten = entity.current_map.take_food_from(cell, eat_amount)
+	var amount_eaten = _food_module.take_food_from(_last_food_cell, eat_amount)
 	var percentage = amount_eaten / eat_amount
 	var actual_hunger_time = time_until_hungry_seconds * percentage
 	
@@ -81,7 +70,19 @@ func eat(cell: Vector2i):
 	hunger.wait_time = actual_hunger_time
 
 
-func rest():
-	rest_timer.stop()
-	recovery_timer.start()
-	exhaustion_timer.stop()
+func get_debug_text() -> String:
+	var text = ""
+	text += "Hunger: " + get_timer_time(hunger) + "\n"
+	text += "Starvation: " + get_timer_time(starvation)
+	return text
+
+
+func get_timer_time(timer: Timer) -> String:
+	return str(snappedf(timer.time_left, 0.01)) + " s"
+
+
+func _on_food_detected(cell: Vector2i):
+	_last_food_cell = cell
+	if not starvation.is_stopped():
+		priority = 10
+		behavior = _eat
