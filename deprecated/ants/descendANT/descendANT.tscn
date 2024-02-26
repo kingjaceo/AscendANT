@@ -1,0 +1,166 @@
+[gd_scene load_steps=22 format=3 uid="uid://cavji350dfjf4"]
+
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/descendANT.gd" id="1_4bjrb"]
+[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="1_24okm"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="3_2rt8f"]
+[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="3_mb72a"]
+[ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="4_tg0uc"]
+[ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="5_yy3np"]
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/digger.gd" id="6_231cp"]
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/carrier.gd" id="6_s28ob"]
+[ext_resource type="Script" path="res://deprecated/seek_diggable.gd" id="6_tdoyj"]
+[ext_resource type="Script" path="res://deprecated/entity_hungry.gd" id="7_k1gn1"]
+[ext_resource type="Script" path="res://deprecated/entity_eating.gd" id="8_53k2h"]
+[ext_resource type="Script" path="res://deprecated/entity_idle.gd" id="9_qjuw5"]
+[ext_resource type="Script" path="res://deprecated/camera_followable.gd" id="11_q4ndr"]
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/digging.gd" id="11_waqhi"]
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/dump.gd" id="14_m56kx"]
+[ext_resource type="Script" path="res://deprecated/ants/descendANT/seek_dump_site.gd" id="14_ys7sp"]
+
+[sub_resource type="Animation" id="Animation_ogkkb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_c3n6i"]
+resource_name = "dig"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_7a50e"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)]
+}
+
+[sub_resource type="Animation" id="Animation_26fly"]
+resource_name = "walk"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AntSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(16, 16, 16, 16)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a1315"]
+_data = {
+"RESET": SubResource("Animation_ogkkb"),
+"dig": SubResource("Animation_c3n6i"),
+"idle": SubResource("Animation_7a50e"),
+"walk": SubResource("Animation_26fly")
+}
+
+[node name="descendANT" type="Node2D" node_paths=PackedStringArray("digger", "carrier")]
+script = ExtResource("1_4bjrb")
+digger = NodePath("Digger")
+carrier = NodePath("Carrier")
+
+[node name="EntityBugger" parent="." instance=ExtResource("1_24okm")]
+top_level = false
+
+[node name="AntSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5708
+texture = ExtResource("3_2rt8f")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_a1315")
+}
+speed_scale = 2.0
+
+[node name="EntityBody" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_mb72a")
+speed = 5.0
+lifetime_seconds = 120.0
+time_until_hungry_seconds = 100.0
+time_until_starvation_seconds = 100.0
+time_to_eat = 3.0
+time_until_rest = 100.0
+time_until_recovered = 3.0
+time_until_exhausted = 20.0
+
+[node name="EntityMover" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_tg0uc")
+_walk_speed = 200.0
+_turn_speed = 20.0
+
+[node name="Carrier" type="Node" parent="."]
+script = ExtResource("6_s28ob")
+
+[node name="Digger" type="Node" parent="."]
+script = ExtResource("6_231cp")
+dig_rate = 50.0
+dirt_capacity = 10.0
+
+[node name="ANTiStateMachine" type="Node" parent="."]
+script = ExtResource("5_yy3np")
+
+[node name="SeekDiggableState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("6_tdoyj")
+
+[node name="SeekFoodState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("7_k1gn1")
+
+[node name="EatingState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("8_53k2h")
+
+[node name="RestingState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("9_qjuw5")
+
+[node name="DiggingState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("11_waqhi")
+
+[node name="SeekDumpSiteState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("14_ys7sp")
+
+[node name="DumpState" type="Node" parent="ANTiStateMachine"]
+script = ExtResource("14_m56kx")
+
+[node name="CameraFollowable" type="Node2D" parent="."]
+script = ExtResource("11_q4ndr")

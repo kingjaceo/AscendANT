@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://bqkt1m1ykdt85"]
+
+[ext_resource type="Script" path="res://camera/camera_controller.gd" id="1_qegwf"]
+[ext_resource type="PackedScene" uid="uid://d22076d10lu42" path="res://camera/camera_bugger.tscn" id="2_kxhv0"]
+[ext_resource type="Script" path="res://camera/camera_mover.gd" id="3_tdgu5"]
+[ext_resource type="Script" path="res://camera/camera_zoomer.gd" id="4_offcg"]
+[ext_resource type="Script" path="res://camera/camera_follower.gd" id="5_0gvdw"]
+
+[node name="Camera2D" type="Camera2D"]
+script = ExtResource("1_qegwf")
+
+[node name="CameraBugger" parent="." instance=ExtResource("2_kxhv0")]
+
+[node name="Modules" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="SmoothMover" type="Node" parent="Modules"]
+script = ExtResource("3_tdgu5")
+
+[node name="SmoothZoomer" type="Node" parent="Modules"]
+script = ExtResource("4_offcg")
+
+[node name="SmoothFollower" type="Node" parent="Modules" node_paths=PackedStringArray("mover")]
+script = ExtResource("5_0gvdw")
+mover = NodePath("../SmoothMover")

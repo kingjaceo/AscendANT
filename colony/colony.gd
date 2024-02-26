@@ -14,8 +14,8 @@ var pheromone_map: PheromoneMap
 @export var colony_map: GameMap
 
 #var _baseANT = preload("res://entities/ants/baseANT.tscn")
-var _ANT = preload("res://entities/ants/ANT.tscn")
-var _descendANT = preload("res://entities/ants/descendANT/descendANT.tscn")
+#var _ANT = preload("res://entities/ants/ANT.tscn")
+#var _descendANT = preload("res://entities/ants/descendANT/descendANT.tscn")
 #var _debugger = preload("res://entities/ants/baseANTdebugger.tscn")
 var _entity = preload("res://entities/entity.tscn")
 
@@ -52,7 +52,7 @@ func _create_ants():
 		
 	# TEST: produce the first descendANTs
 	for i in range(0):
-		_create_ant(_descendANT)
+		_create_ant(_entity)
 
 
 func _set_attributes():
@@ -74,7 +74,7 @@ func hatch_egg():
 	Messenger.update_eggs()
 	Messenger.update_current_population()
 	
-	_create_ant(_ANT)
+	_create_ant(_entity)
 
 
 func take_food(amount: float):

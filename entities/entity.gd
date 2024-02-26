@@ -74,6 +74,10 @@ func _make_a_choice() -> void:
 
 
 func _die(cause: String) -> void:
-	print(entity_name, ID, " died: ", cause, "!")
+	print(self, " died: ", cause, "!")
 	died.emit()
 	queue_free()
+
+
+func _to_string() -> String:
+	return entity_name + str(ID)

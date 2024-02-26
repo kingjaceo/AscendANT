@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://wa4shnb8tgs1"]
+
+[ext_resource type="Script" path="res://deprecated/ants/ant_debugger.gd" id="1_wmn5e"]
+
+[node name="AntDebugger" type="Node2D" node_paths=PackedStringArray("_text_display")]
+top_level = true
+z_index = 13
+script = ExtResource("1_wmn5e")
+_text_display = NodePath("TextDisplay")
+
+[node name="TextDisplay" type="RichTextLabel" parent="."]
+offset_left = 21.0
+offset_top = 22.0
+offset_right = 277.0
+offset_bottom = 247.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Ant Debugger:"

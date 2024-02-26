@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://cmtp8js1ng80"]
 
 [ext_resource type="Script" path="res://spider.gd" id="1_gwo3j"]
-[ext_resource type="Script" path="res://entities/brain.gd" id="3_limm1"]
-[ext_resource type="Script" path="res://entities/entity_body.gd" id="4_jlw0w"]
-[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="5_k34rp"]
-[ext_resource type="Script" path="res://entities/mover.gd" id="6_ccrc3"]
+[ext_resource type="Script" path="res://deprecated/brain.gd" id="3_limm1"]
+[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="4_jlw0w"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="5_k34rp"]
+[ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="6_ccrc3"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
 length = 0.001

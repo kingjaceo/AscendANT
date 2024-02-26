@@ -1,4 +1,4 @@
 extends CheckButton
 
-func _on_toggled():
-	Messenger.toggle_outline()
+#func _on_toggled():
+	#Messenger.toggle_outline()

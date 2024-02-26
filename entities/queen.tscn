@@ -1,18 +1,18 @@
 [gd_scene load_steps=7 format=3 uid="uid://blyjcm0ud4k81"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_uqna2"]
-[ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://entities/ants/queen.ase" id="2_3igfy"]
-[ext_resource type="Script" path="res://entities/egg_hatcher.gd" id="2_6csja"]
-[ext_resource type="Script" path="res://game/states/state_machine.gd" id="2_vni38"]
+[ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://deprecated/ants/queen.ase" id="2_ly2fw"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="3_y64mc"]
-[ext_resource type="Script" path="res://entities/egg_layer.gd" id="4_lhuif"]
+[ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="4_pdp1r"]
+[ext_resource type="Script" path="res://entities/entity_state_modules/egg_hatcher.gd" id="5_b2g6f"]
+[ext_resource type="Script" path="res://entities/entity_state_modules/egg_layer.gd" id="6_in1rv"]
 
 [node name="Queen" type="Node2D"]
 script = ExtResource("1_uqna2")
 entity_name = "Queen"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_3igfy")
+texture = ExtResource("2_ly2fw")
 region_enabled = true
 region_rect = Rect2(0, 0, 128, 64)
 
@@ -21,18 +21,18 @@ visible = false
 
 [node name="ANTiStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("2_vni38")
+script = ExtResource("4_pdp1r")
 
 [node name="ANTiStateModules" type="Node" parent="."]
 unique_name_in_owner = true
 
 [node name="EggHatcher" type="Node" parent="ANTiStateModules"]
-script = ExtResource("2_6csja")
+script = ExtResource("5_b2g6f")
 egg_hatch_time = 100.0
 hatch_at_ready = true
 
 [node name="EggLayer" type="Node" parent="ANTiStateModules"]
-script = ExtResource("4_lhuif")
+script = ExtResource("6_in1rv")
 egg_lay_time = 100.0
 
 [node name="Modules" type="Node" parent="."]

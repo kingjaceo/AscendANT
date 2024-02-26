@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://qr20wmxddfv2"]
 
-[ext_resource type="Texture2D" uid="uid://bn6xvnh025umv" path="res://colony/colony_tilesheet.ase" id="1_0apls"]
+[ext_resource type="Texture2D" uid="uid://bn6xvnh025umv" path="res://game_maps/colony_sprites/colony_tilesheet.ase" id="1_0apls"]
 [ext_resource type="PackedScene" uid="uid://cjvp0580bg7u7" path="res://colony/colony.tscn" id="1_g7rh7"]
-[ext_resource type="Texture2D" uid="uid://ejx4qsicobmr" path="res://colony/food_pile.ase" id="6_8ss8f"]
+[ext_resource type="Texture2D" uid="uid://ejx4qsicobmr" path="res://game_maps/colony_sprites/food_pile.ase" id="6_8ss8f"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_li7mm"]
 texture = ExtResource("1_0apls")

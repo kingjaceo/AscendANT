@@ -1,9 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://buncto7kta03y"]
+[gd_scene load_steps=2 format=3 uid="uid://b2trws6ot0c4b"]
 
-[ext_resource type="Script" path="res://world_map.gd" id="1_tmo2j"]
+[sub_resource type="GDScript" id="GDScript_dr3yw"]
+script/source = "extends TileMap
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
 
 [node name="WorldMap" type="Node2D"]
-script = ExtResource("1_tmo2j")
+script = SubResource("GDScript_dr3yw")
 
 [node name="TileMap" type="TileMap" parent="."]
 format = 2

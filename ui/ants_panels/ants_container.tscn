@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ytifdcxinxf7"]
 
-[ext_resource type="Theme" uid="uid://drhulf7ugq5j3" path="res://ui/main_theme.tres" id="1_a6eqf"]
+[ext_resource type="Theme" uid="uid://drhulf7ugq5j3" path="res://main_theme.tres" id="1_a6eqf"]
 [ext_resource type="PackedScene" uid="uid://dmwn1gewfukua" path="res://ui/ants_panels/ant_panel.tscn" id="1_ngrt2"]
 
 [node name="PanelContainer2" type="PanelContainer"]
