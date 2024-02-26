@@ -43,15 +43,15 @@ func _setup():
 
 
 func update_priority() -> void:
-	if not starvation.is_stopped() and priority < 3:
+	if not starvation.is_stopped() and priority < 3 and _food_module.has_food():
 		priority = 3
 		behavior = _seek_food
 		exit_behavior = _nothing
 
 
 func _seek_food() -> void:
-	if entity.home_map == entity.current_map:
-		mover.move_to(_food_module.get_food_source())
+	if entity.home_map == entity.current_map and _food_module.has_food():
+		mover.move_to(_food_module.get_nearest_pile(entity.position))
 	else:
 		mover.move_to(Vector2.ZERO)
 
@@ -65,7 +65,7 @@ func _eat():
 	mover.idle()
 	
 	# update timers
-	eat_timer.start()
+	eat_timer.start(time_to_eat)
 	hunger.stop()
 	starvation.stop()
 	hunger.wait_time = actual_hunger_time

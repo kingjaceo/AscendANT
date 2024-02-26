@@ -27,7 +27,6 @@ func _ready() -> void:
 	home_map = current_map
 	
 	_connect_module_signals()
-	#state_module.connect_modules(modules)
 	_make_a_choice()
 
 

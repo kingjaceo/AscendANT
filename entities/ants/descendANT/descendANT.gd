@@ -6,10 +6,10 @@ static var descendANTid = 0
 @export var digger: Digger
 @export var carrier: Carrier
 
-var _can_dig: bool
-var _target_dig_cell: Vector2i
-var _can_dump: bool
-var _target_dump_cell: Vector2i
+#var _can_dig: bool
+#var _target_dig_cell: Vector2i
+#var _can_dump: bool
+#var _target_dump_cell: Vector2i
 
 
 #func _ready():

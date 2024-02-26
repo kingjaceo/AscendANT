@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=16 format=3 uid="uid://c6roeqeju6rrh"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_utrar"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="2_4qg3q"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://entities/ants/descendANT/descendANTs.ase" id="3_811sa"]
 [ext_resource type="Script" path="res://entities/mover.gd" id="6_age8p"]
-[ext_resource type="Script" path="res://entities/entity_module.gd" id="7_8hodk"]
 [ext_resource type="Script" path="res://entities/liver.gd" id="7_gg2iy"]
 [ext_resource type="Script" path="res://game/states/state_machine.gd" id="7_mc2vr"]
 [ext_resource type="Script" path="res://entities/camera_followable.gd" id="8_g5f6t"]
@@ -70,6 +69,7 @@ _data = {
 }
 
 [node name="Entity" type="Node2D"]
+z_index = 1
 script = ExtResource("1_utrar")
 entity_name = "Entity"
 
@@ -87,7 +87,6 @@ libraries = {
 speed_scale = 2.0
 
 [node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
-visible = false
 top_level = false
 
 [node name="CameraFollowable" type="Node2D" parent="."]
@@ -108,7 +107,7 @@ script = ExtResource("9_ha6ve")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
 eat_amount = 10.0
-time_until_hungry_seconds = 20.0
+time_until_hungry_seconds = 3.0
 
 [node name="Rester" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("8_l3i4m")
@@ -124,9 +123,6 @@ unique_name_in_owner = true
 
 [node name="Mover" type="Node" parent="Modules"]
 script = ExtResource("6_age8p")
-
-[node name="EntityModule" type="Node" parent="Modules"]
-script = ExtResource("7_8hodk")
 
 [node name="FoodSenser" type="Node" parent="Modules" node_paths=PackedStringArray("mover")]
 script = ExtResource("12_j27y5")

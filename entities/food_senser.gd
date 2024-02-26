@@ -18,5 +18,5 @@ func _setup():
 
 
 func _sense_food():
-	if _food_module.food_at(entity.current_cell):
-		food_detected.emit(entity.current_cell)
+	if _food_module.food_at(entity.position):
+		food_detected.emit(entity.position)

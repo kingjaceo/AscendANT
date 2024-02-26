@@ -19,7 +19,7 @@ func clear_connections() -> void:
 	#pass
 
 
-func connect_map_modules(map_modules: Array[Node]) -> void:
+func connect_map_modules(_map_modules: Array[Node]) -> void:
 	pass
 
 

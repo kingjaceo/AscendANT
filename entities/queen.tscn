@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://blyjcm0ud4k81"]
+[gd_scene load_steps=7 format=3 uid="uid://blyjcm0ud4k81"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_uqna2"]
 [ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://entities/ants/queen.ase" id="2_3igfy"]
 [ext_resource type="Script" path="res://entities/egg_hatcher.gd" id="2_6csja"]
 [ext_resource type="Script" path="res://game/states/state_machine.gd" id="2_vni38"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="3_y64mc"]
-[ext_resource type="Script" path="res://entities/ANTiStateModule.gd" id="4_iinho"]
 [ext_resource type="Script" path="res://entities/egg_layer.gd" id="4_lhuif"]
 
 [node name="Queen" type="Node2D"]
@@ -29,15 +28,12 @@ unique_name_in_owner = true
 
 [node name="EggHatcher" type="Node" parent="ANTiStateModules"]
 script = ExtResource("2_6csja")
-egg_hatch_time = 1.0
+egg_hatch_time = 100.0
 hatch_at_ready = true
 
 [node name="EggLayer" type="Node" parent="ANTiStateModules"]
 script = ExtResource("4_lhuif")
 egg_lay_time = 100.0
-
-[node name="ANTiStateModule" type="Node" parent="ANTiStateModules"]
-script = ExtResource("4_iinho")
 
 [node name="Modules" type="Node" parent="."]
 unique_name_in_owner = true

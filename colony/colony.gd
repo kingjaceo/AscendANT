@@ -13,10 +13,10 @@ var _egg_timer: float
 var pheromone_map: PheromoneMap
 @export var colony_map: GameMap
 
-var _baseANT = preload("res://entities/ants/baseANT.tscn")
+#var _baseANT = preload("res://entities/ants/baseANT.tscn")
 var _ANT = preload("res://entities/ants/ANT.tscn")
 var _descendANT = preload("res://entities/ants/descendANT/descendANT.tscn")
-var _debugger = preload("res://entities/ants/baseANTdebugger.tscn")
+#var _debugger = preload("res://entities/ants/baseANTdebugger.tscn")
 var _entity = preload("res://entities/entity.tscn")
 
 # Called when the node enters the scene tree for the first time.

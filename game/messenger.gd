@@ -35,8 +35,8 @@ func get_tile_position(coordinate):
 	return pheromone_map.get_tile_position(coordinate)
 	
 
-func get_tile_coordinate(position):
-	return pheromone_map.get_tile_coordinate(position)
+#func get_tile_coordinate(position):
+	#return pheromone_map.get_tile_coordinate(position)
 	
 
 func get_home_tile():

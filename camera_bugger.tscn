@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://d22076d10lu42"]
+
+[ext_resource type="Script" path="res://game/camera_debugger.gd" id="1_8kt75"]
+
+[node name="CameraBugger" type="Node2D"]
+script = ExtResource("1_8kt75")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 26.0
