@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bb1v0xld5hp6g"]
+[gd_scene load_steps=18 format=3 uid="uid://bb1v0xld5hp6g"]
 
 [ext_resource type="Script" path="res://game_maps/game_map.gd" id="1_f3pxn"]
 [ext_resource type="Texture2D" uid="uid://4t7r63j3b8b" path="res://game_maps/overworld_sprites/cookie_tilesheet64.ase" id="1_hkrv4"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://game_maps/map_modules/spawner.gd" id="4_q4jj3"]
 [ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="5_of15w"]
 [ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="5_s5eqe"]
+[ext_resource type="Script" path="res://game_maps/pheromone_module.gd" id="8_yvn7c"]
+[ext_resource type="Script" path="res://game_maps/pheromone_cursor.gd" id="9_wo6sh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_46ocd"]
 texture = ExtResource("1_hkrv4")
@@ -95,6 +97,22 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/4 = SubResource("TileSetAtlasSource_y6y0u")
 sources/0 = SubResource("TileSetAtlasSource_46ocd")
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4qsj2"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_max = 23.2
+gravity = Vector3(0, 98, 0)
+
+[sub_resource type="Gradient" id="Gradient_xtxal"]
+colors = PackedColorArray(0, 0.909804, 1, 1, 0, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a474y"]
+gradient = SubResource("Gradient_xtxal")
+width = 2
+height = 2
+fill_from = Vector2(0.350427, 0.397436)
+fill_to = Vector2(0.598291, 0.653846)
+
 [node name="OverworldMap" type="TileMap"]
 texture_filter = 1
 tile_set = SubResource("TileSet_u0oft")
@@ -117,6 +135,7 @@ location = Vector2i(6, 6)
 starting_amount = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="Modules/Food/FoodPile"]
+visible = false
 texture_filter = 1
 texture = ExtResource("5_s5eqe")
 region_enabled = true
@@ -129,10 +148,19 @@ script = ExtResource("2_k8461")
 script = ExtResource("2_k8461")
 
 [node name="Pheromones" type="Node" parent="Modules"]
-script = ExtResource("2_k8461")
+unique_name_in_owner = true
+script = ExtResource("8_yvn7c")
 
 [node name="Spawner" type="Node" parent="Modules"]
 script = ExtResource("4_q4jj3")
+
+[node name="PheromoneCursor" type="Node" parent="Modules"]
+script = ExtResource("9_wo6sh")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Modules/PheromoneCursor"]
+amount = 500
+process_material = SubResource("ParticleProcessMaterial_4qsj2")
+texture = SubResource("GradientTexture2D_a474y")
 
 [node name="Entities" type="Node2D" parent="."]
 unique_name_in_owner = true
