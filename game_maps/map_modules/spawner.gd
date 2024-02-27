@@ -1,4 +1,4 @@
-class_name Spawner
+class_name SpawnerModule
 extends MapModule
 
 @export var spawn_locations: Array[Vector2i]

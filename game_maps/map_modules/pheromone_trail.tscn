@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3kwrug18cbho"]
+
+[ext_resource type="Material" uid="uid://cxnt5v334kufu" path="res://game_maps/map_modules/pheromone_trail.tres" id="1_yhct2"]
+[ext_resource type="Texture2D" uid="uid://b6hsyqhrfw126" path="res://food_pheromone_particle32.ase" id="2_p8vt4"]
+
+[node name="GPUParticles2D" type="GPUParticles2D"]
+amount = 100
+process_material = ExtResource("1_yhct2")
+texture = ExtResource("2_p8vt4")

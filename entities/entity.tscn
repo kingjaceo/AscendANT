@@ -1,8 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=17 format=3 uid="uid://c6roeqeju6rrh"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_utrar"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="2_4qg3q"]
-[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_npnbs"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_ne1g5"]
 [ext_resource type="Script" path="res://deprecated/camera_followable.gd" id="4_1af5x"]
 [ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="5_fiv6b"]
 [ext_resource type="Script" path="res://entities/entity_state_modules/liver.gd" id="6_1nc1p"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://entities/entity_state_modules/rester.gd" id="8_50l2s"]
 [ext_resource type="Script" path="res://entities/entity_state_modules/wanderer.gd" id="9_gbhut"]
 [ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="10_f45nb"]
+[ext_resource type="PackedScene" uid="uid://d3kwrug18cbho" path="res://game_maps/map_modules/pheromone_trail.tscn" id="11_75xce"]
 [ext_resource type="Script" path="res://entities/entity_modules/food_senser.gd" id="11_ahynf"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
@@ -73,10 +74,13 @@ z_index = 1
 script = ExtResource("1_utrar")
 entity_name = "Entity"
 
+[node name="GPUParticles2D" parent="." instance=ExtResource("11_75xce")]
+position = Vector2(-8, 0)
+
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1
 rotation = 1.5708
-texture = ExtResource("2_npnbs")
+texture = ExtResource("2_ne1g5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
