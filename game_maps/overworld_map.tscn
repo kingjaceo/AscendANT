@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bb1v0xld5hp6g"]
+[gd_scene load_steps=20 format=3 uid="uid://bb1v0xld5hp6g"]
 
 [ext_resource type="Script" path="res://game_maps/game_map.gd" id="1_f3pxn"]
 [ext_resource type="Texture2D" uid="uid://4t7r63j3b8b" path="res://game_maps/overworld_sprites/cookie_tilesheet64.ase" id="1_hkrv4"]
@@ -9,6 +9,10 @@
 [ext_resource type="Script" path="res://game_maps/map_modules/spawner.gd" id="4_q4jj3"]
 [ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="5_of15w"]
 [ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="5_s5eqe"]
+[ext_resource type="Script" path="res://game_maps/pheromone_module.gd" id="8_4vw70"]
+[ext_resource type="Texture2D" uid="uid://b6hsyqhrfw126" path="res://food_pheromone_particle32.ase" id="8_7hqqb"]
+[ext_resource type="Script" path="res://game_maps/test_particles.gd" id="9_ge1e6"]
+[ext_resource type="PackedScene" uid="uid://41uhgv0l22so" path="res://game_maps/map_modules/pheromone_cloud.tscn" id="11_20c6l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_46ocd"]
 texture = ExtResource("1_hkrv4")
@@ -95,6 +99,35 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/4 = SubResource("TileSetAtlasSource_y6y0u")
 sources/0 = SubResource("TileSetAtlasSource_46ocd")
 
+[sub_resource type="Gradient" id="Gradient_luxyn"]
+offsets = PackedFloat32Array(0.004662, 1)
+colors = PackedColorArray(1, 0, 0.952941, 0.345098, 1, 1, 1, 0.133333)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1qayt"]
+gradient = SubResource("Gradient_luxyn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uvfue"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, 0, 10)
+emission_shape_scale = Vector3(10, 10, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 3.5
+emission_ring_inner_radius = 0.0
+angle_max = 180.0
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.1
+radial_accel_max = 0.1
+damping_min = 10.0
+damping_max = 12.0
+scale_min = 0.1
+scale_max = 0.5
+color_ramp = SubResource("GradientTexture1D_1qayt")
+
 [node name="OverworldMap" type="TileMap"]
 texture_filter = 1
 tile_set = SubResource("TileSet_u0oft")
@@ -117,19 +150,31 @@ location = Vector2i(6, 6)
 starting_amount = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="Modules/Food/FoodPile"]
+visible = false
 texture_filter = 1
 texture = ExtResource("5_s5eqe")
 region_enabled = true
 region_rect = Rect2(0, 0, 128, 128)
 
-[node name="Water" type="Node" parent="Modules"]
-script = ExtResource("2_k8461")
-
 [node name="HexGridPathfinder" type="Node" parent="Modules"]
 script = ExtResource("2_k8461")
 
 [node name="Pheromones" type="Node" parent="Modules"]
-script = ExtResource("2_k8461")
+script = ExtResource("8_4vw70")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Modules/Pheromones"]
+visible = false
+texture_filter = 1
+position = Vector2(-50, -1)
+amount = 250
+process_material = SubResource("ParticleProcessMaterial_uvfue")
+texture = ExtResource("8_7hqqb")
+lifetime = 3.0
+randomness = 1.0
+script = ExtResource("9_ge1e6")
+
+[node name="PheromoneCloud" parent="Modules/Pheromones" instance=ExtResource("11_20c6l")]
+visible = false
 
 [node name="Spawner" type="Node" parent="Modules"]
 script = ExtResource("4_q4jj3")

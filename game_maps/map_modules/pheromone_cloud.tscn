@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://41uhgv0l22so"]
+
+[ext_resource type="Texture2D" uid="uid://b6hsyqhrfw126" path="res://food_pheromone_particle32.ase" id="1_jsq1d"]
+[ext_resource type="Script" path="res://game_maps/pheromone_cloud.gd" id="2_gaflb"]
+
+[sub_resource type="Gradient" id="Gradient_luxyn"]
+offsets = PackedFloat32Array(0.004662, 1)
+colors = PackedColorArray(1, 0, 0.952941, 0.345098, 1, 1, 1, 0.133333)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1qayt"]
+gradient = SubResource("Gradient_luxyn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uvfue"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, 0, 10)
+emission_shape_scale = Vector3(10, 10, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 3.5
+emission_ring_inner_radius = 0.0
+angle_max = 180.0
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.1
+radial_accel_max = 0.1
+damping_min = 10.0
+damping_max = 12.0
+scale_min = 0.1
+scale_max = 0.5
+color_ramp = SubResource("GradientTexture1D_1qayt")
+
+[node name="PheromoneCloud" type="GPUParticles2D"]
+texture_filter = 1
+amount = 250
+process_material = SubResource("ParticleProcessMaterial_uvfue")
+texture = ExtResource("1_jsq1d")
+lifetime = 3.0
+randomness = 1.0
+script = ExtResource("2_gaflb")

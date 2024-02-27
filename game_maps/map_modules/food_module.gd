@@ -6,7 +6,7 @@ var food_piles_by_cell: Dictionary # {Vector2i cell: FoodPile food_pile}
 signal food_taken
 
 
-func _ready() -> void:
+func _setup() -> void:
 	for food_pile in get_children():
 		food_piles_by_cell[food_pile.location] = food_pile
 
