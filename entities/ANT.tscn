@@ -1,19 +1,21 @@
-[gd_scene load_steps=19 format=3 uid="uid://c6roeqeju6rrh"]
+[gd_scene load_steps=21 format=3 uid="uid://dd8t2255ibxu2"]
 
-[ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_62b0b"]
-[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="2_4qg3q"]
-[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_ne1g5"]
-[ext_resource type="Script" path="res://deprecated/camera_followable.gd" id="4_1af5x"]
-[ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="5_fiv6b"]
-[ext_resource type="Script" path="res://entities/entity_state_modules/liver.gd" id="6_1nc1p"]
-[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="7_grwm8"]
-[ext_resource type="Script" path="res://entities/entity_state_modules/rester.gd" id="8_50l2s"]
-[ext_resource type="Script" path="res://entities/entity_state_modules/wanderer.gd" id="9_gbhut"]
-[ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="10_f45nb"]
-[ext_resource type="PackedScene" uid="uid://d3kwrug18cbho" path="res://game_maps/map_modules/pheromone_trail.tscn" id="11_75xce"]
-[ext_resource type="Script" path="res://entities/entity_modules/food_senser.gd" id="11_ahynf"]
-[ext_resource type="Script" path="res://game_maps/map_modules/pheromone_marker_module.gd" id="14_6t28j"]
-[ext_resource type="Script" path="res://game_maps/map_modules/pheromone_trail.gd" id="14_cohrj"]
+[ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_3hugp"]
+[ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_kdk5a"]
+[ext_resource type="PackedScene" uid="uid://d3kwrug18cbho" path="res://game_maps/map_modules/pheromone_trail.tscn" id="3_qlhcv"]
+[ext_resource type="Script" path="res://game_maps/map_modules/pheromone_trail.gd" id="4_roh5d"]
+[ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="5_wwopl"]
+[ext_resource type="Script" path="res://deprecated/camera_followable.gd" id="6_g7781"]
+[ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="7_21o43"]
+[ext_resource type="Script" path="res://entities/entity_state_modules/liver.gd" id="8_ax0sk"]
+[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="9_1fj4l"]
+[ext_resource type="Script" path="res://entities/entity_state_modules/rester.gd" id="10_cemll"]
+[ext_resource type="Script" path="res://game_maps/map_modules/pheromone_marker_module.gd" id="11_wp16b"]
+[ext_resource type="Script" path="res://entities/forager.gd" id="12_sp4yl"]
+[ext_resource type="Script" path="res://entities/entity_state_modules/wanderer.gd" id="13_j5arl"]
+[ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="13_s3cii"]
+[ext_resource type="Script" path="res://entities/entity_modules/food_senser.gd" id="14_1df3c"]
+[ext_resource type="Script" path="res://entities/pheromone_senser.gd" id="15_py554"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
 length = 0.001
@@ -71,15 +73,13 @@ _data = {
 "walk": SubResource("Animation_26fly")
 }
 
-[node name="Entity" type="Node2D"]
-z_index = 1
-script = ExtResource("1_62b0b")
-entity_name = "Entity"
+[node name="ANT" type="Node2D"]
+script = ExtResource("1_3hugp")
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1
 rotation = 1.5708
-texture = ExtResource("2_ne1g5")
+texture = ExtResource("2_kdk5a")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
@@ -89,52 +89,62 @@ libraries = {
 }
 speed_scale = 2.0
 
-[node name="PheromoneTrail" parent="." instance=ExtResource("11_75xce")]
+[node name="PheromoneTrail" parent="." instance=ExtResource("3_qlhcv")]
 position = Vector2(-8, 0)
-script = ExtResource("14_cohrj")
+script = ExtResource("4_roh5d")
 
-[node name="EntityBugger" parent="." instance=ExtResource("2_4qg3q")]
+[node name="EntityBugger" parent="." instance=ExtResource("5_wwopl")]
 visible = false
 top_level = false
 
 [node name="CameraFollowable" type="Node2D" parent="."]
-script = ExtResource("4_1af5x")
+script = ExtResource("6_g7781")
 
 [node name="ANTiStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_fiv6b")
+script = ExtResource("7_21o43")
 
 [node name="ANTiStateModules" type="Node" parent="."]
 unique_name_in_owner = true
 
 [node name="Liver" type="Node" parent="ANTiStateModules"]
-script = ExtResource("6_1nc1p")
+script = ExtResource("8_ax0sk")
 
 [node name="Eater" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover", "food_senser")]
-script = ExtResource("7_grwm8")
+script = ExtResource("9_1fj4l")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
 eat_amount = 10.0
-time_until_hungry_seconds = 3.0
+time_until_hungry_seconds = 100.0
 
 [node name="Rester" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
-script = ExtResource("8_50l2s")
+script = ExtResource("10_cemll")
 mover = NodePath("../../Modules/Mover")
-time_until_rest = 10.0
+time_until_rest = 100.0
+
+[node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover", "pheromone_senser")]
+script = ExtResource("11_wp16b")
+mover = NodePath("../../Modules/Mover")
+pheromone_senser = NodePath("../../Modules/PheromoneSenser")
+
+[node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover", "_pheromone_senser")]
+script = ExtResource("12_sp4yl")
+_mover = NodePath("../../Modules/Mover")
+_pheromone_senser = NodePath("../../Modules/PheromoneSenser")
 
 [node name="Wanderer" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
-script = ExtResource("9_gbhut")
+script = ExtResource("13_j5arl")
 mover = NodePath("../../Modules/Mover")
 
 [node name="Modules" type="Node" parent="."]
 unique_name_in_owner = true
 
 [node name="Mover" type="Node" parent="Modules"]
-script = ExtResource("10_f45nb")
+script = ExtResource("13_s3cii")
 
 [node name="FoodSenser" type="Node" parent="Modules" node_paths=PackedStringArray("mover")]
-script = ExtResource("11_ahynf")
+script = ExtResource("14_1df3c")
 mover = NodePath("../Mover")
 
-[node name="PheromoneMarker" type="Node" parent="Modules"]
-script = ExtResource("14_6t28j")
+[node name="PheromoneSenser" type="Node" parent="Modules"]
+script = ExtResource("15_py554")

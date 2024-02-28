@@ -120,7 +120,6 @@ location = Vector2i(6, 6)
 starting_amount = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="Modules/Food/FoodPile"]
-visible = false
 texture_filter = 1
 texture = ExtResource("5_s5eqe")
 region_enabled = true

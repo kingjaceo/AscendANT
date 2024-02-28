@@ -13,7 +13,6 @@ func _setup():
 	set_process(false)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	_particles.amount_ratio = 1
 	var mouse_position = owner.get_global_mouse_position()
@@ -29,7 +28,7 @@ func _process(delta):
 
 
 func _input(event):
-	if event.is_action_pressed("pheromone_cursor"):
+	if event.is_action_pressed("pheromone_mode"):
 		_active = not _active
 	
 	set_process(_active)

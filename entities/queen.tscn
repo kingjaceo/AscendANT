@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://blyjcm0ud4k81"]
 
-[ext_resource type="Script" path="res://entities/entity.gd" id="1_uqna2"]
+[ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_8eul5"]
 [ext_resource type="Texture2D" uid="uid://cxvwmer8v46vt" path="res://deprecated/ants/queen.ase" id="2_ly2fw"]
 [ext_resource type="PackedScene" uid="uid://qdpt6qlridyh" path="res://entities/entity_bugger.tscn" id="3_y64mc"]
 [ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="4_pdp1r"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://entities/entity_state_modules/egg_layer.gd" id="6_in1rv"]
 
 [node name="Queen" type="Node2D"]
-script = ExtResource("1_uqna2")
+script = ExtResource("1_8eul5")
 entity_name = "Queen"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -28,7 +28,7 @@ unique_name_in_owner = true
 
 [node name="EggHatcher" type="Node" parent="ANTiStateModules"]
 script = ExtResource("5_b2g6f")
-egg_hatch_time = 100.0
+egg_hatch_time = 1.0
 hatch_at_ready = true
 
 [node name="EggLayer" type="Node" parent="ANTiStateModules"]

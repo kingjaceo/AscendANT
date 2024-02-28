@@ -8,7 +8,10 @@ var moving = false
 
 var _target: Vector2
 var _point_path_to_target: PackedVector2Array
-var _current_index
+var _current_index: int
+
+var current_cell: Vector2i
+var previous_cell: Vector2i
 
 const TOLERANCE = 10
 const EPSILON = 0.001
@@ -17,11 +20,15 @@ signal arrived_at_next_cell
 signal arrived_at_target
 
 
+func _setup() -> void:
+	choice_making_signals = [arrived_at_target]
+	death_signals = {}
+
+
 func path_to(target_cell: Vector2i) -> void:
 	_point_path_to_target = entity.current_map.get_point_path(entity.current_cell, target_cell)
 	_current_index = 0
 	_target = _point_path_to_target[_current_index]
-
 	moving = true
 
 
@@ -39,20 +46,15 @@ func get_debug_text() -> String:
 
 
 func get_debug_draw() -> Dictionary:
-	#var pos = owner.current_map.to_global(_target)
 	var pos = _target - owner.position
 	return {"position": pos, "color": Color.BLUE, "size": 10}
-
-
-func _setup() -> void:
-	choice_making_signals = [arrived_at_target]
-	death_signals = {}
 
 
 func _physics_process(delta) -> void:
 	if moving:
 		_turn_and_move(delta)
 		_check_distance()
+		_check_cell()
 
 
 func _turn_and_move(delta) -> void:
@@ -76,11 +78,10 @@ func _check_distance() -> void:
 	if distance < TOLERANCE:
 		entity.current_cell = _target
 		arrived_at_target.emit()
-		#arrived_at_next_cell.emit()
-		#_current_index += 1
-		#var arrived_at_last_cell_in_point_path = _current_index >= len(_point_path_to_target)
-		#if arrived_at_last_cell_in_point_path:
-			#moving = false
-			#arrived_at_target.emit()
-		#else:
-			#_target = _point_path_to_target[_current_index]
+
+
+func _check_cell() -> void:
+	current_cell = entity.current_map.local_to_map(entity.position)
+	if current_cell != previous_cell:
+		arrived_at_next_cell.emit()
+		previous_cell = current_cell

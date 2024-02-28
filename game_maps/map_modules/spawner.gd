@@ -6,11 +6,11 @@ extends MapModule
 signal entity_spawned
 
 
-func _ready():
-	entity_spawned.connect(owner._update)
+func _setup():
+	entity_spawned.connect(game_map._update)
 
 
 func spawn(entity: Entity):
-	entity.current_map = owner
-	owner.entities.add_child(entity)
+	entity.current_map = game_map
+	game_map.entities.add_child(entity)
 	entity_spawned.emit(entity)

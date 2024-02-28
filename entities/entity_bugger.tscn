@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://qdpt6qlridyh"]
 
-[ext_resource type="Script" path="res://entities/entity_bugger.gd" id="1_c60ll"]
+[ext_resource type="Script" path="res://entities/scripts/entity_bugger.gd" id="1_c60ll"]
 
 [node name="EntityDebugger" type="Node2D"]
 top_level = true

@@ -16,3 +16,12 @@ func start():
 func _finish():
 	get_parent().remove(location, self)
 	queue_free()
+
+
+func reset(time: float) -> void:
+	_tween.kill()
+	modulate = Color(1, 1, 1, 1)
+	start()
+	#_tween = get_tree().create_tween()
+	#_tween.tween_property(self, "modulate", Color(1, 1, 1, 0), time).set_trans(Tween.TRANS_SINE)
+	#_tween.finished.connect(_finish)

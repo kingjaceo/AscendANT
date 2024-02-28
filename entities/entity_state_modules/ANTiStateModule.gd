@@ -11,7 +11,7 @@ func get_debug_text() -> String:
 
 
 func update_priority() -> void:
-	priority = 0
+	pass
 
 
 func _nothing() -> void:

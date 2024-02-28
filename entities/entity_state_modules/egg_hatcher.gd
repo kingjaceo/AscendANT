@@ -8,6 +8,7 @@ var _egg_module: MapModule
 var _spawner: MapModule
 
 var entity_model = load("res://entities/entity.tscn")
+var ANT_model = load("res://entities/ANT.tscn")
 
 signal egg_hatched
 
@@ -43,6 +44,6 @@ func get_debug_text() -> String:
 
 func _hatch_egg():
 	#if _egg_module and _egg_module.num_eggs > 0:
-	var new_entity = entity_model.instantiate()
+	var new_entity = ANT_model.instantiate()
 	egg_hatched.emit(new_entity)
 

@@ -22,6 +22,8 @@ func add_at_cell(cell: Vector2i):
 		pheromones_by_cell[cell] = new_cloud
 		add_child(new_cloud)
 		new_cloud.start()
+	else:
+		pheromones_by_cell[cell].reset(20)
 
 
 func add_at_location(location: Vector2):

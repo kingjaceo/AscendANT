@@ -71,6 +71,12 @@ func get_random_cell() -> Vector2i:
 	return Vector2i()
 
 
+func get_random_cell_position(location: Vector2) -> Vector2:
+	var cell = local_to_map(location)
+	var neighbors = get_surrounding_cells(cell)
+	return map_to_local(neighbors[randi() % len(neighbors)])
+
+
 func _hex_distance(coord1, coord2):
 	var q1 = coord1[0]
 	var q2 = coord2[0]
