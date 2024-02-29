@@ -115,22 +115,22 @@ script = ExtResource("9_1fj4l")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
 eat_amount = 10.0
-time_until_hungry_seconds = 100.0
+time_until_hungry_seconds = 5.0
 
 [node name="Rester" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("10_cemll")
 mover = NodePath("../../Modules/Mover")
 time_until_rest = 100.0
 
-[node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover", "pheromone_senser")]
+[node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("11_wp16b")
 mover = NodePath("../../Modules/Mover")
-pheromone_senser = NodePath("../../Modules/PheromoneSenser")
 
-[node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover", "_pheromone_senser")]
+[node name="Scouted" type="Node" parent="ANTiStateModules/PheromoneMarker"]
+
+[node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover")]
 script = ExtResource("12_sp4yl")
 _mover = NodePath("../../Modules/Mover")
-_pheromone_senser = NodePath("../../Modules/PheromoneSenser")
 
 [node name="Wanderer" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("13_j5arl")
@@ -146,5 +146,6 @@ script = ExtResource("13_s3cii")
 script = ExtResource("14_1df3c")
 mover = NodePath("../Mover")
 
-[node name="PheromoneSenser" type="Node" parent="Modules"]
+[node name="PheromoneSenser" type="Node" parent="Modules" node_paths=PackedStringArray("mover")]
 script = ExtResource("15_py554")
+mover = NodePath("../Mover")

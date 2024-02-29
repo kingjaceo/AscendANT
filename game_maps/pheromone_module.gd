@@ -5,15 +5,11 @@ var pheromones_by_cell: Dictionary # {Vector2i cell: PheromoneCloud pheromone}
 var pheromone_cloud = preload("res://game_maps/map_modules/pheromone_cloud.tscn")
 
 
-func _setup():
-	add_at_cell(Vector2i(3, 3))
-	add_at_cell(Vector2i(3, 2))
-	add_at_cell(Vector2i(2, 2))
-	add_at_cell(Vector2i(2, 1))
-	add_at_cell(Vector2i(1, 1))
+func _setup() -> void:
+	pass
 
 
-func add_at_cell(cell: Vector2i):
+func add_at_cell(cell: Vector2i) -> void:
 	if not pheromones_by_cell.has(cell):
 		var new_cloud = pheromone_cloud.instantiate()
 		new_cloud.location = cell
@@ -26,18 +22,23 @@ func add_at_cell(cell: Vector2i):
 		pheromones_by_cell[cell].reset(20)
 
 
-func add_at_location(location: Vector2):
+
+func add_at_location(location: Vector2) -> void:
 	var cell = game_map.local_to_map(location)
 	add_at_cell(cell)
 
-func remove(cell: Vector2i, cloud: PheromoneCloud):
+
+func remove(cell: Vector2i, cloud: PheromoneCloud) -> void:
 	pheromones_by_cell.erase(cell)
 
-#func mark_position(pos: Vector2, color: Color) -> void:
-	#var cell = game_map.local_to_map(pos)
-	#if _pheromones_by_cell.has(cell):
-		#print("already clicked: ", cell)
-	#else:
-		#_pheromones_by_cell[cell] = color
-		#var particles = GPUParticles2D.new()
-		#particles
+
+func get_neighbors(cell: Vector2i) -> Dictionary: # {Vector2 neighbor_location: PheromoneCloud pheromone / false}
+	var potential_neighbors = game_map.get_surrounding_cells(cell)
+	var neighbors = {}
+	for neighbor in potential_neighbors:
+		if pheromones_by_cell.has(neighbor):
+			neighbors[game_map.map_to_local(neighbor)] = pheromones_by_cell[neighbor]
+		else:
+			neighbors[game_map.map_to_local(neighbor)] = false
+	
+	return neighbors

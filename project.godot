@@ -21,8 +21,8 @@ aseprite_executable_path="C:/Projects/LibreSprite/libresprite.exe"
 
 [autoload]
 
-UI="*res://ui/ui.gd"
 Messenger="*res://game/messenger.gd"
+Pheromones="*res://pheromones/pheromones.gd"
 
 [display]
 

@@ -28,7 +28,6 @@ unique_name_in_owner = true
 
 [node name="EggHatcher" type="Node" parent="ANTiStateModules"]
 script = ExtResource("5_b2g6f")
-egg_hatch_time = 1.0
 hatch_at_ready = true
 
 [node name="EggLayer" type="Node" parent="ANTiStateModules"]

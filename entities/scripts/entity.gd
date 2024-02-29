@@ -25,12 +25,12 @@ func _ready() -> void:
 	entity_modules = entity_modules.get_children()
 	
 	home_map = current_map
-	
+	_connect_map_modules(current_map.map_modules)
 	_connect_module_signals()
 	_make_a_choice()
 
 
-func connect_map_modules(map_modules: Array[Node]) -> void:
+func _connect_map_modules(map_modules: Array[Node]) -> void:
 	for state_module in state_modules:
 		state_module.clear_connections()
 		state_module.connect_map_modules(map_modules)

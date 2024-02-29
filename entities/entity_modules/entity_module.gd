@@ -11,6 +11,10 @@ func _ready():
 	_setup()
 
 
+func _setup() -> void:
+	pass
+
+
 func clear_connections() -> void:
 	pass
 
@@ -29,10 +33,6 @@ func get_debug_text() -> String:
 
 func get_debug_draw() -> Dictionary:
 	return {"position": Vector2.ZERO, "color": Color.WHITE, "size": 0}
-
-
-func _setup() -> void:
-	pass
 
 
 func _setup_timer(timer: Timer, init_time: float, start_now: bool) -> Timer:

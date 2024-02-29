@@ -2,7 +2,7 @@ class_name PheromoneMarkerModule
 extends ANTiStateModule
 
 @export var mover: Mover
-@export var pheromone_senser: PheromoneSenser
+#@export var pheromone_senser: PheromoneSenser
 var _pheromone_module: PheromoneModule
 
 var _active: bool = false
