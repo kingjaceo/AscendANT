@@ -38,15 +38,15 @@ func _setup():
 	
 	food_senser.food_detected.connect(_on_food_detected)
 	hunger.timeout.connect(hunger.stop)
-	hunger.timeout.connect(starvation.start)
+	hunger.timeout.connect(_starving)
 	eat_timer.timeout.connect(_stop_eat)
 
 
-func update_priority() -> void:
-	if not starvation.is_stopped() and priority < 3 and _food_module.has_food():
-		priority = 3
-		behavior = _seek_food
-		exit_behavior = _nothing
+#func update_priority() -> void:
+	#if not starvation.is_stopped() and priority < 5 and _food_module.has_food():
+		#priority = 5
+		#behavior = _seek_food
+		#exit_behavior = _nothing
 
 
 func _seek_food() -> void:
@@ -79,11 +79,18 @@ func _stop_eat() -> void:
 	exit_behavior = _nothing
 
 
+func _starving() -> void:
+	starvation.start()
+	priority = 5
+	behavior = _seek_food
+	exit_behavior = _nothing
+
+
 func get_debug_text() -> String:
 	var text = ""
 	text += "Hunger: " + get_timer_time(hunger) + "\n"
 	text += "Eat Timer: " + get_timer_time(eat_timer) + "\n"
-	text += "Starvation: " + get_timer_time(starvation)
+	text += "Starvation: " + get_timer_time(starvation) + "\n"
 	return text
 
 

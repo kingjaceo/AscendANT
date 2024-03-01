@@ -13,7 +13,7 @@ func _ready():
 func _process(_delta):
 	rotation = -entity.rotation
 	state.text = entity.state_machine.current_behavior_name
-	_update_timers()
+	_update_text()
 	queue_redraw()
 
 
@@ -27,12 +27,10 @@ func _draw():
 		draw_circle(data["position"], data["size"], data["color"])
 	
 
-func _update_timers():
+func _update_text():
 	info.text = entity.entity_name + str(entity.ID) + "\n"
 	for module in entity.state_modules:
 		info.text += module.get_debug_text()
-		info.text += "\n"
 		
 	for module in entity.entity_modules:
 		info.text += module.get_debug_text()
-		info.text += "\n"

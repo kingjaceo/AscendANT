@@ -6,7 +6,6 @@ extends MapModule
 
 var _last_clicked_cell: Vector2i
 var _active: bool = false
-var _current_pheromone_color = Color.HOT_PINK
 
 var current_pheromone: Pheromone
 const EXPLORED = preload("res://pheromones/explored.tres")

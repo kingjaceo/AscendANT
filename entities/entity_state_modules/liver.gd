@@ -14,5 +14,5 @@ func _setup():
 
 func get_debug_text() -> String:
 	var text = ""
-	text += "Life Left: " + _get_timer_time(lifetime)
+	text += "Life Left: " + _get_timer_time(lifetime) + "\n"
 	return text

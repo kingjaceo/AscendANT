@@ -28,7 +28,7 @@ func _setup():
 
 func update_priority() -> void:
 	if not exhaustion_timer.is_stopped():
-		priority = 2
+		priority = 4
 		behavior = _rest
 	else:
 		priority = 0

@@ -5,7 +5,7 @@ extends SpawnerModule
 const QUEEN = preload("res://entities/queen.tscn")
 
 
-func _process(delta):
+func _process(_delta):
 	var queen = QUEEN.instantiate()
 	spawn(queen)
 	game_map.remove(self)

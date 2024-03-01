@@ -14,7 +14,3 @@ func _setup():
 		game_map.set_cell(OUTLINE_LAYER, cell, outline_sheet_id, outline_atlas_coord)
 	
 	game_map.set_layer_modulate(OUTLINE_LAYER, Color(1, 1, 1, alpha_level))
-
-
-func _process(delta):
-	pass

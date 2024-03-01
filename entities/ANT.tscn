@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dd8t2255ibxu2"]
+[gd_scene load_steps=21 format=3 uid="uid://dd8t2255ibxu2"]
 
 [ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_3hugp"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_kdk5a"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://game_maps/map_modules/pheromone_marker_module.gd" id="11_wp16b"]
 [ext_resource type="Script" path="res://entities/forager.gd" id="12_sp4yl"]
 [ext_resource type="Script" path="res://entities/entity_state_modules/wanderer.gd" id="13_j5arl"]
+[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="13_pmask"]
 [ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="13_s3cii"]
 [ext_resource type="Script" path="res://entities/entity_modules/food_senser.gd" id="14_1df3c"]
 [ext_resource type="Script" path="res://entities/pheromone_senser.gd" id="15_py554"]
@@ -107,6 +108,17 @@ script = ExtResource("7_21o43")
 [node name="ANTiStateModules" type="Node" parent="."]
 unique_name_in_owner = true
 
+[node name="Eater" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover", "food_senser")]
+script = ExtResource("13_pmask")
+mover = NodePath("../../Modules/Mover")
+food_senser = NodePath("../../Modules/FoodSenser")
+eat_amount = 10.0
+time_until_hungry_seconds = 3.0
+
+[node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
+script = ExtResource("11_wp16b")
+mover = NodePath("../../Modules/Mover")
+
 [node name="Liver" type="Node" parent="ANTiStateModules"]
 script = ExtResource("8_ax0sk")
 
@@ -114,10 +126,6 @@ script = ExtResource("8_ax0sk")
 script = ExtResource("10_cemll")
 mover = NodePath("../../Modules/Mover")
 time_until_rest = 100.0
-
-[node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
-script = ExtResource("11_wp16b")
-mover = NodePath("../../Modules/Mover")
 
 [node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover", "_pheromone_marker")]
 script = ExtResource("12_sp4yl")
