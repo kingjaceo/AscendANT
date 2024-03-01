@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Pheromone" load_steps=2 format=3 uid="uid://ci5gca7278k8e"]
+
+[ext_resource type="Script" path="res://pheromones/pheromone.gd" id="1_fp2x2"]
+
+[resource]
+script = ExtResource("1_fp2x2")
+type = 1
+lifetime = 10.0
+color = Color(0.776471, 0.117647, 0.490196, 1)

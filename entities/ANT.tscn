@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dd8t2255ibxu2"]
+[gd_scene load_steps=20 format=3 uid="uid://dd8t2255ibxu2"]
 
 [ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_3hugp"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_kdk5a"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://deprecated/camera_followable.gd" id="6_g7781"]
 [ext_resource type="Script" path="res://deprecated/states/state_machine.gd" id="7_21o43"]
 [ext_resource type="Script" path="res://entities/entity_state_modules/liver.gd" id="8_ax0sk"]
-[ext_resource type="Script" path="res://deprecated/entity_body.gd" id="9_1fj4l"]
 [ext_resource type="Script" path="res://entities/entity_state_modules/rester.gd" id="10_cemll"]
 [ext_resource type="Script" path="res://game_maps/map_modules/pheromone_marker_module.gd" id="11_wp16b"]
 [ext_resource type="Script" path="res://entities/forager.gd" id="12_sp4yl"]
@@ -74,7 +73,9 @@ _data = {
 }
 
 [node name="ANT" type="Node2D"]
+z_index = 1
 script = ExtResource("1_3hugp")
+entity_name = "ANT"
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -94,7 +95,6 @@ position = Vector2(-8, 0)
 script = ExtResource("4_roh5d")
 
 [node name="EntityBugger" parent="." instance=ExtResource("5_wwopl")]
-visible = false
 top_level = false
 
 [node name="CameraFollowable" type="Node2D" parent="."]
@@ -110,13 +110,6 @@ unique_name_in_owner = true
 [node name="Liver" type="Node" parent="ANTiStateModules"]
 script = ExtResource("8_ax0sk")
 
-[node name="Eater" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover", "food_senser")]
-script = ExtResource("9_1fj4l")
-mover = NodePath("../../Modules/Mover")
-food_senser = NodePath("../../Modules/FoodSenser")
-eat_amount = 10.0
-time_until_hungry_seconds = 5.0
-
 [node name="Rester" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("10_cemll")
 mover = NodePath("../../Modules/Mover")
@@ -126,11 +119,10 @@ time_until_rest = 100.0
 script = ExtResource("11_wp16b")
 mover = NodePath("../../Modules/Mover")
 
-[node name="Scouted" type="Node" parent="ANTiStateModules/PheromoneMarker"]
-
-[node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover")]
+[node name="Forager" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("_mover", "_pheromone_marker")]
 script = ExtResource("12_sp4yl")
 _mover = NodePath("../../Modules/Mover")
+_pheromone_marker = NodePath("../PheromoneMarker")
 
 [node name="Wanderer" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("13_j5arl")

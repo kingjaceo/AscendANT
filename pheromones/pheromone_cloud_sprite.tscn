@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn386eeg04bra"]
+
+[ext_resource type="Texture2D" uid="uid://k8dpw460e42m" path="res://pheromones/blank_pheromone_cloud64.ase" id="1_icrhl"]
+[ext_resource type="Script" path="res://pheromones/pheromone_cloud.gd" id="2_djhc1"]
+
+[node name="Sprite2D" type="Sprite2D"]
+texture = ExtResource("1_icrhl")
+script = ExtResource("2_djhc1")

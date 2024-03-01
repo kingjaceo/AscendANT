@@ -1,4 +1,4 @@
-class_name Eater 
+class_name Eater
 extends ANTiStateModule
 
 @export var mover: Mover

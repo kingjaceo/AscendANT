@@ -1,6 +1,6 @@
 extends Node
 
-enum Type {EXPLORE, TO_FOOD, FOOD}
+enum Type {EXPLORED, TO_FOOD, FOOD}
 
 #enum Names {NONE, EXPLORED, TO_FOOD, TO_WATER, FOOD, WATER}
 #var pheromone = preload("pheromone.gd")

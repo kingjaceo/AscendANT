@@ -1,9 +1,12 @@
-class_name PheromoneMarkerModule
+class_name PheromoneMarker
 extends ANTiStateModule
 
 @export var mover: Mover
 #@export var pheromone_senser: PheromoneSenser
 var _pheromone_module: PheromoneModule
+var current_pheromone: Pheromone
+#const EXPLORED = preload("res://pheromones/explored.tres")
+#const TO_FOOD = preload("res://pheromones/to_food.tres")
 
 var _active: bool = false
 
@@ -33,7 +36,7 @@ func _update_priority():
 
 
 func mark():
-	_pheromone_module.add_at_cell(mover.previous_cell)
+	_pheromone_module.add_at_cell(current_pheromone, mover.previous_cell)
 	priority = 0
 	behavior = _nothing
 	exit_behavior = _nothing

@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://entities/entity_state_modules/egg_layer.gd" id="6_in1rv"]
 
 [node name="Queen" type="Node2D"]
+z_index = 1
 script = ExtResource("1_8eul5")
 entity_name = "Queen"
 
@@ -28,6 +29,7 @@ unique_name_in_owner = true
 
 [node name="EggHatcher" type="Node" parent="ANTiStateModules"]
 script = ExtResource("5_b2g6f")
+egg_hatch_time = 60.0
 hatch_at_ready = true
 
 [node name="EggLayer" type="Node" parent="ANTiStateModules"]

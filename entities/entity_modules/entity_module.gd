@@ -28,7 +28,7 @@ func connect_map_modules(_map_modules: Array[Node]) -> void:
 
 
 func get_debug_text() -> String:
-	return "EntityModule: NONE"
+	return ""
 
 
 func get_debug_draw() -> Dictionary:
