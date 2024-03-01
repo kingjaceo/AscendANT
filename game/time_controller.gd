@@ -3,10 +3,10 @@ extends Node2D
 var _game_time_scale: float
 
 func _ready():
-	_game_time_scale = 2
+	_game_time_scale = 1
 	
 func _process(_delta):
-	if Input.is_action_pressed("pause"):
+	if Input.is_action_just_pressed("pause"):
 		if Engine.time_scale > 0:
 			Engine.time_scale = 0
 		else:

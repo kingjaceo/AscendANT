@@ -1,7 +1,7 @@
 class_name CameraMover
 extends CameraModule
 
-@export var acceleration: float = 2000
+@export var acceleration: float = 1
 @export var _damp_factor: float = 0.95
 @export var _speed_up_multiplier: float = 2
 
@@ -33,10 +33,10 @@ func _process(delta):
 	
 	_move_direction = _move_direction.normalized()
 	if speed_up:
-		_velocity += _move_direction * acceleration * delta * _speed_up_multiplier
+		_velocity += _move_direction * acceleration * _speed_up_multiplier
 	else:
-		_velocity += _move_direction * acceleration * delta
-	camera.position += _velocity * delta
+		_velocity += _move_direction * acceleration
+	camera.position += _velocity
 	_velocity *= _damp_factor
 
 
