@@ -2,6 +2,7 @@ class_name FoodPile
 extends Pile
 
 
+# TODO: should only be on food taken
 func _update() -> void:
 	if amount_remaining <= 0:
 		get_parent().remove(location)

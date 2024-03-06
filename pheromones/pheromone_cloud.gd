@@ -8,8 +8,11 @@ var index : int # position in stack of pheromeon
 
 signal dispersed
 
-func start():
+func _ready():
 	modulate = pheromone.color
+
+
+func start():
 	if pheromone.lifetime > 0:
 		var tween = get_tree().create_tween()
 		#top_tween = tween

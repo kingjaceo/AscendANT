@@ -59,8 +59,9 @@ func _spawn_food_randomly() -> void:
 		await timer.timeout
 		var new_pile = FOOD_PILE.instantiate()
 		var new_location = game_map.get_random_walkable_cell()
-		new_pile.location = new_location
+		#new_pile.location = new_location
 		new_pile.position = game_map.map_to_local(new_location)
+		new_pile.current_map = game_map
 		add_child(new_pile)
 		food_piles_by_cell[new_location] = new_pile
 		food_spawned.emit(FOOD_PHEROMONE, new_location)

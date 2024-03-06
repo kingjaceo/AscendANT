@@ -28,6 +28,14 @@ func mark_location(pheromone: Pheromone, location: Vector2) -> void:
 	mark_cell(pheromone, cell)
 
 
+func add_pheromone_to_cell(pheromone: Pheromone, cell: Vector2i):
+	if pheromones_by_cell.has(cell):
+		var new_cloud = _create_cloud(pheromone, cell)
+		add_child(new_cloud)
+		new_cloud.dispersed.connect(remove)
+		pheromones_by_cell[cell].append(new_cloud)
+
+
 func remove(cell: Vector2i, position: int) -> void:
 	for cloud in pheromones_by_cell[cell].slice(position):
 		cloud.index -= 1

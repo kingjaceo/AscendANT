@@ -91,6 +91,8 @@ unique_name_in_owner = true
 [node name="Food" type="Node" parent="Modules" node_paths=PackedStringArray("_pheromone_module")]
 script = ExtResource("3_bb7sj")
 _pheromone_module = NodePath("../Pheromones")
+_min_food_spawn_time = 5.0
+_max_food_spawn_time = 10.0
 
 [node name="HexGridPathfinder" type="Node" parent="Modules"]
 script = ExtResource("2_k8461")
