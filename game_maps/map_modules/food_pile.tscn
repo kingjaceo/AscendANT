@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cospgv8v14g24"]
+
+[ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="1_g6omw"]
+[ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="2_3m688"]
+
+[node name="FoodPile" type="Node2D"]
+z_index = 1
+script = ExtResource("1_g6omw")
+location = Vector2i(6, 6)
+starting_amount = 50.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_3m688")
+region_enabled = true
+region_rect = Rect2(0, 0, 128, 128)

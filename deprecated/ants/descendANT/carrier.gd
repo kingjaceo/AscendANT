@@ -1,4 +1,4 @@
-class_name Carrier
+class_name Carrier_deprecated
 extends Node
 
 @export var capacity: float = 100

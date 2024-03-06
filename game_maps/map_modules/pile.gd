@@ -1,16 +1,16 @@
 class_name Pile
-extends Node
+extends Node2D
 
 @export var location: Vector2i
 @export var starting_amount: float
 var amount_remaining: float
 
-@onready var pile_sprite = $Sprite2D
+@onready var pile_sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
 	amount_remaining = starting_amount
-	_place_pile()
+	#_place_pile()
 
 
 func take_from(amount: float) -> float:
@@ -25,5 +25,6 @@ func _update() -> void:
 		queue_free()
 
 
-func _place_pile() -> void:
-	pile_sprite.position = owner.map_to_local(location)
+#func _place_pile() -> void:
+	#pile_sprite.position = owner.map_to_local(location)
+	#pile_sprite.visible = true

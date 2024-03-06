@@ -2,13 +2,19 @@ class_name FoodModule
 extends MapModule
 
 var food_piles_by_cell: Dictionary # {Vector2i cell: FoodPile food_pile}
+const FOOD_PILE = preload("res://game_maps/map_modules/food_pile.tscn")
+const FOOD_PHEROMONE = preload("res://pheromones/food.tres")
+@export var _pheromone_module: PheromoneModule
+@export var _min_food_spawn_time: float = 10
+@export var _max_food_spawn_time: float = 30
 
 signal food_taken
+signal food_spawned
+signal food_removed
 
 
 func _setup() -> void:
-	for food_pile in get_children():
-		food_piles_by_cell[food_pile.location] = food_pile
+	_spawn_food_randomly()
 
 
 func has_food() -> bool:
@@ -43,3 +49,18 @@ func take_food_from(position: Vector2, amount: float) -> float:
 
 func remove(cell: Vector2i) -> void:
 	food_piles_by_cell.erase(cell)
+	food_removed.emit(cell)
+
+
+func _spawn_food_randomly() -> void:
+	while true:
+		var time_til_next_food = randi_range(_min_food_spawn_time, _max_food_spawn_time)
+		var timer = get_tree().create_timer(time_til_next_food)
+		await timer.timeout
+		var new_pile = FOOD_PILE.instantiate()
+		var new_location = game_map.get_random_walkable_cell()
+		new_pile.location = new_location
+		new_pile.position = game_map.map_to_local(new_location)
+		add_child(new_pile)
+		food_piles_by_cell[new_location] = new_pile
+		food_spawned.emit(FOOD_PHEROMONE, new_location)

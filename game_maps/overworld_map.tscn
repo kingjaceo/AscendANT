@@ -1,12 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://bb1v0xld5hp6g"]
+[gd_scene load_steps=13 format=3 uid="uid://bb1v0xld5hp6g"]
 
 [ext_resource type="Script" path="res://game_maps/game_map.gd" id="1_f3pxn"]
 [ext_resource type="Texture2D" uid="uid://c6hbjyyvcpuny" path="res://game_maps/overworld_sprites/overworld_tilesheet64.ase" id="1_k0avv"]
 [ext_resource type="Script" path="res://game_maps/map_modules/map_module.gd" id="2_k8461"]
 [ext_resource type="Script" path="res://game_maps/map_modules/food_module.gd" id="3_bb7sj"]
 [ext_resource type="Script" path="res://game_maps/map_modules/spawner.gd" id="4_q4jj3"]
-[ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="5_of15w"]
-[ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="5_s5eqe"]
 [ext_resource type="Script" path="res://game_maps/map_modules/pheromone_module.gd" id="8_4vw70"]
 [ext_resource type="Script" path="res://game_maps/queen_spawner.gd" id="10_r5jkf"]
 [ext_resource type="PackedScene" uid="uid://d3kwrug18cbho" path="res://game_maps/map_modules/pheromone_trail.tscn" id="11_4ah7h"]
@@ -90,26 +88,16 @@ script = ExtResource("1_f3pxn")
 [node name="Modules" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="Food" type="Node" parent="Modules"]
+[node name="Food" type="Node" parent="Modules" node_paths=PackedStringArray("_pheromone_module")]
 script = ExtResource("3_bb7sj")
-
-[node name="FoodPile" type="Node" parent="Modules/Food"]
-script = ExtResource("5_of15w")
-location = Vector2i(6, 6)
-starting_amount = 50.0
-
-[node name="Sprite2D" type="Sprite2D" parent="Modules/Food/FoodPile"]
-texture_filter = 1
-texture = ExtResource("5_s5eqe")
-region_enabled = true
-region_rect = Rect2(0, 0, 128, 128)
+_pheromone_module = NodePath("../Pheromones")
 
 [node name="HexGridPathfinder" type="Node" parent="Modules"]
 script = ExtResource("2_k8461")
 
-[node name="Pheromones" type="Node" parent="Modules"]
-unique_name_in_owner = true
+[node name="Pheromones" type="Node" parent="Modules" node_paths=PackedStringArray("_food_module")]
 script = ExtResource("8_4vw70")
+_food_module = NodePath("../Food")
 
 [node name="Spawner" type="Node" parent="Modules"]
 script = ExtResource("4_q4jj3")
@@ -117,8 +105,9 @@ script = ExtResource("4_q4jj3")
 [node name="QueenSpawner" type="Node" parent="Modules"]
 script = ExtResource("10_r5jkf")
 
-[node name="PheromoneCursor" type="Node" parent="Modules"]
+[node name="PheromoneCursor" type="Node" parent="Modules" node_paths=PackedStringArray("_pheromones")]
 script = ExtResource("13_yfcol")
+_pheromones = NodePath("../Pheromones")
 
 [node name="PheromoneTrail" parent="Modules/PheromoneCursor" instance=ExtResource("11_4ah7h")]
 

@@ -3,8 +3,8 @@ extends CameraModule
 
 @export var _start_zoom: Vector2 = Vector2(1, 1)
 
-@export var _zoom_in_ratio: float = 1.5
-@export var _zoom_out_ratio: float = 0.66
+#@export var _zoom_in_ratio: float = 1.5
+#@export var _zoom_out_ratio: float = 0.66
 @export var _zoom_step: Vector2 = Vector2(0.1, 0.1)
 @export var _zoom_speed: float = 1
 @export var _speed_up_multiplier: float = 2

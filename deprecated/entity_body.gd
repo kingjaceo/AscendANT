@@ -42,18 +42,15 @@ func _setup():
 	eat_timer.timeout.connect(_stop_eat)
 
 
-#func update_priority() -> void:
-	#if not starvation.is_stopped() and priority < 5 and _food_module.has_food():
-		#priority = 5
-		#behavior = _seek_food
-		#exit_behavior = _nothing
-
-
 func _seek_food() -> void:
 	if entity.home_map == entity.current_map and _food_module.has_food():
 		mover.move_to(_food_module.get_nearest_pile(entity.position))
 	else:
-		mover.move_to(Vector2.ZERO)
+		priority = 0
+		behavior = _nothing
+		await get_tree().create_timer(1).timeout
+		priority = 5
+		behavior = _seek_food
 
 
 func _eat():

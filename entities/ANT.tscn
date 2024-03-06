@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dd8t2255ibxu2"]
+[gd_scene load_steps=22 format=3 uid="uid://dd8t2255ibxu2"]
 
 [ext_resource type="Script" path="res://entities/scripts/entity.gd" id="1_3hugp"]
 [ext_resource type="Texture2D" uid="uid://hxi6iranaj1a" path="res://deprecated/ants/descendANT/descendANTs.ase" id="2_kdk5a"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://deprecated/entity_body.gd" id="13_pmask"]
 [ext_resource type="Script" path="res://entities/entity_modules/mover.gd" id="13_s3cii"]
 [ext_resource type="Script" path="res://entities/entity_modules/food_senser.gd" id="14_1df3c"]
+[ext_resource type="Script" path="res://entities/carrier.gd" id="14_rn31n"]
 [ext_resource type="Script" path="res://entities/pheromone_senser.gd" id="15_py554"]
 
 [sub_resource type="Animation" id="Animation_ogkkb"]
@@ -74,9 +75,12 @@ _data = {
 }
 
 [node name="ANT" type="Node2D"]
-z_index = 1
+z_index = 2
 script = ExtResource("1_3hugp")
 entity_name = "ANT"
+
+[node name="EntityBugger" parent="." instance=ExtResource("5_wwopl")]
+top_level = false
 
 [node name="AntSprite" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -95,9 +99,6 @@ speed_scale = 2.0
 position = Vector2(-8, 0)
 script = ExtResource("4_roh5d")
 
-[node name="EntityBugger" parent="." instance=ExtResource("5_wwopl")]
-top_level = false
-
 [node name="CameraFollowable" type="Node2D" parent="."]
 script = ExtResource("6_g7781")
 
@@ -112,8 +113,9 @@ unique_name_in_owner = true
 script = ExtResource("13_pmask")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
-eat_amount = 10.0
+eat_amount = 50.0
 time_until_hungry_seconds = 3.0
+time_until_starvation_seconds = 80.0
 
 [node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("11_wp16b")
@@ -135,6 +137,9 @@ _pheromone_marker = NodePath("../PheromoneMarker")
 [node name="Wanderer" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
 script = ExtResource("13_j5arl")
 mover = NodePath("../../Modules/Mover")
+
+[node name="Carrier" type="Node" parent="ANTiStateModules"]
+script = ExtResource("14_rn31n")
 
 [node name="Modules" type="Node" parent="."]
 unique_name_in_owner = true

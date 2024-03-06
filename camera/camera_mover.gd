@@ -12,7 +12,7 @@ var _move_direction: Vector2
 signal input_pressed
 
 
-func _process(delta):
+func _process(_delta):
 	var speed_up = false
 	_move_direction = Vector2.ZERO
 	

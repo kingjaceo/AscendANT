@@ -7,6 +7,8 @@ extends TileMap
 @onready var map_modules = %Modules
 @onready var entities = %Entities
 
+var _valid_walkable_cells: Array[Vector2i]
+
 
 var _entrances_from: Dictionary # {GameMap: Vector2i}
 var _exits_at: Dictionary # {Vector2i: GameMap}
@@ -17,6 +19,7 @@ const WALKABLE_LAYER = 1
 
 func _ready():
 	map_modules = map_modules.get_children()
+	_valid_walkable_cells = get_used_cells(WALKABLE_LAYER)
 
 
 func add_entity(entity: Entity) -> void:
@@ -64,8 +67,8 @@ func get_entrance_cell() -> Vector2i:
 	return Vector2i()
 
 
-func get_random_cell() -> Vector2i:
-	return Vector2i()
+func get_random_walkable_cell() -> Vector2i:
+	return _valid_walkable_cells[randi() % len(_valid_walkable_cells)]
 
 
 func get_random_cell_position(location: Vector2) -> Vector2:

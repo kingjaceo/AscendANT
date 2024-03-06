@@ -33,12 +33,14 @@ func _scout():
 	var to_food_neighbors = []
 
 	for neighbor_position in neighbor_pheromone_clouds:
-		var pheromone = neighbor_pheromone_clouds[neighbor_position].pheromone
-		if pheromone.type == Pheromones.Type.FOOD:
-			_mover.move_to(neighbor_position)
-			return
-		if pheromone.type == Pheromones.Type.TO_FOOD:
-			to_food_neighbors.append(neighbor_position)
+		var pheromone_clouds = neighbor_pheromone_clouds[neighbor_position]
+		for cloud in pheromone_clouds:
+			var pheromone = cloud.pheromone
+			if pheromone.type == Pheromones.Type.FOOD:
+				_mover.move_to(neighbor_position)
+				return
+			if pheromone.type == Pheromones.Type.TO_FOOD:
+				to_food_neighbors.append(neighbor_position)
 	
 	if len(to_food_neighbors) > 0:
 		var choice = to_food_neighbors[randi() % len(to_food_neighbors)]
@@ -62,4 +64,4 @@ func _wander() -> void:
 
 
 func _choose_new_target() -> void:
-	_wander_direction = Vector2i(randf_range(-1, 1), randf_range(-1, 1))
+	_wander_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
