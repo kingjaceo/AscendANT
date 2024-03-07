@@ -36,9 +36,9 @@ func _scout():
 		var pheromone_clouds = neighbor_pheromone_clouds[neighbor_position]
 		for cloud in pheromone_clouds:
 			var pheromone = cloud.pheromone
-			if pheromone.type == Pheromones.Type.FOOD:
-				_mover.move_to(neighbor_position)
-				return
+			#if pheromone.type == Pheromones.Type.FOOD:
+				#_mover.move_to(neighbor_position)
+				#return
 			if pheromone.type == Pheromones.Type.TO_FOOD:
 				to_food_neighbors.append(neighbor_position)
 	

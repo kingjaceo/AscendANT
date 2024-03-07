@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cospgv8v14g24"]
 
-[ext_resource type="Script" path="res://game_maps/map_modules/pile.gd" id="1_ixaby"]
+[ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="1_rr5wg"]
 [ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="2_3m688"]
 [ext_resource type="Script" path="res://pheromones/pheromone.gd" id="4_vfox8"]
 [ext_resource type="Script" path="res://game_maps/map_modules/pheromone_emitter.gd" id="4_yksf4"]
@@ -13,7 +13,9 @@ color = Color(0.945098, 0.0941176, 0.2, 1)
 
 [node name="FoodPile" type="Node2D"]
 z_index = 1
-script = ExtResource("1_ixaby")
+script = ExtResource("1_rr5wg")
+starting_amount = 1000.0
+object_name = "FoodPile"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

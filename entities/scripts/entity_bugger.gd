@@ -29,6 +29,7 @@ func _draw():
 
 func _update_text():
 	info.text = entity.entity_name + str(entity.ID) + "\n"
+	info.text += str(entity.current_map.local_to_map(entity.position)) + "\n"
 	for module in entity.state_modules:
 		info.text += module.get_debug_text()
 		

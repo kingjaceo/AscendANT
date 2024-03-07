@@ -34,6 +34,7 @@ func add_pheromone_to_cell(pheromone: Pheromone, cell: Vector2i):
 		add_child(new_cloud)
 		new_cloud.dispersed.connect(remove)
 		pheromones_by_cell[cell].append(new_cloud)
+		return new_cloud
 
 
 func remove(cell: Vector2i, position: int) -> void:

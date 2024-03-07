@@ -1,8 +1,13 @@
 class_name MapObject
-extends Entity
+extends Node2D
 
 @export var object_name: String
 @onready var modules = %Modules
+var current_map: GameMap
+var ID: int
+static var ID_counter: int = 0
+
+signal removed
 
 
 func _ready() -> void:
@@ -11,7 +16,6 @@ func _ready() -> void:
 	
 	modules = modules.get_children()
 	
-	home_map = current_map
 	_connect_map_modules(current_map.map_modules)
 	_connect_module_signals()
 	_setup()
@@ -31,12 +35,12 @@ func _connect_module_signals():
 	for module in modules:
 		for death_signal in module.death_signals:
 			var reason = module.death_signals[death_signal]
-			death_signal.connect(_die.bind(reason))
+			death_signal.connect(_remove.bind(reason))
 
 
-func _die(cause: String) -> void:
-	print(self, " died: ", cause, "!")
-	died.emit()
+func _remove(cause: String) -> void:
+	print(self, " removed: ", cause, "!")
+	removed.emit()
 	queue_free()
 
 

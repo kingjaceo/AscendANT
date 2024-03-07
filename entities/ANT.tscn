@@ -113,8 +113,8 @@ unique_name_in_owner = true
 script = ExtResource("13_pmask")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
-eat_amount = 50.0
-time_until_hungry_seconds = 3.0
+eat_amount = 5.0
+time_until_hungry_seconds = 45.0
 time_until_starvation_seconds = 80.0
 
 [node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]
