@@ -1,16 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://cospgv8v14g24"]
+[gd_scene load_steps=6 format=3 uid="uid://cospgv8v14g24"]
 
-[ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="1_g6omw"]
+[ext_resource type="Script" path="res://game_maps/map_modules/food_pile.gd" id="1_rr5wg"]
 [ext_resource type="Texture2D" uid="uid://dageu6ui481n4" path="res://game_maps/overworld_sprites/cookies.ase" id="2_3m688"]
+[ext_resource type="Script" path="res://pheromones/pheromone.gd" id="4_vfox8"]
+[ext_resource type="Script" path="res://game_maps/map_modules/pheromone_emitter.gd" id="4_yksf4"]
+
+[sub_resource type="Resource" id="Resource_nbrc3"]
+script = ExtResource("4_vfox8")
+type = 2
+lifetime = 5.0
+color = Color(0.945098, 0.0941176, 0.2, 1)
 
 [node name="FoodPile" type="Node2D"]
 z_index = 1
-script = ExtResource("1_g6omw")
-location = Vector2i(6, 6)
-starting_amount = 50.0
+script = ExtResource("1_rr5wg")
+starting_amount = 1000.0
+object_name = "FoodPile"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_3m688")
 region_enabled = true
 region_rect = Rect2(0, 0, 128, 128)
+
+[node name="Modules" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="PheromoneEmitter" type="Node" parent="Modules"]
+script = ExtResource("4_yksf4")
+pheromone = SubResource("Resource_nbrc3")

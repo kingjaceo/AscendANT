@@ -80,23 +80,3 @@ func get_random_cell_position(location: Vector2) -> Vector2:
 func remove(node: Node):
 	if map_modules.has(node):
 		map_modules.erase(node)
-
-
-func _hex_distance(coord1, coord2) -> float:
-	coord1 = _convert_to_cube_coords(coord1)
-	coord2 = _convert_to_cube_coords(coord2)
-	var q1 = coord1[0]
-	var q2 = coord2[0]
-	var r1 = coord1[1]
-	var r2 = coord2[1]
-	
-	var distance = (abs(q1 - q2) + abs(q1 + r1 - q2 - r2) + abs(r1 - r2)) / 2
-	
-	return distance
-
-
-func _convert_to_cube_coords(coord: Vector2i) -> Vector3i:
-	var q = coord[0]
-	var r = coord[1] - (coord[0] - (coord[0]&1)) / 2
-	var s = -q - r
-	return Vector3(q, r, s)

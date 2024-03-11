@@ -14,6 +14,7 @@ signal food_removed
 
 
 func _setup() -> void:
+	await get_tree().create_timer(0.1).timeout
 	_spawn_food_randomly()
 
 
@@ -43,24 +44,34 @@ func food_at(position: Vector2) -> bool:
 func take_food_from(position: Vector2, amount: float) -> float:
 	var cell = owner.local_to_map(position)
 	if food_piles_by_cell.has(cell):
-		return food_piles_by_cell[cell].take_from(amount)
+		var amount_taken = food_piles_by_cell[cell].take_from(amount)
+		return amount_taken
 	return 0
 
 
 func remove(cell: Vector2i) -> void:
+	#food_piles_by_cell[cell].remove()
 	food_piles_by_cell.erase(cell)
 	food_removed.emit(cell)
 
 
 func _spawn_food_randomly() -> void:
+	var new_location = game_map.get_random_walkable_cell()
+	_spawn_food(new_location)
 	while true:
 		var time_til_next_food = randi_range(_min_food_spawn_time, _max_food_spawn_time)
 		var timer = get_tree().create_timer(time_til_next_food)
 		await timer.timeout
-		var new_pile = FOOD_PILE.instantiate()
-		var new_location = game_map.get_random_walkable_cell()
-		new_pile.location = new_location
-		new_pile.position = game_map.map_to_local(new_location)
-		add_child(new_pile)
-		food_piles_by_cell[new_location] = new_pile
-		food_spawned.emit(FOOD_PHEROMONE, new_location)
+		new_location = game_map.get_random_walkable_cell()
+		_spawn_food(new_location)
+
+
+func _spawn_food(new_location) -> void:
+	var new_pile = FOOD_PILE.instantiate()
+	new_pile.location = new_location
+	new_pile.position = game_map.map_to_local(new_location)
+	new_pile.current_map = game_map
+	new_pile.removed.connect(remove.bind(new_location))
+	add_child(new_pile)
+	food_piles_by_cell[new_location] = new_pile
+	food_spawned.emit(FOOD_PHEROMONE, new_location)

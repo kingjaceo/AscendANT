@@ -1,5 +1,5 @@
 class_name Pile
-extends Node2D
+extends MapObject
 
 @export var location: Vector2i
 @export var starting_amount: float
@@ -8,9 +8,8 @@ var amount_remaining: float
 @onready var pile_sprite: Sprite2D = $Sprite2D
 
 
-func _ready() -> void:
+func _setup() -> void:
 	amount_remaining = starting_amount
-	#_place_pile()
 
 
 func take_from(amount: float) -> float:
@@ -20,9 +19,14 @@ func take_from(amount: float) -> float:
 	return amount_available
 
 
+#func remove():
+	#for module in modules:
+		#module.end()
+	#queue_free()
+
 func _update() -> void:
 	if amount_remaining <= 0:
-		queue_free()
+		_remove("depleted")
 
 
 #func _place_pile() -> void:

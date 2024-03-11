@@ -2,7 +2,7 @@ class_name Entity
 extends Node2D
 
 @export var entity_name: String
-var ID
+var ID: int
 
 @onready var state_machine = %ANTiStateMachine
 @onready var state_modules = %ANTiStateModules
