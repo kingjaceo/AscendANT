@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://bwh8fgykc1vb5"]
+
+[ext_resource type="Script" path="res://pheromones/pheromone_cloud.gd" id="1_wyh04"]
+[ext_resource type="Script" path="res://pheromones/sprite_cloud_behavior.gd" id="3_c6ymx"]
+[ext_resource type="Texture2D" uid="uid://k8dpw460e42m" path="res://pheromones/blank_pheromone_cloud64.ase" id="3_ofu7m"]
+
+[sub_resource type="Animation" id="Animation_plc5y"]
+resource_name = "default"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 64, 64), Rect2(64, 0, 64, 64), Rect2(128, 0, 64, 64), Rect2(192, 0, 64, 64), Rect2(256, 0, 64, 64), Rect2(320, 0, 64, 64), Rect2(384, 0, 64, 64), Rect2(448, 0, 64, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_cikye"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 64, 64)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_66oyw"]
+_data = {
+"RESET": SubResource("Animation_cikye"),
+"default": SubResource("Animation_plc5y")
+}
+
+[node name="AltPheromoneCloud" type="Node2D"]
+script = ExtResource("1_wyh04")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_ofu7m")
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 64)
+script = ExtResource("3_c6ymx")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_66oyw")
+}

@@ -6,4 +6,4 @@
 script = ExtResource("1_cjusn")
 type = 0
 lifetime = 10.0
-color = Color(1, 1, 1, 1)
+color = Color(0.505882, 0.847059, 0.945098, 1)
