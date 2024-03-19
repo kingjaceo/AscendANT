@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dymqs7qdu30pn" path="res://ui/ui.tscn" id="2_yvpsu"]
 [ext_resource type="PackedScene" uid="uid://bb1v0xld5hp6g" path="res://game_maps/overworld_map.tscn" id="3_2mdjj"]
 [ext_resource type="PackedScene" uid="uid://bqkt1m1ykdt85" path="res://camera/game_map_camera.tscn" id="5_fihw0"]
-[ext_resource type="Script" path="res://game/game_controller.gd" id="6_dunaq"]
+[ext_resource type="Script" path="res://game_controller.gd" id="6_dunaq"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_e2fjy")

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ixbuxbwnld4j"]
+
+[ext_resource type="Shader" path="res://pheromones/pheromone_cloud.gdshader" id="1_owywt"]
+
+[resource]
+shader = ExtResource("1_owywt")
+shader_parameter/fog_density = 0.25
+shader_parameter/fog_speed = Vector2(0.3, 0.3)
+shader_parameter/radius = 1.0

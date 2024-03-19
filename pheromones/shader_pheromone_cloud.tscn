@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqe0f812vd6yo"]
+
+[ext_resource type="Script" path="res://pheromones/shader_pheromone_cloud.gd" id="1_7r0v3"]
+[ext_resource type="Material" uid="uid://ixbuxbwnld4j" path="res://pheromones/shader_pheromone_cloud.tres" id="2_w0b0k"]
+
+[sub_resource type="Gradient" id="Gradient_2tfui"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1rdgf"]
+gradient = SubResource("Gradient_2tfui")
+width = 50
+height = 50
+
+[node name="ShaderCloud" type="Node2D" groups=["pheromone_effects"]]
+top_level = true
+z_index = 4
+z_as_relative = false
+script = ExtResource("1_7r0v3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("2_w0b0k")
+position = Vector2(-1, 0)
+texture = SubResource("GradientTexture2D_1rdgf")

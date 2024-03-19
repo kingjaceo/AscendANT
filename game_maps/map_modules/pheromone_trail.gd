@@ -13,10 +13,10 @@ func _process(_delta):
 	#position = owner.position
 
 
-func _input(event):
-	if event.is_action_pressed("pheromone_mode"):
-		_active = not _active
-	
-	if not _active:
-		amount_ratio = 0
-	set_process(_active)
+#func _input(event):
+	#if event.is_action_pressed("pheromone_mode"):
+		#_active = not _active
+	#
+	#if not _active:
+		#amount_ratio = 0
+	#set_process(_active)

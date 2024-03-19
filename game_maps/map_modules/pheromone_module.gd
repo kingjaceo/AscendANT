@@ -3,7 +3,8 @@ extends MapModule
 
 var pheromones_by_cell: Dictionary # {Vector2i cell: PheromoneCloud pheromone}
 #const PHEROMONE_CLOUD = preload("res://game_maps/map_modules/pheromone_cloud.tscn")
-const PHEROMONE_CLOUD = preload("res://pheromones/alt_pheromone_cloud.tscn")
+#const PHEROMONE_CLOUD = preload("res://pheromones/alt_pheromone_cloud.tscn")
+@export var PHEROMONE_CLOUD: PackedScene
 var PHEROMONE_EMITTER
 @export var _food_module: FoodModule
 

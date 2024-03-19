@@ -1,14 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://41uhgv0l22so"]
+[gd_scene load_steps=6 format=3 uid="uid://41uhgv0l22so"]
 
-[ext_resource type="Material" uid="uid://bidjkfidximqi" path="res://game_maps/map_modules/pheromone_cloud.tres" id="1_d03uq"]
 [ext_resource type="Texture2D" uid="uid://drsl43yxghs5f" path="res://pheromones/blank_pheromone_particle32.ase" id="2_uguo2"]
 [ext_resource type="Script" path="res://pheromones/pheromone_cloud.gd" id="3_fwgkc"]
 
-[node name="PheromoneCloud" type="GPUParticles2D"]
+[sub_resource type="Gradient" id="Gradient_fotno"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ry6r5"]
+gradient = SubResource("Gradient_fotno")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_th1ki"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 16.0
+emission_ring_inner_radius = 8.0
+spread = 180.0
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.1
+radial_accel_max = 0.1
+damping_min = 10.0
+damping_max = 12.0
+scale_min = 0.25
+scale_max = 1.25
+color_ramp = SubResource("GradientTexture1D_ry6r5")
+
+[node name="PheromoneCloud" type="GPUParticles2D" groups=["pheromone_effects"]]
 texture_filter = 1
-amount = 250
-process_material = ExtResource("1_d03uq")
+amount = 6
+process_material = SubResource("ParticleProcessMaterial_th1ki")
 texture = ExtResource("2_uguo2")
-lifetime = 3.0
+lifetime = 2.0
 randomness = 1.0
 script = ExtResource("3_fwgkc")

@@ -80,6 +80,7 @@ script = ExtResource("1_3hugp")
 entity_name = "ANT"
 
 [node name="EntityBugger" parent="." instance=ExtResource("5_wwopl")]
+visible = false
 top_level = false
 
 [node name="AntSprite" type="Sprite2D" parent="."]
@@ -96,6 +97,7 @@ libraries = {
 speed_scale = 2.0
 
 [node name="PheromoneTrail" parent="." instance=ExtResource("3_qlhcv")]
+visible = false
 position = Vector2(-8, 0)
 script = ExtResource("4_roh5d")
 
@@ -113,8 +115,8 @@ unique_name_in_owner = true
 script = ExtResource("13_pmask")
 mover = NodePath("../../Modules/Mover")
 food_senser = NodePath("../../Modules/FoodSenser")
-eat_amount = 5.0
-time_until_hungry_seconds = 45.0
+eat_amount = 100.0
+time_until_hungry_seconds = 10.0
 time_until_starvation_seconds = 80.0
 
 [node name="PheromoneMarker" type="Node" parent="ANTiStateModules" node_paths=PackedStringArray("mover")]

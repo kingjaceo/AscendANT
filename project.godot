@@ -24,6 +24,7 @@ aseprite_executable_path="C:/Projects/LibreSprite/libresprite.exe"
 Messenger="*res://game/messenger.gd"
 Pheromones="*res://pheromones/pheromones.gd"
 HexMath="*res://hex_math.gd"
+GameController="*res://game_controller.gd"
 
 [display]
 

@@ -9,6 +9,7 @@ var index : int # position in stack of pheromeon
 signal dispersed
 
 func _ready():
+	visible = GameController.pheromones_on
 	modulate = pheromone.color
 
 

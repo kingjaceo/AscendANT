@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj46astqemocw"]
+
+[ext_resource type="Texture2D" uid="uid://4m8ile7rjf3o" path="res://pheromones/simple_pheromone_hex.ase" id="1_ckj33"]
+[ext_resource type="Script" path="res://pheromones/pheromone_cloud.gd" id="2_3uctk"]
+
+[node name="Sprite2D" type="Sprite2D" groups=["pheromone_effect"]]
+self_modulate = Color(1, 1, 1, 0.74902)
+texture = ExtResource("1_ckj33")
+script = ExtResource("2_3uctk")

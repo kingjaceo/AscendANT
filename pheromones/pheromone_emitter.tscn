@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://vss5dgespk28"]
 
-[ext_resource type="Script" path="res://pheromone_emitter.gd" id="1_8qcmu"]
+[ext_resource type="Script" path="res://pheromones/pheromone_emitter.gd" id="1_8qcmu"]
 
 [node name="PheromoneEmitter" type="Node2D"]
 script = ExtResource("1_8qcmu")
